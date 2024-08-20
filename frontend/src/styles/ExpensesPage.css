@@ -1,0 +1,99 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 700px;
+    margin: 50px auto;
+}
+
+/* Estilos do cabeçalho */
+.header {
+    display: flex;
+    width: 100%;
+}
+
+.title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 21px;
+    font-weight: 600;
+    margin: 0 15px 0 0;
+}
+
+.add-button {
+    display: flex;
+    align-items: center;
+    padding: 7px;
+    border: none;
+    border-radius: 100%;
+    cursor: pointer;
+    color: #ffffff;
+    background: #ee9c3b;
+}
+
+/* Tabela de despesas */
+.expenses-table {
+    width: 100%;
+    margin-top: 20px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+/* Cabeçalho da tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead th {
+    font-weight: 600;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    white-space: nowrap; /* Garante que o cabeçalho não quebre */
+}
+
+th, td {
+    text-align: left;
+    padding: 10px;
+}
+
+/* Colunas específicas */
+th.info-icon, td.info-icon {
+    width: 50px;
+    text-align: center;
+    cursor: pointer;
+}
+
+th.description, td.description {
+    width: 200px;
+    word-break: break-word;
+}
+
+th.date, td.date {
+    width: 120px;
+}
+
+th.amount, td.amount {
+    width: 120px;
+}
+
+th.paid, td.paid {
+    width: 50px;
+}
+
+/* Linha de despesas */
+tbody tr {
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}

@@ -1,0 +1,162 @@
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Conteúdo do Modal */
+.modal-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+}
+
+h2 {
+    margin-top: 0;
+    font-size: 19px;
+}
+
+/* Formulário */
+.modal-form {
+    margin-top: 19px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Wrapper para campos de entrada*/
+.input-row-wrapper {
+    margin-top: 15px;
+}
+
+/* Estilo para os campos de entrada */
+.input-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.input-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.input-row .form-group:first-child {
+    margin-right: 10px;
+}
+
+/* Estilo para os botões */
+.tag-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    align-items: center;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.tag {
+    background: #f0f0f0;
+    border-radius: 4px;
+    padding: 5px 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.remove-tag-button {
+    background: transparent;
+    border: none;
+    color: #353535;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+}
+
+.tag-input-container input {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Estilo para o botão de salvar e fechar */
+.save-button {
+    background: #4caf50;
+    color: #fff;
+}
+
+.close-button {
+    background: transparent;
+    color: #a5a5a5;
+}
+
+/* Estilo para o botão de tags */
+.tags-button, .observation-button {
+    margin-top: 17px;
+    background: transparent;
+    border: none;
+    color: #525252;
+    cursor: pointer;
+}
+
+/* Estilos para o container das ações do formulário */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.form-actions button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
