@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaCommentDots, FaTag, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
-import PropTypes from 'prop-types'; // Importando PropTypes
+import PropTypes from 'prop-types';
 import "../../styles/ExpenseModal.css";
+import "../../styles/InputStyles.css";
 
 // Função para formatar a data no formato dd/mm/aa
 const formatDateForDisplay = (date) => {
@@ -149,7 +150,8 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
                                 <input 
                                     type="number" 
                                     value={amount} 
-                                    onChange={(e) => setAmount(e.target.value)} 
+                                    onChange={(e) => setAmount(e.target.value)}
+                                    onWheel={(e) => e.target.blur()}
                                     placeholder="R$ 0,00"
                                 />
                             </div>
