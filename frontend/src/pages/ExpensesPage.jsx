@@ -5,7 +5,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConfirmModal from '../components/ConfirmModal';
 import ExpenseModal from '../components/expensesComponents/ExpenseModal';
 import ExpenseInfoModal from '../components/expensesComponents/ExpenseInfoModal';
-import { getExpenses, addExpense, deleteExpense } from '../services/expenseService';
+import EditExpenseModal from '../components/expensesComponents/EditExpenseModal'; // Importar o modal de edição
+import { getExpenses, addExpense, deleteExpense, updateExpense } from '../services/expenseService';
 import "../styles/ExpensesPage.css";
 
 const formatDate = (dateString) => {
@@ -19,6 +20,7 @@ const formatDate = (dateString) => {
 const ExpensesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Estado para o modal de edição
     const [selectedExpense, setSelectedExpense] = useState(null);
     const [expenses, setExpenses] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -64,6 +66,20 @@ const ExpensesPage = () => {
         } catch (error) {
             toast.error('Erro ao adicionar despesa!');
             console.error('Erro ao adicionar despesa:', error);
+        }
+    };
+
+    const handleEditExpense = async (updatedExpense) => {
+        try {
+            await updateExpense(updatedExpense);
+            const data = await getExpenses();
+            setExpenses(data);
+            setIsEditModalOpen(false);
+            handleCloseInfoModal();
+            toast.success('Despesa atualizada com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao atualizar despesa!');
+            console.error('Erro ao atualizar despesa:', error);
         }
     };
 
@@ -152,13 +168,24 @@ const ExpensesPage = () => {
                     onAddExpense={handleAddExpense}
                 />
                 {selectedExpense && (
-                    <ExpenseInfoModal
-                        isOpen={isInfoModalOpen}
-                        onClose={handleCloseInfoModal}
-                        expense={selectedExpense}
-                        onEdit={() => {/* lógica de edição */}}
-                        onDelete={() => handleDeleteExpense(selectedExpense.id)}
-                    />
+                    <>
+                        <ExpenseInfoModal
+                            isOpen={isInfoModalOpen}
+                            onClose={handleCloseInfoModal}
+                            expense={selectedExpense}
+                            onEdit={() => {
+                                setIsInfoModalOpen(false);
+                                setIsEditModalOpen(true);
+                            }}
+                            onDelete={() => handleDeleteExpense(selectedExpense.id)}
+                        />
+                        <EditExpenseModal
+                            isOpen={isEditModalOpen}
+                            onClose={() => setIsEditModalOpen(false)}
+                            expense={selectedExpense}
+                            onSave={handleEditExpense}
+                        />
+                    </>
                 )}
                 <ConfirmModal
                     show={showConfirmModal}

@@ -2,7 +2,6 @@ import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import PropTypes from 'prop-types';
 import '../../styles/ExpenseInfoModal.css';
 
-// Função para formatar a data no formato dd/mm/aaaa
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
@@ -14,15 +13,13 @@ const formatDate = (dateString) => {
 const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
     if (!isOpen) return null;
 
-    // Garantir que as tags são uma string
     const description = typeof expense.description === 'string' ? expense.description : 'Descrição não disponível';
     const amount = typeof expense.amount === 'number' ? expense.amount.toFixed(2) : '0.00';
-    const tag = typeof expense.tag === 'string' ? expense.tag : 'Tag não disponível';  // Ajustado para uma tag única
+    const tag = typeof expense.tag === 'string' ? expense.tag : 'Tag não disponível';
     const date = typeof expense.date === 'string' ? formatDate(expense.date) : 'Data não disponível';
     const observation = typeof expense.observation === 'string' && expense.observation.trim() !== '' 
         ? expense.observation 
         : 'Nenhuma observação informada';
-    
 
     return (
         <div className="expense-info-modal-overlay" onClick={onClose}>
@@ -53,7 +50,7 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
                     </div>
                     <div className="detail-item">
                         <div className="detail-item-tags">
-                            <strong>Tag:</strong> {tag}  {/* Atualizado para mostrar uma única tag */}
+                            <strong>Tag:</strong> {tag} 
                         </div>
                     </div>
                 </div>
@@ -82,7 +79,6 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
     );
 };
 
-// Definição das PropTypes para validação de propriedades
 ExpenseInfoModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -91,7 +87,7 @@ ExpenseInfoModal.propTypes = {
         amount: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
         observation: PropTypes.string,
-        tag: PropTypes.string.isRequired,  // Alterado para uma única tag
+        tag: PropTypes.string.isRequired,
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,

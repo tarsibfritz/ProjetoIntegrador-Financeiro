@@ -5,7 +5,6 @@ exports.createExpense = async (req, res) => {
   try {
     const { description, amount, date, observation, paid, tag } = req.body;
 
-    // Criação da despesa
     const newExpense = await Expense.create({
       description,
       amount,
@@ -53,11 +52,11 @@ exports.updateExpense = async (req, res) => {
       return res.status(404).json({ mensagem: 'Despesa não encontrada' });
     }
 
-    // Atualiza os dados da despesa
     await expense.update({ description, amount, date, observation, paid, tag });
 
     res.status(200).json(expense);
   } catch (error) {
+    console.error('Erro ao atualizar despesa:', error.message);
     res.status(400).json({ erro: error.message });
   }
 };

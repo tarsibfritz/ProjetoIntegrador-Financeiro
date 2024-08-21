@@ -1,176 +1,145 @@
-import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { FaCommentDots, FaTag, FaTimes } from 'react-icons/fa';
-import axios from 'axios';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
-import "../../styles/EditExpenseModal.css";
+import { FaTimes } from 'react-icons/fa';
+import '../../styles/EditExpenseModal.css';
 
-const EditExpenseModal = ({ isOpen, onClose, onUpdateExpense, expense }) => {
+// Função para formatar a data no formato dd/mm/aaaa
+const formatDateForDisplay = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+};
+
+// Função para formatar a data no formato yyyy-mm-dd para input
+const formatDateForInput = (dateString) => {
+    const date = new Date(dateString);
+    const day = date.getUTCDate().toString().padStart(2, '0');
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, '0');
+    const year = date.getUTCFullYear();
+    return `${year}-${month}-${day}`;
+};
+
+// Opções de tags para despesas
+const tagOptions = [
+    'Alimentação',
+    'Transporte',
+    'Saúde',
+    'Educação',
+    'Lazer',
+    'Moradia',
+    'Imprevisto',
+    'Cuidados Pessoais'
+];
+
+const EditExpenseModal = ({ isOpen, onClose, expense, onSave }) => {
     const [description, setDescription] = useState(expense.description || '');
     const [amount, setAmount] = useState(expense.amount || '');
-    const [date, setDate] = useState(expense.date ? new Date(expense.date).toISOString().split('T')[0] : '');
+    const [date, setDate] = useState(expense.date ? formatDateForDisplay(expense.date) : '');
     const [observation, setObservation] = useState(expense.observation || '');
-    const [tags, setTags] = useState(expense.tags || []);
-    const [tagInput, setTagInput] = useState('');
-    const [showObservationInput, setShowObservationInput] = useState(false);
-    const [showTagInput, setShowTagInput] = useState(false);
+    const [tag, setTag] = useState(expense.tag || '');
 
-    useEffect(() => {
-        setDescription(expense.description || '');
-        setAmount(expense.amount || '');
-        setDate(expense.date ? new Date(expense.date).toISOString().split('T')[0] : '');
-        setObservation(expense.observation || '');
-        setTags(expense.tags || []);
-    }, [expense]);
+    if (!isOpen) return null;
 
-    const handleAddTag = () => {
-        if (tagInput) {
-            if (tags.includes(tagInput)) {
-                toast.warning("Tag já adicionada!");
-            } else {
-                setTags([...tags, tagInput]);
-                setTagInput('');
-                toast.success("Tag adicionada com sucesso!");
-            }
-        }
-    };
-
-    const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-        toast.info("Tag removida.");
-    };
-
-    const handleTagInputKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleAddTag();
-        }
-    };
-
-    const handleSave = async () => {
-        if (!description || !amount || !date) {
-            toast.error("Por favor, preencha todos os campos obrigatórios.");
-            return;
-        }
-
+    const handleSave = () => {
         const updatedExpense = {
             ...expense,
             description,
             amount: parseFloat(amount),
-            date: new Date(date).toISOString(),
+            date: formatDateForInput(date), // Converte para yyyy-mm-dd
             observation,
-            tags
+            tag,
         };
-
-        try {
-            await axios.put(`http://localhost:3000/api/expenses/${expense.id}`, updatedExpense);
-            toast.success("Despesa atualizada com sucesso!");
-            onUpdateExpense(updatedExpense);
-            onClose();
-        } catch (error) {
-            toast.error("Erro ao atualizar despesa.");
-            console.error('Erro ao atualizar despesa:', error);
-        }
+        onSave(updatedExpense);
     };
 
     return (
-        isOpen && (
-            <div className="edit-expense-modal-overlay">
-                <div className="edit-expense-modal-content">
-                    <button className="edit-expense-close-button" onClick={onClose}>
+        <div className="edit-expense-modal-overlay" onClick={onClose}>
+            <div className="edit-expense-modal-content" onClick={e => e.stopPropagation()}>
+                <h2>Editar Despesa</h2>
+                <div className="modal-details">
+                    <div className="detail-item">
+                        <label>
+                            <strong>Descrição:</strong>
+                            <input
+                                type="text"
+                                value={description}
+                                onChange={(e) => setDescription(e.target.value)}
+                            />
+                        </label>
+                    </div>
+                    <div className="detail-item">
+                        <label>
+                            <strong>Valor:</strong>
+                            <input
+                                type="number"
+                                value={amount}
+                                onChange={(e) => setAmount(e.target.value)}
+                            />
+                        </label>
+                    </div>
+                    <div className="detail-item">
+                        <label>
+                            <strong>Data:</strong>
+                            <input
+                                type="text" // Usa texto para manter o formato dd/mm/yy
+                                value={date}
+                                onChange={(e) => setDate(e.target.value)}
+                                placeholder="dd/mm/aaaa"
+                            />
+                        </label>
+                    </div>
+                    <div className="detail-item">
+                        <label>
+                            <strong>Observação:</strong>
+                            <textarea
+                                value={observation}
+                                onChange={(e) => setObservation(e.target.value)}
+                            />
+                        </label>
+                    </div>
+                    <div className="detail-item">
+                        <label>
+                            <strong>Tag:</strong>
+                            <select
+                                value={tag}
+                                onChange={(e) => setTag(e.target.value)}
+                            >
+                                <option value="">Selecione uma tag</option>
+                                {tagOptions.map(option => (
+                                    <option key={option} value={option}>
+                                        {option}
+                                    </option>
+                                ))}
+                            </select>
+                        </label>
+                    </div>
+                </div>
+                <hr className="divider-line" />
+                <div className="edit-expense-buttons">
+                    <button onClick={handleSave} className="save-button">Salvar</button>
+                    <button className="cancel-button" onClick={onClose}>
                         <FaTimes />
                     </button>
-                    <h2 className="edit-expense-heading">Editar Despesa</h2>
-                    <form className="edit-expense-form">
-                        <label>
-                            Descrição:
-                            <input 
-                                type="text" 
-                                value={description} 
-                                onChange={(e) => setDescription(e.target.value)} 
-                            />
-                        </label>
-                        <label>
-                            Valor:
-                            <input 
-                                type="number" 
-                                value={amount} 
-                                onChange={(e) => setAmount(e.target.value)} 
-                                step="0.01" 
-                            />
-                        </label>
-                        <label>
-                            Data:
-                            <input 
-                                type="date" 
-                                value={date} 
-                                onChange={(e) => setDate(e.target.value)} 
-                            />
-                        </label>
-                        {showObservationInput ? (
-                            <label>
-                                Observação:
-                                <textarea 
-                                    value={observation} 
-                                    onChange={(e) => setObservation(e.target.value)} 
-                                />
-                            </label>
-                        ) : (
-                            <button 
-                                type="button" 
-                                onClick={() => setShowObservationInput(true)}
-                            >
-                                <FaCommentDots /> Adicionar Observação
-                            </button>
-                        )}
-                        {showTagInput ? (
-                            <div>
-                                <label>
-                                    Tags:
-                                    <input 
-                                        type="text" 
-                                        value={tagInput} 
-                                        onChange={(e) => setTagInput(e.target.value)} 
-                                        onKeyDown={handleTagInputKeyDown}
-                                    />
-                                </label>
-                                <button type="button" onClick={handleAddTag}>Adicionar Tag</button>
-                                <div>
-                                    {tags.map((tag, index) => (
-                                        <span key={index} className="edit-expense-tag">
-                                            {tag}
-                                            <button type="button" onClick={() => handleRemoveTag(tag)}>x</button>
-                                        </span>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : (
-                            <button 
-                                type="button" 
-                                onClick={() => setShowTagInput(true)}
-                            >
-                                <FaTag /> Adicionar Tag
-                            </button>
-                        )}
-                        <button 
-                            type="button" 
-                            className="edit-expense-save-button" 
-                            onClick={handleSave}
-                        >
-                            Salvar
-                        </button>
-                    </form>
                 </div>
             </div>
-        )
+        </div>
     );
 };
 
+// Definição das PropTypes para validação de propriedades
 EditExpenseModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onUpdateExpense: PropTypes.func.isRequired,
-    expense: PropTypes.object.isRequired
+    expense: PropTypes.shape({
+        description: PropTypes.string,
+        amount: PropTypes.number,
+        date: PropTypes.string,
+        observation: PropTypes.string,
+        tag: PropTypes.string,
+    }).isRequired,
+    onSave: PropTypes.func.isRequired,
 };
 
 export default EditExpenseModal;
