@@ -14,18 +14,15 @@ const formatDate = (dateString) => {
 const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
     if (!isOpen) return null;
 
-    // Garantir que as tags são uma lista de strings
+    // Garantir que as tags são uma string
     const description = typeof expense.description === 'string' ? expense.description : 'Descrição não disponível';
     const amount = typeof expense.amount === 'number' ? expense.amount.toFixed(2) : '0.00';
+    const tag = typeof expense.tag === 'string' ? expense.tag : 'Tag não disponível';  // Ajustado para uma tag única
     const date = typeof expense.date === 'string' ? formatDate(expense.date) : 'Data não disponível';
     const observation = typeof expense.observation === 'string' && expense.observation.trim() !== '' 
         ? expense.observation 
         : 'Nenhuma observação informada';
     
-    // Extrair nomes das tags
-    const tags = Array.isArray(expense.tags) 
-        ? expense.tags.map(tag => tag.name ? tag.name : 'Tag inválida') 
-        : [];
 
     return (
         <div className="expense-info-modal-overlay" onClick={onClose}>
@@ -56,18 +53,7 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
                     </div>
                     <div className="detail-item">
                         <div className="detail-item-tags">
-                            <strong>Tags:</strong>
-                            <div className="tags-container">
-                                {tags.length > 0 ? (
-                                    tags.map((tag, index) => (
-                                        <span key={index} className="tag-item">
-                                            {tag}
-                                        </span>
-                                    ))
-                                ) : (
-                                    'Nenhuma'
-                                )}
-                            </div>
+                            <strong>Tag:</strong> {tag}  {/* Atualizado para mostrar uma única tag */}
                         </div>
                     </div>
                 </div>
@@ -105,9 +91,7 @@ ExpenseInfoModal.propTypes = {
         amount: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
         observation: PropTypes.string,
-        tags: PropTypes.arrayOf(PropTypes.shape({
-            name: PropTypes.string.isRequired
-        })).isRequired,
+        tag: PropTypes.string.isRequired,  // Alterado para uma única tag
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
