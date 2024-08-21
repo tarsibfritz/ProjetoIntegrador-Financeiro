@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { FaCommentDots, FaTag, FaTimes } from 'react-icons/fa';
+import { FaCommentDots, FaTag } from 'react-icons/fa';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import "../../styles/ExpenseModal.css";
@@ -10,7 +10,7 @@ import "../../styles/InputStyles.css";
 const formatDateForDisplay = (date) => {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear().toString().slice(-2); // Pega os dois últimos dígitos do ano
+    const year = date.getFullYear().toString().slice(-2);
     return `${day}/${month}/${year}`;
 };
 
@@ -23,42 +23,23 @@ const convertToDateInputFormat = (dateStr) => {
 const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
-    const [date, setDate] = useState(formatDateForDisplay(new Date())); // Data formatada para exibição
+    const [date, setDate] = useState(formatDateForDisplay(new Date()));
     const [observation, setObservation] = useState('');
-    const [tags, setTags] = useState([]);
-    const [availableTags, setAvailableTags] = useState([]); // Tags disponíveis para seleção
     const [selectedTag, setSelectedTag] = useState('');
-    const [newTag, setNewTag] = useState(''); // Tag que o usuário está adicionando manualmente
     const [showObservationInput, setShowObservationInput] = useState(false);
     const [showTagInput, setShowTagInput] = useState(false);
 
-    useEffect(() => {
-        // Buscar tags disponíveis do backend
-        const fetchTags = async () => {
-            try {
-                const response = await axios.get('http://localhost:3000/api/tags');
-                if (response.status === 200) {
-                    setAvailableTags(response.data.tags); // Supondo que a resposta é um array de tags
-                }
-            } catch (error) {
-                toast.error(`Erro ao buscar tags: ${error.message}`);
-            }
-        };
-        fetchTags();
-    }, []);
-
-    const handleAddTag = () => {
-        if (newTag && !tags.includes(newTag)) {
-            setTags([...tags, newTag]);
-            setNewTag('');
-            toast.success("Tag adicionada com sucesso!");
-        }
-    };
-
-    const handleRemoveTag = (tagToRemove) => {
-        setTags(tags.filter(tag => tag !== tagToRemove));
-        toast.info("Tag removida.");
-    };
+    // Tags pré-definidas
+    const availableTags = [
+        'Alimentação',
+        'Transporte',
+        'Saúde',
+        'Educação',
+        'Lazer',
+        'Moradia',
+        'Imprevisto',
+        'Cuidados Pessoais'
+    ];
 
     const handleDescriptionChange = (e) => {
         if (e.target.value.length <= 100) {
@@ -84,13 +65,13 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
 
     const handleSave = async (e) => {
         e.preventDefault();
-        
+
         // Validação dos campos obrigatórios
-        if (!description || !amount || !date) {
+        if (!description || !amount || !date || !selectedTag) {
             toast.warning("Por favor, preencha todos os campos obrigatórios.");
             return;
         }
-    
+
         // Validação do valor
         const numericAmount = parseFloat(amount);
         if (numericAmount <= 0 || isNaN(numericAmount)) {
@@ -98,23 +79,29 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
             return;
         }
 
+        // Validação da tag
+        if (!availableTags.includes(selectedTag)) {
+            toast.warning("Tag selecionada é inválida.");
+            return;
+        }
+
         // Converter a data para o formato yyyy-mm-dd
         const formattedDate = convertToDateInputFormat(date);
-    
+
         const expenseData = {
             description,
             amount: numericAmount,
-            date: new Date(formattedDate).toISOString(), // Convertendo para UTC
+            date: new Date(formattedDate).toISOString(),
             observation,
-            tags
+            tag: selectedTag // Tag única selecionada
         };
-    
+
         try {
             const response = await axios.post('http://localhost:3000/api/expenses', expenseData);
-    
+
             if (response.status === 201) {
                 toast.success("Despesa salva com sucesso!");
-                onAddExpense(expenseData); // Adiciona a despesa à lista
+                onAddExpense(expenseData);
                 handleClose();
             } else {
                 toast.error(`Erro: ${response.data.error || 'Não foi possível salvar a despesa.'}`);
@@ -122,114 +109,104 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
         } catch (error) {
             toast.error(`Erro ao salvar despesa: ${error.message}`);
         }
-    };    
+    };
 
     const handleClose = () => {
         setDescription('');
         setAmount('');
-        setDate(formatDateForDisplay(new Date())); // Resetar data para a data atual formatada
+        setDate(formatDateForDisplay(new Date()));
         setObservation('');
-        setTags([]);
+        setSelectedTag('');
         onClose();
-    };
-
-    const handleTagInputKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault(); // Evita o comportamento padrão do Enter
-            handleAddTag();
-        }
     };
 
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                <h2>Criar Despesa</h2>
-                <form className="modal-form" onSubmit={handleSave}>
-                    <div className="form-group">
-                        <label>Descrição</label>
-                        <input 
-                            type="text" 
-                            value={description} 
-                            onChange={handleDescriptionChange} 
-                            placeholder="Descrição da despesa"
-                        />
-                    </div>
-                    <div className="input-row-wrapper">
-                        <div className="input-row">
-                            <div className="form-group">
-                                <label>Valor</label>
-                                <input 
-                                    type="number" 
-                                    value={amount} 
-                                    onChange={(e) => setAmount(e.target.value)}
-                                    onWheel={(e) => e.target.blur()}
-                                    placeholder="R$ 0,00"
-                                />
-                            </div>
-                            <div className="form-group">
-                                <label>Data</label>
-                                <input 
-                                    type="text" 
-                                    value={date} 
-                                    onChange={(e) => setDate(e.target.value)} 
-                                    placeholder="dd/mm/aa"
-                                />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="form-actions">
-                        <button type="button" className="observation-button" onClick={() => setShowObservationInput(!showObservationInput)}>
-                            <FaCommentDots /> Observação
-                        </button>
-                        <button type="button" className="tags-button" onClick={() => setShowTagInput(!showTagInput)}>
-                            <FaTag /> Tags
-                        </button>
-                    </div>
-                    {showObservationInput && (
+        <>
+            <div className="modal-overlay" onClick={handleClose}>
+                <div className="modal-content" onClick={e => e.stopPropagation()}>
+                    <h2>Criar Despesa</h2>
+                    <form className="modal-form" onSubmit={handleSave}>
                         <div className="form-group">
+                            <label>Descrição</label>
                             <input 
                                 type="text" 
-                                value={observation} 
-                                onChange={handleObservationChange} 
-                                placeholder="Adicione uma observação"
+                                value={description} 
+                                onChange={handleDescriptionChange} 
+                                placeholder="Descrição da despesa"
                             />
                         </div>
-                    )}
-                    {showTagInput && (
-                        <div className="form-group">
-                            <label>Adicionar Tag</label>
-                            <input
-                                type="text"
-                                value={newTag}
-                                onChange={(e) => setNewTag(e.target.value)}
-                                onKeyDown={handleTagInputKeyDown}
-                                placeholder="Digite uma nova tag e pressione Enter"
-                            />
-                            <div className="tags">
-                                {tags.map((tag, index) => (
-                                    <span key={index} className="tag">
-                                        {tag}
-                                        <button type="button" className="remove-tag-button" onClick={() => handleRemoveTag(tag)}>
-                                            <FaTimes />
-                                        </button>
-                                    </span>
-                                ))}
+                        <div className="input-row-wrapper">
+                            <div className="input-row">
+                                <div className="form-group">
+                                    <label>Valor</label>
+                                    <input 
+                                        type="number" 
+                                        value={amount} 
+                                        onChange={(e) => setAmount(e.target.value)}
+                                        onWheel={(e) => e.target.blur()}
+                                        placeholder="R$ 0,00"
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Data</label>
+                                    <input 
+                                        type="text" 
+                                        value={date} 
+                                        onChange={(e) => setDate(e.target.value)} 
+                                        placeholder="dd/mm/aa"
+                                    />
+                                </div>
                             </div>
                         </div>
-                    )}
-                    <div className="button-container">
-                        <button type="submit" className="save-button">Salvar</button>
-                        <button type="button" className="close-button" onClick={handleClose}>Fechar</button>
-                    </div>
-                </form>
+                        <div className="form-actions">
+                            <button type="button" className="observation-button" onClick={() => setShowObservationInput(!showObservationInput)}>
+                                <FaCommentDots /> Observação
+                            </button>
+                            <button type="button" className="tags-button" onClick={() => setShowTagInput(!showTagInput)}>
+                                <FaTag /> Tags
+                            </button>
+                        </div>
+                        {showObservationInput && (
+                            <div className="form-group">
+                                <input 
+                                    type="text" 
+                                    value={observation} 
+                                    onChange={handleObservationChange} 
+                                    placeholder="Adicione uma observação"
+                                />
+                            </div>
+                        )}
+                        {showTagInput && (
+                            <div className="form-group">
+                                <label>Tag</label>
+                                <div className="tags-input">
+                                    <select
+                                        value={selectedTag}
+                                        onChange={(e) => setSelectedTag(e.target.value)}
+                                    >
+                                        <option value="">Selecione uma tag</option>
+                                        {availableTags.map((tag, index) => (
+                                            <option key={index} value={tag}>
+                                                {tag}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                        )}
+                        <div className="form-group">
+                            <button type="submit">Salvar</button>
+                            <button type="button" onClick={handleClose}>Fechar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 
-// Definição das PropTypes para validação de propriedades
 ExpenseModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,

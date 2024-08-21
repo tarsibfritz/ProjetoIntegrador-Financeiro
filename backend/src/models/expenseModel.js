@@ -27,17 +27,23 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    tag: {
+      type: DataTypes.ENUM(
+        'Alimentação',
+        'Transporte',
+        'Saúde',
+        'Educação',
+        'Lazer',
+        'Moradia',
+        'Imprevisto',
+        'Cuidados Pessoais'
+      ),
+      allowNull: false,
+    }
+  }, {
+    tableName: 'expenses',
+    timestamps: true,
   });
-
-  // Definindo o relacionamento Many-to-Many entre Expense e Tag
-  Expense.associate = (models) => {
-    Expense.belongsToMany(models.Tag, {
-      through: 'ExpenseTags',
-      as: 'tags',
-      foreignKey: 'expenseId',
-      otherKey: 'tagId'
-    });
-  };
 
   return Expense;
 };

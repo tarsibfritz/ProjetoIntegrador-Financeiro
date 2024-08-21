@@ -21,7 +21,6 @@ db.sequelize = sequelize;
 
 // Modelos
 db.User = require('./userModel')(sequelize, Sequelize.DataTypes);
-db.Tag = require('./tagModel')(sequelize, Sequelize.DataTypes);
 db.Expense = require('./expenseModel')(sequelize, Sequelize.DataTypes);
 db.Income = require('./incomeModel')(sequelize, Sequelize.DataTypes);
 
