@@ -14,6 +14,19 @@ const formatDate = (dateString) => {
 const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
     if (!isOpen) return null;
 
+    // Garantir que as tags são uma lista de strings
+    const description = typeof expense.description === 'string' ? expense.description : 'Descrição não disponível';
+    const amount = typeof expense.amount === 'number' ? expense.amount.toFixed(2) : '0.00';
+    const date = typeof expense.date === 'string' ? formatDate(expense.date) : 'Data não disponível';
+    const observation = typeof expense.observation === 'string' && expense.observation.trim() !== '' 
+        ? expense.observation 
+        : 'Nenhuma observação informada';
+    
+    // Extrair nomes das tags
+    const tags = Array.isArray(expense.tags) 
+        ? expense.tags.map(tag => tag.name ? tag.name : 'Tag inválida') 
+        : [];
+
     return (
         <div className="expense-info-modal-overlay" onClick={onClose}>
             <div className="expense-info-modal-content" onClick={e => e.stopPropagation()}>
@@ -21,37 +34,39 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
                 <div className="modal-details">
                     <div className="detail-item">
                         <div className="detail-item-left">
-                            {expense.description}
+                            <strong>Descrição:</strong> {description}
                         </div>
                     </div>
                     <div className="detail-item">
                         <div className="detail-item-row">
                             <div className="detail-item-value">
-                                <strong>Valor:</strong> R$ {expense.amount.toFixed(2)}
+                                <strong>Valor:</strong> R$ {amount}
                             </div>
                             <div className="detail-item-date">
-                                <strong>Data:</strong> {formatDate(expense.date)}
+                                <strong>Data:</strong> {date}
                             </div>
                         </div>
                     </div>
                     <div className="detail-item">
                         <div className="detail-item-row">
                             <div className="detail-item-observation">
-                                <strong>Observação:</strong> {expense.observation || 'Nenhuma'}
+                                <strong>Observação:</strong> {observation}
                             </div>
-                            <div className="detail-item-tags">
-                                <strong>Tags:</strong>
-                                <div className="tags-container">
-                                    {expense.tags.length > 0 ? (
-                                        expense.tags.map((tag, index) => (
-                                            <span key={index} className="tag-item">
-                                                {tag}
-                                            </span>
-                                        ))
-                                    ) : (
-                                        'Nenhuma'
-                                    )}
-                                </div>
+                        </div>
+                    </div>
+                    <div className="detail-item">
+                        <div className="detail-item-tags">
+                            <strong>Tags:</strong>
+                            <div className="tags-container">
+                                {tags.length > 0 ? (
+                                    tags.map((tag, index) => (
+                                        <span key={index} className="tag-item">
+                                            {tag}
+                                        </span>
+                                    ))
+                                ) : (
+                                    'Nenhuma'
+                                )}
                             </div>
                         </div>
                     </div>
@@ -90,7 +105,9 @@ ExpenseInfoModal.propTypes = {
         amount: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
         observation: PropTypes.string,
-        tags: PropTypes.arrayOf(PropTypes.string).isRequired,
+        tags: PropTypes.arrayOf(PropTypes.shape({
+            name: PropTypes.string.isRequired
+        })).isRequired,
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,

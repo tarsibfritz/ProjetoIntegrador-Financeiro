@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { FaCommentDots, FaTag, FaTimes } from 'react-icons/fa';
 import axios from 'axios';
@@ -26,32 +26,38 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
     const [date, setDate] = useState(formatDateForDisplay(new Date())); // Data formatada para exibição
     const [observation, setObservation] = useState('');
     const [tags, setTags] = useState([]);
-    const [tagInput, setTagInput] = useState('');
+    const [availableTags, setAvailableTags] = useState([]); // Tags disponíveis para seleção
+    const [selectedTag, setSelectedTag] = useState('');
+    const [newTag, setNewTag] = useState(''); // Tag que o usuário está adicionando manualmente
     const [showObservationInput, setShowObservationInput] = useState(false);
     const [showTagInput, setShowTagInput] = useState(false);
 
-    const handleAddTag = () => {
-        if (tagInput) {
-            if (tags.includes(tagInput)) {
-                toast.warning("Tag já adicionada!");
-            } else {
-                setTags([...tags, tagInput]);
-                setTagInput('');
-                toast.success("Tag adicionada com sucesso!");
+    useEffect(() => {
+        // Buscar tags disponíveis do backend
+        const fetchTags = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/tags');
+                if (response.status === 200) {
+                    setAvailableTags(response.data.tags); // Supondo que a resposta é um array de tags
+                }
+            } catch (error) {
+                toast.error(`Erro ao buscar tags: ${error.message}`);
             }
+        };
+        fetchTags();
+    }, []);
+
+    const handleAddTag = () => {
+        if (newTag && !tags.includes(newTag)) {
+            setTags([...tags, newTag]);
+            setNewTag('');
+            toast.success("Tag adicionada com sucesso!");
         }
     };
 
     const handleRemoveTag = (tagToRemove) => {
         setTags(tags.filter(tag => tag !== tagToRemove));
         toast.info("Tag removida.");
-    };
-
-    const handleTagInputKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            e.preventDefault();
-            handleAddTag();
-        }
     };
 
     const handleDescriptionChange = (e) => {
@@ -127,6 +133,13 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
         onClose();
     };
 
+    const handleTagInputKeyDown = (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault(); // Evita o comportamento padrão do Enter
+            handleAddTag();
+        }
+    };
+
     if (!isOpen) return null;
 
     return (
@@ -185,8 +198,16 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
                         </div>
                     )}
                     {showTagInput && (
-                        <div className="tag-input-container form-group">
-                            <div className="tags form-group">
+                        <div className="form-group">
+                            <label>Adicionar Tag</label>
+                            <input
+                                type="text"
+                                value={newTag}
+                                onChange={(e) => setNewTag(e.target.value)}
+                                onKeyDown={handleTagInputKeyDown}
+                                placeholder="Digite uma nova tag e pressione Enter"
+                            />
+                            <div className="tags">
                                 {tags.map((tag, index) => (
                                     <span key={index} className="tag">
                                         {tag}
@@ -196,13 +217,6 @@ const ExpenseModal = ({ isOpen, onClose, onAddExpense }) => {
                                     </span>
                                 ))}
                             </div>
-                            <input 
-                                type="text" 
-                                value={tagInput} 
-                                onChange={(e) => setTagInput(e.target.value)} 
-                                onKeyDown={handleTagInputKeyDown} 
-                                placeholder="Adicione uma tag"
-                            />
                         </div>
                     )}
                     <div className="button-container">

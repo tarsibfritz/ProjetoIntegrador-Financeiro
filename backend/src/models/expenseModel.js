@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Expense', {
+module.exports = (sequelize) => {
+  const Expense = sequelize.define('Expense', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -23,24 +23,21 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    tags: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      get() {
-        const rawValue = this.getDataValue('tags');
-        return rawValue ? rawValue.split(',').map(tag => tag.trim()) : [];
-      },
-      set(value) {
-        if (Array.isArray(value)) {
-          this.setDataValue('tags', value.join(', '));
-        } else {
-          this.setDataValue('tags', value);
-        }
-      }
-    },
     paid: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
   });
+
+  // Definindo o relacionamento Many-to-Many entre Expense e Tag
+  Expense.associate = (models) => {
+    Expense.belongsToMany(models.Tag, {
+      through: 'ExpenseTags',
+      as: 'tags',
+      foreignKey: 'expenseId',
+      otherKey: 'tagId'
+    });
+  };
+
+  return Expense;
 };

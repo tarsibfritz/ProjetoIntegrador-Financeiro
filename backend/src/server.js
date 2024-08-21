@@ -9,6 +9,7 @@ const port = process.env.PORT || 3000;
 
 // Importar as rotas
 const userRoutes = require('./routes/userRoutes');
+const tagRoutes = require('./routes/tagRoutes')
 const expenseRoutes = require('./routes/expenseRoutes');
 const incomeRoutes = require('./routes/incomeRoutes');
 
@@ -18,6 +19,7 @@ app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
 
 // Rotas
 app.use('/api/users', userRoutes);
+app.use('/api/tags', tagRoutes);
 app.use('/api/expenses', expenseRoutes);
 app.use('/api/incomes', incomeRoutes);
 
