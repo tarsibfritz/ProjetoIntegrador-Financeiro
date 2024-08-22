@@ -71,7 +71,7 @@ const ExpensesPage = () => {
 
     const handleEditExpense = async (updatedExpense) => {
         try {
-            await updateExpense(updatedExpense);
+            await updateExpense(updatedExpense.id, updatedExpense);
             const data = await getExpenses();
             setExpenses(data);
             setIsEditModalOpen(false);
