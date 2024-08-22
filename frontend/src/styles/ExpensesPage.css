@@ -18,6 +18,7 @@
     display: flex;
     align-items: center;
     width: 100%;
+    justify-content: space-between; /* Ajusta os itens para as extremidades do cabeçalho */
 }
 
 /* Título */
@@ -46,28 +47,46 @@
 }
 
 /* Estilos do filtro de mês */
-.sort-container {
+.filter-container {
+    position: relative;
     display: flex;
     align-items: center;
-    margin: 0 15px 0 0;
-    font-family: 'Poppins', sans-serif;
-    font-size: 14px;
 }
 
-.sort-container label {
-    margin-right: 10px;
-    font-weight: 600;
-}
-
-#monthSelect {
-    padding: 7px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 14px;
-    font-family: 'Poppins', sans-serif;
+.filter-icon {
     cursor: pointer;
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-popup {
+    position: absolute;
+    top: 100%;
+    right: 0; /* Ajustado para posicionar o popup à direita */
+    background: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 200px; /* Ajuste a largura do popup conforme necessário */
+}
+
+.filter-popup label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.filter-popup select {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.clear-filter {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    color: #f00;
+    display: flex;
+    align-items: center;
 }
 
 /* Tabela de despesas */
