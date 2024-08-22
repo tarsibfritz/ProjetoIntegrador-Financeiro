@@ -1,14 +1,16 @@
+// Componente LaunchesPage atualizado
+
 import { useState, useEffect, useRef } from 'react';
 import { FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmModal from '../components/ConfirmModal';
-import ExpenseModal from '../components/expensesComponents/ExpenseModal';
-import ExpenseInfoModal from '../components/expensesComponents/ExpenseInfoModal';
-import EditExpenseModal from '../components/expensesComponents/EditExpenseModal'; 
-import { getExpenses, addExpense, deleteExpense, updateExpense } from '../services/expenseService';
-import { groupExpensesByMonth } from '../utils/expensesUtils';
-import "../styles/ExpensesPage.css";
+import LaunchModal from '../components/launchesComponents/LaunchModal';
+import LaunchInfoModal from '../components/launchesComponents/LaunchInfoModal';
+import EditLaunchModal from '../components/launchesComponents/EditLaunchModal'; 
+import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/launchService';
+import { groupLaunchesByMonth } from '../utils/launchesUtils';
+import "../styles/LaunchesPage.css";
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -26,99 +28,99 @@ const getMonthNameInPortuguese = (monthIndex) => {
     return months[monthIndex];
 };
 
-const ExpensesPage = () => {
+const LaunchesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
-    const [selectedExpense, setSelectedExpense] = useState(null);
-    const [expenses, setExpenses] = useState([]);
+    const [selectedLaunch, setSelectedLaunch] = useState(null);
+    const [launches, setLaunches] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [expenseToDelete, setExpenseToDelete] = useState(null);
+    const [launchToDelete, setLaunchToDelete] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState('');
     const containerRef = useRef(null);
 
     useEffect(() => {
-        const loadExpenses = async () => {
+        const loadLaunches = async () => {
             try {
-                const data = await getExpenses();
+                const data = await getLaunches();
                 if (Array.isArray(data)) {
-                    setExpenses(data);
+                    setLaunches(data);
                 } else {
                     console.error('Dados recebidos não são um array:', data);
-                    setExpenses([]); 
+                    setLaunches([]); 
                 }
             } catch (error) {
-                console.error('Erro ao carregar despesas:', error);
+                console.error('Erro ao carregar lançamentos:', error);
             }
         };
 
-        loadExpenses();
+        loadLaunches();
     }, []);
 
-    const groupedExpenses = groupExpensesByMonth(expenses);
+    const groupedLaunches = groupLaunchesByMonth(launches);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
-    const handleOpenInfoModal = (expense) => {
-        setSelectedExpense(expense);
+    const handleOpenInfoModal = (launch) => {
+        setSelectedLaunch(launch);
         setIsInfoModalOpen(true);
     };
     const handleCloseInfoModal = () => {
         setIsInfoModalOpen(false);
-        setSelectedExpense(null);
+        setSelectedLaunch(null);
     };
 
-    const handleAddExpense = async (expense) => {
+    const handleAddLaunch = async (launch) => {
         try {
-            await addExpense(expense);
-            const data = await getExpenses();
-            setExpenses(data);
+            await addLaunch(launch);
+            const data = await getLaunches();
+            setLaunches(data);
             handleCloseModal();
-            toast.success('Despesa adicionada com sucesso!');
+            toast.success('Lançamento adicionado com sucesso!');
         } catch (error) {
-            toast.error('Erro ao adicionar despesa!');
-            console.error('Erro ao adicionar despesa:', error);
+            toast.error('Erro ao adicionar lançamento!');
+            console.error('Erro ao adicionar lançamento:', error);
         }
     };
 
-    const handleEditExpense = async (updatedExpense) => {
+    const handleEditLaunch = async (updatedLaunch) => {
         try {
-            await updateExpense(updatedExpense.id, updatedExpense);
-            const data = await getExpenses();
-            setExpenses(data);
+            await updateLaunch(updatedLaunch.id, updatedLaunch);
+            const data = await getLaunches();
+            setLaunches(data);
             setIsEditModalOpen(false);
             handleCloseInfoModal();
-            toast.success('Despesa atualizada com sucesso!');
+            toast.success('Lançamento atualizado com sucesso!');
         } catch (error) {
-            toast.error('Erro ao atualizar despesa!');
-            console.error('Erro ao atualizar despesa:', error);
+            toast.error('Erro ao atualizar lançamento!');
+            console.error('Erro ao atualizar lançamento:', error);
         }
     };
 
-    const handleDeleteExpense = (expenseId) => {
-        setExpenseToDelete(expenseId);
+    const handleDeleteLaunch = (launchId) => {
+        setLaunchToDelete(launchId);
         setShowConfirmModal(true);
     };
 
     const handleConfirmDelete = async () => {
         try {
-            await deleteExpense(expenseToDelete);
-            setExpenses(prevExpenses => prevExpenses.filter(expense => expense.id !== expenseToDelete));
+            await deleteLaunch(launchToDelete);
+            setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchToDelete));
             setShowConfirmModal(false);
             handleCloseInfoModal();
-            toast.success('Despesa excluída com sucesso!');
+            toast.success('Lançamento excluído com sucesso!');
         } catch (error) {
-            toast.error('Erro ao excluir despesa!');
-            console.error('Erro ao excluir despesa:', error);
+            toast.error('Erro ao excluir lançamento!');
+            console.error('Erro ao excluir lançamento:', error);
         }
     };
 
-    const handlePaidChange = (expenseId) => {
-        setExpenses(prevExpenses => {
-            const updatedExpenses = prevExpenses.map(expense =>
-                expense.id === expenseId ? { ...expense, paid: !expense.paid } : expense
+    const handlePaidChange = (launchId) => {
+        setLaunches(prevLaunches => {
+            const updatedLaunches = prevLaunches.map(launch =>
+                launch.id === launchId ? { ...launch, paid: !launch.paid } : launch
             );
-            return updatedExpenses;
+            return updatedLaunches;
         });
     };
 
@@ -126,22 +128,22 @@ const ExpensesPage = () => {
         setSelectedMonth(event.target.value);
     };
 
-    const months = Object.keys(groupedExpenses).map(key => {
+    const months = Object.keys(groupedLaunches).map(key => {
         const [year, month] = key.split('-');
         const monthIndex = parseInt(month, 10) - 1;
         const monthName = getMonthNameInPortuguese(monthIndex);
         return { value: key, label: `${monthName} ${year}` };
     }).sort((a, b) => new Date(b.value) - new Date(a.value)); 
 
-    // Exibir despesas de acordo com o mês selecionado, ou todas as despesas se nenhum mês estiver selecionado
-    const filteredExpenses = selectedMonth ? groupedExpenses[selectedMonth] || [] : 
-        Object.values(groupedExpenses).flat();
+    // Exibir lançamentos de acordo com o mês selecionado, ou todos os lançamentos se nenhum mês estiver selecionado
+    const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] : 
+        Object.values(groupedLaunches).flat();
 
     return (
         <div>
             <div className="container" ref={containerRef}>
                 <div className="header">
-                    <h1 className="title">Despesas</h1>
+                    <h1 className="title">Lançamentos</h1>
                     <div className="sort-container">
                         <label htmlFor="monthSelect">Filtrar por mês:</label>
                         <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange}>
@@ -157,7 +159,7 @@ const ExpensesPage = () => {
                         </button>
                     </div>
                 </div>
-                <div className="expenses-table">
+                <div className="launches-table">
                     <table>
                         <thead>
                             <tr>
@@ -165,32 +167,36 @@ const ExpensesPage = () => {
                                 <th className="description">Descrição</th>
                                 <th className="date">Data</th>
                                 <th className="amount">Valor</th>
+                                <th className="type">Tipo</th> {/* Adicione esta linha */}
                                 <th className="paid">Pago</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredExpenses.map((expense, index) => (
-                                <tr key={index} className="expense-row">
+                            {filteredLaunches.map((launch, index) => (
+                                <tr key={index} className="launch-row">
                                     <td className="info-icon">
                                         <FaInfoCircle 
                                             className="info-icon" 
-                                            onClick={() => handleOpenInfoModal(expense)} 
+                                            onClick={() => handleOpenInfoModal(launch)} 
                                         />
                                     </td>
                                     <td className="description">
-                                        {expense.description}
+                                        {launch.description}
                                     </td>
                                     <td className="date">
-                                        {formatDate(expense.date)}
+                                        {formatDate(launch.date)}
                                     </td>
                                     <td className="amount">
-                                        R$ {expense.amount.toFixed(2)}
+                                        R$ {launch.amount.toFixed(2)}
+                                    </td>
+                                    <td className="type">
+                                        {launch.type === 'expense' ? 'Despesa' : 'Receita'} {/* Adicione esta linha */}
                                     </td>
                                     <td className="paid">
                                         <input 
                                             type="checkbox" 
-                                            checked={expense.paid || false} 
-                                            onChange={() => handlePaidChange(expense.id)} 
+                                            checked={launch.paid || false} 
+                                            onChange={() => handlePaidChange(launch.id)} 
                                         />
                                     </td>
                                 </tr>
@@ -198,28 +204,28 @@ const ExpensesPage = () => {
                         </tbody>
                     </table>
                 </div>
-                <ExpenseModal
+                <LaunchModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
-                    onAddExpense={handleAddExpense}
+                    onAddLaunch={handleAddLaunch}
                 />
-                {selectedExpense && (
+                {selectedLaunch && (
                     <>
-                        <ExpenseInfoModal
+                        <LaunchInfoModal
                             isOpen={isInfoModalOpen}
                             onClose={handleCloseInfoModal}
-                            expense={selectedExpense}
+                            launch={selectedLaunch}
                             onEdit={() => {
                                 setIsInfoModalOpen(false);
                                 setIsEditModalOpen(true);
                             }}
-                            onDelete={() => handleDeleteExpense(selectedExpense.id)}
+                            onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
                         />
-                        <EditExpenseModal
+                        <EditLaunchModal
                             isOpen={isEditModalOpen}
                             onClose={() => setIsEditModalOpen(false)}
-                            expense={selectedExpense}
-                            onSave={handleEditExpense}
+                            launch={selectedLaunch}
+                            onSave={handleEditLaunch}
                         />
                     </>
                 )}
@@ -234,4 +240,4 @@ const ExpensesPage = () => {
     );
 };
 
-export default ExpensesPage;
+export default LaunchesPage;

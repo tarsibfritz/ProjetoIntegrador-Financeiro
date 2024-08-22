@@ -1,14 +1,14 @@
-export const groupExpensesByMonth = (expenses) => {
+export const groupLaunchesByMonth = (launches) => {
     const grouped = {};
 
-    expenses.forEach(expense => {
-        const date = new Date(expense.date);
+    launches.forEach(launch => {
+        const date = new Date(launch.date);
         const yearMonth = `${date.getFullYear()}-${date.getMonth() + 1}`; // 'YYYY-MM'
 
         if (!grouped[yearMonth]) {
             grouped[yearMonth] = [];
         }
-        grouped[yearMonth].push(expense);
+        grouped[yearMonth].push(launch);
     });
 
     return grouped;

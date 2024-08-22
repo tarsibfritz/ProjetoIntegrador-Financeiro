@@ -1,6 +1,6 @@
 import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import '../../styles/ExpenseInfoModal.css';
+import '../../styles/LaunchInfoModal.css';
 
 const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -10,21 +10,22 @@ const formatDate = (dateString) => {
     return `${day}/${month}/${year}`;
 };
 
-const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
+const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
     if (!isOpen) return null;
 
-    const description = typeof expense.description === 'string' ? expense.description : 'Descrição não disponível';
-    const amount = typeof expense.amount === 'number' ? expense.amount.toFixed(2) : '0.00';
-    const tag = typeof expense.tag === 'string' ? expense.tag : 'Tag não disponível';
-    const date = typeof expense.date === 'string' ? formatDate(expense.date) : 'Data não disponível';
-    const observation = typeof expense.observation === 'string' && expense.observation.trim() !== '' 
-        ? expense.observation 
+    const description = typeof launch.description === 'string' ? launch.description : 'Descrição não disponível';
+    const amount = typeof launch.amount === 'number' ? launch.amount.toFixed(2) : '0.00';
+    const tag = typeof launch.tag === 'string' ? launch.tag : 'Tag não disponível';
+    const date = typeof launch.date === 'string' ? formatDate(launch.date) : 'Data não disponível';
+    const observation = typeof launch.observation === 'string' && launch.observation.trim() !== '' 
+        ? launch.observation 
         : 'Nenhuma observação informada';
+    const type = typeof launch.type === 'string' ? launch.type : 'Tipo não disponível'; // Adicionado para tipo
 
     return (
-        <div className="expense-info-modal-overlay" onClick={onClose}>
-            <div className="expense-info-modal-content" onClick={e => e.stopPropagation()}>
-                <h2>Detalhes da Despesa</h2>
+        <div className="launch-info-modal-overlay" onClick={onClose}>
+            <div className="launch-info-modal-content" onClick={e => e.stopPropagation()}>
+                <h2>Detalhes do Lançamento ({type})</h2>
                 <div className="modal-details">
                     <div className="detail-item">
                         <div className="detail-item-left">
@@ -55,23 +56,23 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
                     </div>
                 </div>
                 <hr className="divider-line" />
-                <div className="expense-info-buttons">
+                <div className="launch-info-buttons">
                     <button 
-                        className="expense-info-edit-button" 
-                        onClick={() => onEdit(expense)}
+                        className="launch-info-edit-button" 
+                        onClick={() => onEdit(launch)}
                         title="Editar informações"
                     >
                         <FaEdit />
                     </button>
                     <button 
-                        className="expense-info-delete-button" 
-                        onClick={() => onDelete(expense)}
+                        className="launch-info-delete-button" 
+                        onClick={() => onDelete(launch)}
                         title="Excluir lançamento"
                     >
                         <FaTrash />
                     </button>
                 </div>
-                <button className="expense-info-close-button" onClick={onClose}>
+                <button className="launch-info-close-button" onClick={onClose}>
                     <FaTimes />
                 </button>
             </div>
@@ -79,18 +80,19 @@ const ExpenseInfoModal = ({ isOpen, onClose, expense, onEdit, onDelete }) => {
     );
 };
 
-ExpenseInfoModal.propTypes = {
+LaunchInfoModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    expense: PropTypes.shape({
+    launch: PropTypes.shape({
         description: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
         observation: PropTypes.string,
         tag: PropTypes.string.isRequired,
+        type: PropTypes.string.isRequired, // Adicionado para tipo
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
 };
 
-export default ExpenseInfoModal;
+export default LaunchInfoModal;

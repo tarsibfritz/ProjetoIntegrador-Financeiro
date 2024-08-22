@@ -1,0 +1,79 @@
+/* Estilos gerais da Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #333;
+    color: #fff;
+}
+
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+.site-name {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.navbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+/* Menu */
+.menu {
+    display: flex;
+    align-items: center;
+}
+
+.menu-item {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
+}
+
+/* Menu Responsivo */
+.menu {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: #333;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.menu.open {
+    display: flex;
+}
+
+.menu-item {
+    padding: 10px;
+    text-align: center;
+}
+
+.menu-item:hover {
+    background-color: #444;
+}
+
+/* Adicionar margem ao ícone de usuário */
+.menu-item:last-child {
+    margin-left: 0;
+}
