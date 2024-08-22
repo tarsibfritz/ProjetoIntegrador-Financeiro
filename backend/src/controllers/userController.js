@@ -1,6 +1,37 @@
-const db = require('../models');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const db = require('../models');
 const User = db.User;
+
+// Defina uma chave secreta para assinar os tokens (deve estar em .env)
+const secretKey = process.env.JWT_SECRET || 'your-secret-key';
+
+// Autenticar um usuário e gerar um token JWT
+exports.loginUser = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    
+    // Encontrar o usuário pelo email
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Comparar a senha fornecida com a senha armazenada
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: 'Invalid password' });
+    }
+
+    // Gerar um token JWT
+    const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+
+    // Retornar o token junto com o usuário
+    res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email } });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
 
 // Criar um novo usuário
 exports.createUser = async (req, res) => {
