@@ -18,6 +18,14 @@ const formatDate = (dateString) => {
     return `${day}/${month}/${year}`;
 };
 
+const getMonthNameInPortuguese = (monthIndex) => {
+    const months = [
+        'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+        'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+    return months[monthIndex];
+};
+
 const ExpensesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -26,7 +34,7 @@ const ExpensesPage = () => {
     const [expenses, setExpenses] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [expenseToDelete, setExpenseToDelete] = useState(null);
-    const [selectedMonth, setSelectedMonth] = useState(''); // Mês selecionado
+    const [selectedMonth, setSelectedMonth] = useState('');
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -120,8 +128,8 @@ const ExpensesPage = () => {
 
     const months = Object.keys(groupedExpenses).map(key => {
         const [year, month] = key.split('-');
-        const date = new Date(year, month - 1);
-        const monthName = date.toLocaleString('default', { month: 'long' });
+        const monthIndex = parseInt(month, 10) - 1;
+        const monthName = getMonthNameInPortuguese(monthIndex);
         return { value: key, label: `${monthName} ${year}` };
     }).sort((a, b) => new Date(b.value) - new Date(a.value)); 
 
