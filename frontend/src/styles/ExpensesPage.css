@@ -37,13 +37,14 @@
     border: none;
     border-radius: 100%;
     cursor: pointer;
-    color: #ffffff;
-    background: #ee9c3b;
+    color: #000;
+    background: #E9E9E9;
+    transition: ease 0.4s;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .add-button:hover {
-    background: #e78c30;
+    background: #d1d1d1;
 }
 
 /* Estilos do filtro de mês */

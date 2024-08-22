@@ -21,8 +21,7 @@ db.sequelize = sequelize;
 
 // Modelos
 db.User = require('./userModel')(sequelize, Sequelize.DataTypes);
-db.Expense = require('./expenseModel')(sequelize, Sequelize.DataTypes);
-db.Income = require('./incomeModel')(sequelize, Sequelize.DataTypes);
+db.Launch = require('./launchModel')(sequelize, Sequelize.DataTypes);
 
 // Relacionamentos
 Object.values(db).forEach(model => {

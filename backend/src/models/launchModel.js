@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
 module.exports = (sequelize) => {
-  const Expense = sequelize.define('Expense', {
+  const Launch = sequelize.define('Launch', {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -36,14 +36,25 @@ module.exports = (sequelize) => {
         'Lazer',
         'Moradia',
         'Imprevisto',
-        'Cuidados Pessoais'
+        'Cuidados Pessoais',
+        'Salário',
+        'Freelance',
+        'Investimentos',
+        'Outros'
       ),
       allowNull: false,
-    }
+    },
+    type: {
+      type: DataTypes.ENUM('expense', 'income'),
+      allowNull: false,
+      validate: {
+        isIn: [['expense', 'income']],
+      },
+    },
   }, {
-    tableName: 'expenses',
+    tableName: 'launches',
     timestamps: true,
   });
 
-  return Expense;
+  return Launch;
 };

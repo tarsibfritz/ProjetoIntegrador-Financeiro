@@ -9,8 +9,7 @@ const port = process.env.PORT || 3000;
 
 // Importar as rotas
 const userRoutes = require('./routes/userRoutes');
-const expenseRoutes = require('./routes/expenseRoutes');
-const incomeRoutes = require('./routes/incomeRoutes');
+const launchRoutes = require('./routes/launchRoutes');
 
 // Middleware
 app.use(cors()); // Habilitar CORS
@@ -18,8 +17,7 @@ app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
 
 // Rotas
 app.use('/api/users', userRoutes);
-app.use('/api/expenses', expenseRoutes);
-app.use('/api/incomes', incomeRoutes);
+app.use('/api/launches', launchRoutes);
 
 // Conectar ao banco de dados e sincronizar modelos
 const db = require('./models/index');
