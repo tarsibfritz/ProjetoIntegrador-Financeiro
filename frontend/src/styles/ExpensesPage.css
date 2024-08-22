@@ -1,3 +1,4 @@
+/* Estilos gerais do contêiner da página */
 .container {
     display: flex;
     flex-direction: column;
@@ -15,9 +16,11 @@
 /* Estilos do cabeçalho */
 .header {
     display: flex;
+    align-items: center;
     width: 100%;
 }
 
+/* Título */
 .title {
     font-family: 'Poppins', sans-serif;
     font-size: 21px;
@@ -25,6 +28,7 @@
     margin: 0 15px 0 0;
 }
 
+/* Botão de adicionar despesa */
 .add-button {
     display: flex;
     align-items: center;
@@ -34,6 +38,36 @@
     cursor: pointer;
     color: #ffffff;
     background: #ee9c3b;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.add-button:hover {
+    background: #e78c30;
+}
+
+/* Estilos do filtro de mês */
+.sort-container {
+    display: flex;
+    align-items: center;
+    margin: 0 15px 0 0;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+}
+
+.sort-container label {
+    margin-right: 10px;
+    font-weight: 600;
+}
+
+#monthSelect {
+    padding: 7px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Tabela de despesas */
@@ -96,4 +130,9 @@ tbody tr {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
+}
+
+/* Estilos do checkbox 'Pago' */
+input[type="checkbox"] {
+    cursor: pointer;
 }

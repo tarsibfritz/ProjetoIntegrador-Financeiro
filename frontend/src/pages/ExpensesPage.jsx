@@ -5,8 +5,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConfirmModal from '../components/ConfirmModal';
 import ExpenseModal from '../components/expensesComponents/ExpenseModal';
 import ExpenseInfoModal from '../components/expensesComponents/ExpenseInfoModal';
-import EditExpenseModal from '../components/expensesComponents/EditExpenseModal'; // Importar o modal de edição
+import EditExpenseModal from '../components/expensesComponents/EditExpenseModal'; 
 import { getExpenses, addExpense, deleteExpense, updateExpense } from '../services/expenseService';
+import { groupExpensesByMonth } from '../utils/expensesUtils';
 import "../styles/ExpensesPage.css";
 
 const formatDate = (dateString) => {
@@ -20,11 +21,12 @@ const formatDate = (dateString) => {
 const ExpensesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // Estado para o modal de edição
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
     const [selectedExpense, setSelectedExpense] = useState(null);
     const [expenses, setExpenses] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [expenseToDelete, setExpenseToDelete] = useState(null);
+    const [selectedMonth, setSelectedMonth] = useState(''); // Mês selecionado
     const containerRef = useRef(null);
 
     useEffect(() => {
@@ -35,7 +37,7 @@ const ExpensesPage = () => {
                     setExpenses(data);
                 } else {
                     console.error('Dados recebidos não são um array:', data);
-                    setExpenses([]); // Define um array vazio como fallback
+                    setExpenses([]); 
                 }
             } catch (error) {
                 console.error('Erro ao carregar despesas:', error);
@@ -44,6 +46,8 @@ const ExpensesPage = () => {
 
         loadExpenses();
     }, []);
+
+    const groupedExpenses = groupExpensesByMonth(expenses);
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
@@ -110,11 +114,35 @@ const ExpensesPage = () => {
         });
     };
 
+    const handleMonthChange = (event) => {
+        setSelectedMonth(event.target.value);
+    };
+
+    const months = Object.keys(groupedExpenses).map(key => {
+        const [year, month] = key.split('-');
+        const date = new Date(year, month - 1);
+        const monthName = date.toLocaleString('default', { month: 'long' });
+        return { value: key, label: `${monthName} ${year}` };
+    }).sort((a, b) => new Date(b.value) - new Date(a.value)); 
+
+    // Exibir despesas de acordo com o mês selecionado, ou todas as despesas se nenhum mês estiver selecionado
+    const filteredExpenses = selectedMonth ? groupedExpenses[selectedMonth] || [] : 
+        Object.values(groupedExpenses).flat();
+
     return (
         <div>
             <div className="container" ref={containerRef}>
                 <div className="header">
                     <h1 className="title">Despesas</h1>
+                    <div className="sort-container">
+                        <label htmlFor="monthSelect">Filtrar por mês:</label>
+                        <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange}>
+                            <option value="">Todos os meses</option>
+                            {months.map(month => (
+                                <option key={month.value} value={month.value}>{month.label}</option>
+                            ))}
+                        </select>
+                    </div>
                     <div className="add-container">
                         <button className="add-button" onClick={handleOpenModal}>
                             <FaPlus size={17} />
@@ -133,7 +161,7 @@ const ExpensesPage = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {expenses.map((expense, index) => (
+                            {filteredExpenses.map((expense, index) => (
                                 <tr key={index} className="expense-row">
                                     <td className="info-icon">
                                         <FaInfoCircle 
