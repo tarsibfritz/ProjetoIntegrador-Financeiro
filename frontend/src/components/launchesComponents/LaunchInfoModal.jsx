@@ -20,12 +20,14 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
     const observation = typeof launch.observation === 'string' && launch.observation.trim() !== '' 
         ? launch.observation 
         : 'Nenhuma observação informada';
-    const type = typeof launch.type === 'string' ? launch.type : 'Tipo não disponível'; // Adicionado para tipo
+    const type = typeof launch.type === 'string' 
+        ? (launch.type === 'income' ? 'Receita' : launch.type === 'expense' ? 'Despesa' : 'Tipo não disponível') 
+        : 'Tipo não disponível'; 
 
     return (
         <div className="launch-info-modal-overlay" onClick={onClose}>
             <div className="launch-info-modal-content" onClick={e => e.stopPropagation()}>
-                <h2>Detalhes do Lançamento ({type})</h2>
+                <h2>Detalhes do Lançamento</h2>
                 <div className="modal-details">
                     <div className="detail-item">
                         <div className="detail-item-left">
@@ -44,14 +46,17 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
                     </div>
                     <div className="detail-item">
                         <div className="detail-item-row">
-                            <div className="detail-item-observation">
-                                <strong>Observação:</strong> {observation}
+                            <div className="detail-item-tags">
+                                <strong>Tag:</strong> {tag}
+                            </div>
+                            <div className="detail-item-type">
+                                <strong>Tipo:</strong> {type}
                             </div>
                         </div>
                     </div>
                     <div className="detail-item">
-                        <div className="detail-item-tags">
-                            <strong>Tag:</strong> {tag} 
+                        <div className="detail-item-observation">
+                            <strong>Observação:</strong> {observation}
                         </div>
                     </div>
                 </div>

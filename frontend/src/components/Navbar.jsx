@@ -11,9 +11,14 @@ const Navbar = () => {
         setIsOpen(!isOpen);
     };
 
+    const closeMenu = () => {
+        setIsOpen(false);
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('token'); // Remove o token do armazenamento
         navigate('/login'); // Redireciona para a página de login
+        closeMenu(); // Fecha o menu após o logout
     };
 
     return (
@@ -26,7 +31,8 @@ const Navbar = () => {
                     {isOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
                 </button>
                 <div className={`menu ${isOpen ? 'open' : ''}`}>
-                    <Link to="/lançamentos" className="menu-item">Lançamentos</Link>
+                    <Link to="/home" className="menu-item" onClick={closeMenu}>Home</Link>
+                    <Link to="/lançamentos" className="menu-item" onClick={closeMenu}>Lançamentos</Link>
                     <button onClick={handleLogout} className="menu-item">Sair</button> {/* Adiciona o botão de logout */}
                 </div>
             </div>

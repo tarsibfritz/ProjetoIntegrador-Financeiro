@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import '../../styles/EditLaunchModal.css'; // Atualize o nome do arquivo CSS se necessário
+import '../../styles/EditLaunchModal.css';
 
 const formatDateForDisplay = (dateString) => {
     const date = new Date(dateString);
@@ -38,7 +38,6 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
     const [observation, setObservation] = useState('');
     const [tag, setTag] = useState('');
     const [type, setType] = useState('');
-    const [paid, setPaid] = useState(false); // Incluído para compatibilidade, se necessário
 
     useEffect(() => {
         if (launch) {
@@ -47,8 +46,7 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
             setDate(launch.date ? formatDateForDisplay(launch.date) : '');
             setObservation(launch.observation || '');
             setTag(launch.tag || '');
-            setType(launch.type || ''); // Atualizado para tipo
-            setPaid(launch.paid || false); // Incluído para compatibilidade, se necessário
+            setType(launch.type || '');
         }
     }, [launch]);
 
@@ -59,8 +57,6 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
     const handleDateChange = (e) => setDate(e.target.value);
     const handleObservationChange = (e) => setObservation(e.target.value);
     const handleTagChange = (e) => setTag(e.target.value);
-    const handleTypeChange = (e) => setType(e.target.value);
-    const handlePaidChange = (e) => setPaid(e.target.checked); // Incluído para compatibilidade, se necessário
 
     const handleSave = async () => {
         const dateISO = new Date(date.split('/').reverse().join('-')).toISOString();
@@ -72,8 +68,7 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
             date: dateISO,
             observation,
             tag,
-            type, // Atualizado para tipo
-            paid,
+            type,
         };
 
         try {
@@ -91,7 +86,8 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
         }
     };
 
-    const tags = type === 'Despesa' ? expenseTags : type === 'Receita' ? incomeTags : [];
+    // Determina as tags com base no tipo
+    const tags = type === 'income' ? incomeTags : type === 'expense' ? expenseTags : [];
 
     return (
         <div className="edit-launch-modal-overlay" onClick={onClose}>
@@ -99,20 +95,6 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
                 <h2 className="modal-title">Editar Lançamento</h2>
                 <div className="modal-form-wrapper">
                     <div className="modal-form">
-                        <div className="form-group">
-                            <label htmlFor="launch-type">
-                                <strong>Tipo:</strong>
-                                <select
-                                    id="launch-type"
-                                    value={type}
-                                    onChange={handleTypeChange}
-                                >
-                                    <option value="">Selecione um tipo</option>
-                                    <option value="Despesa">Despesa</option>
-                                    <option value="Receita">Receita</option>
-                                </select>
-                            </label>
-                        </div>
                         <div className="form-group">
                             <label htmlFor="launch-description">
                                 <strong>Descrição:</strong>
@@ -151,16 +133,6 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
                         </div>
                         <div className="form-group-observation-tag">
                             <div className="form-group">
-                                <label htmlFor="launch-observation">
-                                    <strong>Observação:</strong>
-                                    <textarea
-                                        id="launch-observation"
-                                        value={observation}
-                                        onChange={handleObservationChange}
-                                    />
-                                </label>
-                            </div>
-                            <div className="form-group">
                                 <label htmlFor="launch-tag">
                                     <strong>Tag:</strong>
                                     <select
@@ -177,15 +149,16 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
                                     </select>
                                 </label>
                             </div>
-                            <label htmlFor="launch-paid">
-                                <input
-                                    id="launch-paid"
-                                    type="checkbox"
-                                    checked={paid}
-                                    onChange={handlePaidChange}
-                                />
-                                <strong>Pago:</strong>
-                            </label>
+                            <div className="form-group">
+                                <label htmlFor="launch-observation">
+                                    <strong>Observação:</strong>
+                                    <textarea
+                                        id="launch-observation"
+                                        value={observation}
+                                        onChange={handleObservationChange}
+                                    />
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -207,8 +180,7 @@ EditLaunchModal.propTypes = {
         date: PropTypes.string,
         observation: PropTypes.string,
         tag: PropTypes.string,
-        type: PropTypes.string, // Adicionado para tipo
-        paid: PropTypes.bool, // Incluído para compatibilidade, se necessário
+        type: PropTypes.string,
         id: PropTypes.number.isRequired,
     }).isRequired,
     onSave: PropTypes.func.isRequired,

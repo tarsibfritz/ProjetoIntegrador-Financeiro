@@ -15,24 +15,24 @@
 /* Container do modal */
 .edit-launch-modal-container {
     background: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
+    padding: 15px; /* Reduzido o padding */
+    border-radius: 6px; /* Ajustado o border-radius */
+    width: 80%; /* Reduzido a largura */
+    max-width: 400px; /* Ajustado o max-width */
     position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Ajustado o box-shadow */
 }
 
 /* Título do modal */
 .modal-title {
-    margin-top: 0;
-    font-size: 20px;
+    margin: 0 0 10px 0; /* Ajustado a margem */
+    font-size: 18px; /* Reduzido o font-size */
     color: #333;
 }
 
 /* Wrapper do formulário do modal */
 .modal-form-wrapper {
-    margin-top: 15px;
+    margin-top: 10px; /* Reduzido a margem */
 }
 
 /* Formulário do modal */
@@ -44,12 +44,12 @@
 /* Linhas do formulário */
 .form-row {
     display: flex;
-    gap: 20px; /* Espaçamento entre os campos Valor e Data */
+    gap: 15px; /* Reduzido o gap */
 }
 
 /* Grupos de formulário */
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 10px; /* Reduzido a margem */
 }
 
 /* Estilo dos campos de input, textarea e select */
@@ -57,24 +57,24 @@
 .modal-form textarea,
 .modal-form select {
     width: 100%;
-    padding: 10px;
+    padding: 8px; /* Reduzido o padding */
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 16px;
+    font-size: 14px; /* Reduzido o font-size */
     color: #333;
 }
 
 /* Estilo para textarea */
 .modal-form textarea {
-    height: 120px;
+    height: 80px; /* Reduzido a altura */
     resize: none;
 }
 
 /* Estilo para os labels */
 .modal-form label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 4px; /* Reduzido a margem */
     font-weight: bold;
     color: #555;
 }
@@ -82,24 +82,25 @@
 /* Estilo específico para o grupo de observação e tag */
 .form-group-observation-tag {
     display: flex;
-    gap: 20px; /* Espaçamento entre os campos de observação e tag */
+    flex-direction: column; /* Alterado para coluna */
+    gap: 10px; /* Reduzido o gap */
 }
 
 /* Botões do modal */
 .modal-buttons {
     display: flex;
-    gap: 10px;
-    margin-top: 20px;
+    gap: 8px; /* Reduzido o gap */
+    margin-top: 15px; /* Reduzido a margem */
 }
 
 /* Botões de salvar e cancelar */
 .modal-save-button,
 .modal-cancel-button {
-    padding: 10px 20px;
+    padding: 8px 16px; /* Reduzido o padding */
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 14px; /* Reduzido o font-size */
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -121,7 +122,9 @@
     color: #555;
 }
 
-/* Estilo para o checkbox */
-.modal-form input[type="checkbox"] {
-    margin-right: 10px;
+/* Alinha o status ao lado do tipo */
+.form-row .form-group.status {
+    display: flex;
+    align-items: center;
+    margin-left: 10px; /* Espaçamento entre o tipo e o status */
 }
