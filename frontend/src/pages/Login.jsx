@@ -9,7 +9,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const navigate = useNavigate(); // Hook para navegação
 
-    // Regex para validar emails no formato simples, que contém "@" e termina com ".com"
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     const handleSubmit = async (e) => {
@@ -24,19 +23,28 @@ const Login = () => {
             toast.warning("Endereço de email inválido!");
             setTimeout(() => {
                 toast.info("Exemplo de email válido: exemplo@gmail.com");
-            }, 1500); // 1500 milissegundos = 1.5 segundo
+            }, 1500);
             return;
         }
 
         try {
-            // Enviar solicitação POST para fazer login do usuário
             const response = await axios.post('http://localhost:3000/api/users/login', {
                 email,
                 password,
             });
 
-            // Verificar se a resposta é bem-sucedida e mostrar uma mensagem apropriada
             if (response.status === 200) {
+                const { token, user } = response.data;
+
+                console.log('Resposta da API:', response.data); // Log da resposta
+
+                localStorage.setItem('token', token);
+                localStorage.setItem('userName', user.name); // Armazenar o nome do usuário
+                localStorage.setItem('userEmail', user.email); // Armazenar o e-mail do usuário
+
+                console.log('Nome do usuário armazenado:', localStorage.getItem('userName')); // Log do nome
+                console.log('Token armazenado:', localStorage.getItem('token')); // Log do token
+
                 toast.success("Login realizado com sucesso!");
                 navigate('/home'); // Redireciona para a página /home
             } else {
@@ -44,7 +52,7 @@ const Login = () => {
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                toast.warning("Credenciais inválidas!"); // Erro de login inválido
+                toast.warning("Credenciais inválidas!");
             } else {
                 toast.error("Erro ao realizar o login. Tente novamente.");
             }
@@ -77,13 +85,13 @@ const Login = () => {
                         </div>
                         <div className="login-form-footer">
                             <button className="login-form-button" type="submit">Entrar</button>
-                            <a href='/register' className="login-register-button">Não possui conta? <span>Cadastre-se</span></a>
+                            <a href='/cadastro' className="login-register-button">Não possui conta? <span>Cadastre-se</span></a>
                         </div>
                     </div>
                 </div>
             </form>
         </div> 
-    )
-}
+    );
+};
 
 export default Login;

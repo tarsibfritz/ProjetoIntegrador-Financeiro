@@ -10,10 +10,17 @@ const api = axios.create({
   },
 });
 
-// Adicione interceptadores se necessário
+// Adicione interceptador de requisição
 api.interceptors.request.use(
   (config) => {
-    // Adicione headers ou outras configurações antes da requisição ser enviada
+    // Obtenha o token do localStorage
+    const token = localStorage.getItem('token');
+    
+    // Adicione o token ao cabeçalho Authorization, se disponível
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
     return config;
   },
   (error) => {
@@ -22,13 +29,18 @@ api.interceptors.request.use(
   }
 );
 
+// Adicione interceptador de resposta
 api.interceptors.response.use(
   (response) => {
     // Manipule a resposta antes de retornar para o componente
     return response;
   },
   (error) => {
-    // Trate erros de resposta
+    // Trate erros de resposta, incluindo erros de autenticação
+    if (error.response && error.response.status === 401) {
+      // Por exemplo, você pode redirecionar para a página de login se o token for inválido
+      window.location.href = '/login';
+    }
     return Promise.reject(error);
   }
 );

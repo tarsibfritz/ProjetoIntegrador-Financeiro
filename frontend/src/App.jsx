@@ -6,6 +6,7 @@ import Register from './pages/Register';
 import HomePage from './pages/HomePage';
 import LaunchesPage from './pages/LaunchesPage';
 import Navbar from './components/Navbar';
+import PrivateRoute from './components/PrivateRoute'; // Importe o componente PrivateRoute
 import './index.css';
 
 // Componente para renderizar o Navbar condicionalmente
@@ -21,9 +22,22 @@ const Layout = () => {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/cadastro" element={<Register />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/lançamentos" element={<LaunchesPage />} />
-        {/* Outras rotas */}
+        <Route
+          path="/home"
+          element={
+            <PrivateRoute>
+              <HomePage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/lançamentos"
+          element={
+            <PrivateRoute>
+              <LaunchesPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </>
   );
