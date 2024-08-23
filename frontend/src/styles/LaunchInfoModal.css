@@ -1,4 +1,5 @@
-.expense-info-modal-overlay {
+/* Overlay do modal */
+.launch-info-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -12,7 +13,8 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.expense-info-modal-content {
+/* Conteúdo do modal */
+.launch-info-modal-content {
     background: #ffffff;
     padding: 20px;
     border-radius: 12px;
@@ -21,12 +23,10 @@
     position: relative;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s ease, opacity 0.3s ease;
-    opacity: 1;
-    transform: scale(1);
 }
 
-/* Botão de fechamento do modal*/
-.expense-info-close-button {
+/* Botão de fechamento do modal */
+.launch-info-close-button {
     position: absolute;
     top: 15px;
     right: 15px;
@@ -38,7 +38,7 @@
     transition: color 0.3s ease;
 }
 
-.expense-info-close-button:hover {
+.launch-info-close-button:hover {
     color: #555;
 }
 
@@ -81,29 +81,6 @@
     color: #333;
 }
 
-/* Container para as tags */
-.tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    margin-top: 10px;
-}
-
-/* Estilo para cada tag */
-.tag-item {
-    background: #d5d5d5;
-    color: rgb(33, 33, 33);
-    border-radius: 20px;
-    padding: 5px 10px;
-    font-size: 14px;
-    display: inline-block;
-    transition: background 0.3s ease;
-}
-
-.tag-item:hover {
-    background: #dedede;
-}
-
 /* Linha divisória entre o conteúdo e os botões */
 .divider-line {
     border: none;
@@ -112,14 +89,14 @@
 }
 
 /* Botões para editar e excluir */
-.expense-info-buttons {
+.launch-info-buttons {
     display: flex;
     justify-content: space-around;
     gap: 10px;
     margin-top: 20px;
 }
 
-.expense-info-edit-button {
+.launch-info-edit-button {
     background: transparent;
     color: #888;
     border: none;
@@ -128,7 +105,7 @@
     transition: color 0.3s ease;
 }
 
-.expense-info-delete-button {
+.launch-info-delete-button {
     background: transparent;
     color: #888;
     border: none;
@@ -137,6 +114,21 @@
     transition: color 0.3s ease;
 }
 
-.expense-info-edit-button:hover, .expense-info-delete-button:hover {
+.launch-info-edit-button:hover, .launch-info-delete-button:hover {
     color: #555;
+}
+
+/* Aumentando a legibilidade com um espaçamento mais generoso */
+.detail-item-row {
+    margin-bottom: 20px;
+}
+
+.detail-item-value, .detail-item-date {
+    font-size: 18px;
+    color: #333;
+}
+
+.detail-item-observation, .detail-item-tags {
+    font-size: 16px;
+    color: #666;
 }

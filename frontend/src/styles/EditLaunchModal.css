@@ -1,4 +1,5 @@
-.edit-expense-modal-overlay {
+/* Overlay do modal */
+.edit-launch-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,86 +12,95 @@
     font-family: 'Poppins', sans-serif;
 }
 
-.edit-expense-modal-container {
+/* Container do modal */
+.edit-launch-modal-container {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
     width: 90%;
     max-width: 500px;
     position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Título do modal */
 .modal-title {
     margin-top: 0;
-    font-size: 19px;
+    font-size: 20px;
+    color: #333;
 }
 
+/* Wrapper do formulário do modal */
 .modal-form-wrapper {
     margin-top: 15px;
-    padding: 10px;
 }
 
+/* Formulário do modal */
 .modal-form {
-    margin: 0;
+    display: flex;
+    flex-direction: column;
 }
 
+/* Linhas do formulário */
 .form-row {
     display: flex;
     gap: 20px; /* Espaçamento entre os campos Valor e Data */
 }
 
-.modal-form .form-group {
-    flex: 1;
+/* Grupos de formulário */
+.form-group {
     margin-bottom: 15px;
 }
 
+/* Estilo dos campos de input, textarea e select */
 .modal-form input,
 .modal-form textarea,
 .modal-form select {
     width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
+    padding: 10px;
+    border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
+    font-size: 16px;
+    color: #333;
 }
 
+/* Estilo para textarea */
 .modal-form textarea {
-    height: 10em;
+    height: 120px;
     resize: none;
 }
 
+/* Estilo para os labels */
 .modal-form label {
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
+    color: #555;
 }
 
-/* Ajusta o layout para a tag e o checkbox com largura igual ao form-group-observation */
-.modal-form .form-group-tag,
-.modal-form .form-group-observation {
-    flex: 1; /* Largura igual ao form-group-observation */
-}
-
-/* Ajusta o layout para o grupo de observação e tag com espaçamento igual ao grupo Valor e Data */
-.modal-form .form-group-observation-tag {
+/* Estilo específico para o grupo de observação e tag */
+.form-group-observation-tag {
     display: flex;
-    gap: 20px; /* Espaçamento igual ao valor e data */
-    align-items: flex-start;
+    gap: 20px; /* Espaçamento entre os campos de observação e tag */
 }
 
+/* Botões do modal */
 .modal-buttons {
     display: flex;
-    flex-direction: column;
-    gap: 2px;
+    gap: 10px;
+    margin-top: 20px;
 }
 
+/* Botões de salvar e cancelar */
 .modal-save-button,
 .modal-cancel-button {
     padding: 10px 20px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 16px;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .modal-save-button {
@@ -98,7 +108,20 @@
     color: white;
 }
 
+.modal-save-button:hover {
+    background-color: #45a049;
+}
+
 .modal-cancel-button {
     background-color: transparent;
-    color: rgb(195, 195, 195);
+    color: #888;
+}
+
+.modal-cancel-button:hover {
+    color: #555;
+}
+
+/* Estilo para o checkbox */
+.modal-form input[type="checkbox"] {
+    margin-right: 10px;
 }
