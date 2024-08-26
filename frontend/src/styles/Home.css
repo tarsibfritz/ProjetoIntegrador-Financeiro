@@ -1,0 +1,137 @@
+/* Estilos gerais para a página */
+.user-container {
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 20px;
+}
+
+/* Seção de perfil */
+.profile-section {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.profile-info {
+    text-align: center;
+}
+
+#user-welcome {
+    margin: 0;
+    font-size: 24px;
+    color: #2c3e50;
+}
+
+.user-buttons {
+    margin-top: 10px;
+}
+
+.user-buttons button {
+    background-color: #3498db;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.user-buttons button:hover {
+    background-color: #2980b9;
+}
+
+/* Estilos para a seção de informações */
+.info-section {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* Estilo para o container do saldo total */
+.balance-container {
+    background-color: #eaf2f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 45%;
+    text-align: center;
+}
+
+.balance-container h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #3498db;
+}
+
+.balance-container p {
+    font-size: 36px;
+    margin: 10px 0 0;
+    color: #2c3e50;
+}
+
+/* Estilos para o gráfico de despesas por tag */
+.chart-container {
+    background-color: #eaf2f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 45%;
+    text-align: center;
+    display: flex; /* Adicionado para flexbox */
+    justify-content: center; /* Centraliza o gráfico horizontalmente */
+    align-items: center; /* Centraliza o gráfico verticalmente */
+    flex-direction: column; /* Garante que os elementos estejam em coluna */
+}
+
+.chart-container h2 {
+    margin: 0 0 10px 0; /* Adicionado margem inferior para separar título do gráfico */
+    font-size: 20px;
+    color: #3498db;
+}
+
+/* Estilos para o gráfico de saldo final por mês */
+.monthly-balance-container {
+    background-color: #eaf2f8;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 96.5%;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.monthly-balance-container h2 {
+    margin: 0;
+    font-size: 20px;
+    color: #3498db;
+}
+
+/* Estilo para o gráfico dentro do container */
+.monthly-balance-container .recharts-wrapper {
+    width: 100%; /* Garante que o gráfico use a largura total do container */
+    height: 300px; /* Ajuste a altura conforme necessário */
+}
+
+/* Adicionando responsividade para os gráficos */
+@media (max-width: 768px) {
+    .info-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .balance-container, .chart-container, .monthly-balance-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .monthly-balance-container .recharts-cartesian-axis-x, 
+    .monthly-balance-container .recharts-cartesian-axis-y {
+        font-size: 12px;
+    }
+
+    .monthly-balance-container .recharts-label {
+        font-size: 12px;
+    }
+}
