@@ -28,9 +28,9 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
     const [selectedTag, setSelectedTag] = useState('');
     const [showObservationInput, setShowObservationInput] = useState(false);
     const [showTagInput, setShowTagInput] = useState(false);
-    const [type, setType] = useState(''); // Adicionado para tipo de lançamento
+    const [type, setType] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Tags pré-definidas
     const expenseTags = [
         'Alimentação',
         'Transporte',
@@ -75,9 +75,14 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
     const handleSave = async (e) => {
         e.preventDefault();
 
+        if (isSubmitting) return; // Evita múltiplas submissões
+
+        setIsSubmitting(true);
+
         // Validação dos campos obrigatórios
         if (!description || !amount || !date || !selectedTag || !type) {
             toast.warning("Por favor, preencha todos os campos obrigatórios.");
+            setIsSubmitting(false);
             return;
         }
 
@@ -85,6 +90,7 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
         const numericAmount = parseFloat(amount);
         if (numericAmount <= 0 || isNaN(numericAmount)) {
             toast.warning("O valor deve ser maior que zero.");
+            setIsSubmitting(false);
             return;
         }
 
@@ -92,6 +98,7 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
         const tags = type === 'Despesa' ? expenseTags : incomeTags;
         if (!tags.includes(selectedTag)) {
             toast.warning("Tag selecionada é inválida.");
+            setIsSubmitting(false);
             return;
         }
 
@@ -107,7 +114,7 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
             date: new Date(formattedDate).toISOString(),
             observation,
             tag: selectedTag,
-            type: launchType // Ajustar o tipo para 'expense' ou 'income'
+            type: launchType
         };
 
         try {
@@ -122,6 +129,8 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
             }
         } catch (error) {
             toast.error(`Erro ao salvar lançamento: ${error.message}`);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -131,7 +140,7 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
         setDate(formatDateForDisplay(new Date()));
         setObservation('');
         setSelectedTag('');
-        setType(''); // Resetar tipo
+        setType('');
         onClose();
     };
 
@@ -222,7 +231,7 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
                                     </div>
                                 )}
                                 <div className="form-group">
-                                    <button type="submit">Salvar</button>
+                                    <button type="submit" disabled={isSubmitting}>Salvar</button>
                                     <button type="button" onClick={handleClose}>Fechar</button>
                                 </div>
                             </>

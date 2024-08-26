@@ -1,5 +1,3 @@
-// Componente LaunchesPage atualizado
-
 import { useState, useEffect, useRef } from 'react';
 import { FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
@@ -73,6 +71,7 @@ const LaunchesPage = () => {
     const handleAddLaunch = async (launch) => {
         try {
             await addLaunch(launch);
+            // Recarregue os lançamentos após adicionar um novo
             const data = await getLaunches();
             setLaunches(data);
             handleCloseModal();
@@ -135,7 +134,6 @@ const LaunchesPage = () => {
         return { value: key, label: `${monthName} ${year}` };
     }).sort((a, b) => new Date(b.value) - new Date(a.value)); 
 
-    // Exibir lançamentos de acordo com o mês selecionado, ou todos os lançamentos se nenhum mês estiver selecionado
     const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] : 
         Object.values(groupedLaunches).flat();
 
@@ -167,7 +165,7 @@ const LaunchesPage = () => {
                                 <th className="description">Descrição</th>
                                 <th className="date">Data</th>
                                 <th className="amount">Valor</th>
-                                <th className="type">Tipo</th> {/* Adicione esta linha */}
+                                <th className="type">Tipo</th>
                                 <th className="paid">Pago</th>
                             </tr>
                         </thead>
@@ -190,7 +188,7 @@ const LaunchesPage = () => {
                                         R$ {launch.amount.toFixed(2)}
                                     </td>
                                     <td className="type">
-                                        {launch.type === 'expense' ? 'Despesa' : 'Receita'} {/* Adicione esta linha */}
+                                        {launch.type === 'expense' ? 'Despesa' : 'Receita'}
                                     </td>
                                     <td className="paid">
                                         <input 
