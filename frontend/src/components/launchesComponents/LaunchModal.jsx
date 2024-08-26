@@ -20,7 +20,7 @@ const convertToDateInputFormat = (dateStr) => {
     return `20${year}-${month}-${day}`;
 };
 
-const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
+const LaunchModal = ({ isOpen, onClose }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState(formatDateForDisplay(new Date()));
@@ -122,7 +122,6 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
 
             if (response.status === 201) {
                 toast.success("Lançamento salvo com sucesso!");
-                onAddLaunch(launchData);
                 handleClose();
             } else {
                 toast.error(`Erro: ${response.data.error || 'Não foi possível salvar o lançamento.'}`);
@@ -246,7 +245,6 @@ const LaunchModal = ({ isOpen, onClose, onAddLaunch }) => {
 LaunchModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
-    onAddLaunch: PropTypes.func.isRequired,
 };
 
 export default LaunchModal;

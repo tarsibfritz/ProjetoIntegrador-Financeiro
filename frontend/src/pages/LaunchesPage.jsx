@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ConfirmModal from '../components/ConfirmModal';
 import LaunchModal from '../components/launchesComponents/LaunchModal';
 import LaunchInfoModal from '../components/launchesComponents/LaunchInfoModal';
-import EditLaunchModal from '../components/launchesComponents/EditLaunchModal'; 
+import EditLaunchModal from '../components/launchesComponents/EditLaunchModal';
 import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/launchService';
 import { groupLaunchesByMonth } from '../utils/launchesUtils';
 import "../styles/LaunchesPage.css";
@@ -39,7 +39,7 @@ const calculateBalance = (launches) => {
 const LaunchesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); 
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedLaunch, setSelectedLaunch] = useState(null);
     const [launches, setLaunches] = useState([]);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -55,7 +55,7 @@ const LaunchesPage = () => {
                     setLaunches(data);
                 } else {
                     console.error('Dados recebidos não são um array:', data);
-                    setLaunches([]); 
+                    setLaunches([]);
                 }
             } catch (error) {
                 console.error('Erro ao carregar lançamentos:', error);
@@ -78,10 +78,9 @@ const LaunchesPage = () => {
         setSelectedLaunch(null);
     };
 
-    const handleAddLaunch = async (launch) => {
+    const handleSaveLaunch = async (launch) => {
         try {
             await addLaunch(launch);
-            // Recarregue os lançamentos após adicionar um novo
             const data = await getLaunches();
             setLaunches(data);
             handleCloseModal();
@@ -142,9 +141,9 @@ const LaunchesPage = () => {
         const monthIndex = parseInt(month, 10) - 1;
         const monthName = getMonthNameInPortuguese(monthIndex);
         return { value: key, label: `${monthName} ${year}` };
-    }).sort((a, b) => new Date(b.value) - new Date(a.value)); 
+    }).sort((a, b) => new Date(b.value) - new Date(a.value));
 
-    const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] : 
+    const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] :
         Object.values(groupedLaunches).flat();
 
     const balance = calculateBalance(filteredLaunches);
@@ -223,7 +222,7 @@ const LaunchesPage = () => {
                 <LaunchModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
-                    onAddLaunch={handleAddLaunch}
+                    onSaveLaunch={handleSaveLaunch} // Passa a função de salvamento para o modal
                 />
                 {selectedLaunch && (
                     <>
@@ -245,13 +244,15 @@ const LaunchesPage = () => {
                         />
                     </>
                 )}
-                <ConfirmModal
-                    show={showConfirmModal}
-                    onConfirm={handleConfirmDelete}
-                    onCancel={() => setShowConfirmModal(false)}
-                />
-                <ToastContainer />
+                {showConfirmModal && (
+                    <ConfirmModal
+                        isOpen={showConfirmModal}
+                        onClose={() => setShowConfirmModal(false)}
+                        onConfirm={handleConfirmDelete}
+                    />
+                )}
             </div>
+            <ToastContainer />
         </div>
     );
 };
