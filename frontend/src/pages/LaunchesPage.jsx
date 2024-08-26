@@ -222,7 +222,7 @@ const LaunchesPage = () => {
                 <LaunchModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
-                    onSaveLaunch={handleSaveLaunch} // Passa a função de salvamento para o modal
+                    onAddLaunch={handleSaveLaunch} // Corrigido o nome da prop
                 />
                 {selectedLaunch && (
                     <>
@@ -244,15 +244,14 @@ const LaunchesPage = () => {
                         />
                     </>
                 )}
-                {showConfirmModal && (
-                    <ConfirmModal
-                        isOpen={showConfirmModal}
-                        onClose={() => setShowConfirmModal(false)}
-                        onConfirm={handleConfirmDelete}
-                    />
-                )}
+                <ConfirmModal
+                    show={showConfirmModal}
+                    onConfirm={handleConfirmDelete}
+                    onCancel={() => setShowConfirmModal(false)} // Adicionado onCancel
+                    message="Tem certeza de que deseja excluir este lançamento?" // Verifique se esta prop é esperada pelo ConfirmModal
+                />
+                <ToastContainer />
             </div>
-            <ToastContainer />
         </div>
     );
 };

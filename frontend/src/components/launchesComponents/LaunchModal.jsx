@@ -45,7 +45,6 @@ const LaunchModal = ({ isOpen, onClose }) => {
     const incomeTags = [
         'Salário',
         'Freelance',
-        'Vendas',
         'Investimentos',
         'Outros'
     ];
@@ -124,9 +123,11 @@ const LaunchModal = ({ isOpen, onClose }) => {
                 toast.success("Lançamento salvo com sucesso!");
                 handleClose();
             } else {
+                console.error("Resposta do servidor:", response);
                 toast.error(`Erro: ${response.data.error || 'Não foi possível salvar o lançamento.'}`);
             }
         } catch (error) {
+            console.error("Erro ao salvar lançamento:", error);
             toast.error(`Erro ao salvar lançamento: ${error.message}`);
         } finally {
             setIsSubmitting(false);
