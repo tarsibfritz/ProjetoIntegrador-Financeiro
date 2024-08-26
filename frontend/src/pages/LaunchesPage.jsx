@@ -26,6 +26,16 @@ const getMonthNameInPortuguese = (monthIndex) => {
     return months[monthIndex];
 };
 
+const calculateBalance = (launches) => {
+    const balance = launches.reduce((acc, launch) => {
+        return launch.type === 'expense'
+            ? acc - launch.amount
+            : acc + launch.amount;
+    }, 0);
+
+    return balance;
+};
+
 const LaunchesPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
@@ -137,6 +147,9 @@ const LaunchesPage = () => {
     const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] : 
         Object.values(groupedLaunches).flat();
 
+    const balance = calculateBalance(filteredLaunches);
+    const balanceClass = balance >= 0 ? 'balance-positive' : 'balance-negative';
+
     return (
         <div>
             <div className="container" ref={containerRef}>
@@ -199,6 +212,11 @@ const LaunchesPage = () => {
                                     </td>
                                 </tr>
                             ))}
+                            <tr>
+                                <td colSpan="6" className={`balance ${balanceClass}`}>
+                                    Saldo: R$ {balance.toFixed(2)}
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

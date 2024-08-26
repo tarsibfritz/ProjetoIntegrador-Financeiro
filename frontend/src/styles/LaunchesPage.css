@@ -156,3 +156,17 @@ tbody tr {
 input[type="checkbox"] {
     cursor: pointer;
 }
+
+/* Saldo */
+.balance {
+    font-weight: bold;
+    text-align: right;
+}
+
+.balance-positive {
+    color: green;
+}
+
+.balance-negative {
+    color: red;
+}
