@@ -11,16 +11,16 @@ const calculateBalance = (launches) => {
     }, 0);
 };
 
-// Função para agrupar despesas por categoria
-const groupExpensesByCategory = (launches) => {
+// Função para agrupar despesas por tag
+const groupExpensesByTag = (launches) => {
     const expenseGroups = launches.reduce((acc, launch) => {
         if (launch.type === 'expense') {
-            acc[launch.category] = (acc[launch.category] || 0) + launch.amount;
+            acc[launch.tag] = (acc[launch.tag] || 0) + launch.amount;
         }
         return acc;
     }, {});
 
-    return Object.entries(expenseGroups).map(([category, amount]) => ({ name: category, value: amount }));
+    return Object.entries(expenseGroups).map(([tag, amount]) => ({ name: tag, value: amount }));
 };
 
 const HomePage = () => {
@@ -49,10 +49,10 @@ const HomePage = () => {
 
                 // Calcula o saldo e os dados para o gráfico
                 const totalBalance = calculateBalance(data);
-                const expensesByCategory = groupExpensesByCategory(data);
+                const expensesByTag = groupExpensesByTag(data);
 
                 setBalance(totalBalance);
-                setExpensesData(expensesByCategory);
+                setExpensesData(expensesByTag);
             } catch (error) {
                 setError(error.message);
             } finally {
@@ -90,7 +90,7 @@ const HomePage = () => {
                 </div>
 
                 <div className="chart-container">
-                    <h2>Despesas por Categoria</h2>
+                    <h2>Despesas por Tag</h2>
                     <PieChart width={400} height={400}>
                         <Pie
                             data={expensesData}
