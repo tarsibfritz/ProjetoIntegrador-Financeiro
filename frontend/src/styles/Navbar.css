@@ -1,17 +1,28 @@
+/* Navbar Container */
 .navbar {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 30px;
-    background-color: transparent;
+    background-color: #150E33; /* Ajuste a cor de fundo para melhor contraste */
     color: #fff;
 }
 
-.navbar-left {
+/* Conteúdo da Navbar */
+.navbar-content {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Alinhamento dos Itens */
+.navbar-left, .navbar-links, .navbar-right {
     display: flex;
     align-items: center;
 }
 
+/* Nome do Site */
 .site-name {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
@@ -19,51 +30,82 @@
     margin: 0;
 }
 
-.navbar-right {
+/* Links da Navbar */
+.navbar-links {
     display: flex;
-    align-items: center;
+    gap: 20px;
 }
 
+/* Botão de Toggle do Menu */
 .menu-toggle {
     background: none;
     border: none;
     color: #fff;
     cursor: pointer;
     font-size: 24px;
-    margin-right: 10px;
+    margin-left: 10px;
+    position: relative; /* Para posicionar o menu corretamente */
 }
 
-/* Menu */
+/* Menu (invisível por padrão) */
 .menu {
     display: none;
     flex-direction: column;
     position: absolute;
+    text-align: center;
     top: 60px;
-    right: 20px;
-    background-color: #333;
+    right: 0;
+    background-color: #150E33;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 170px;
+    z-index: 1000;
 }
 
-.menu-item {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-    padding: 10px;
-    text-align: center;
-}
-
+/* Menu visível quando aberto */
 .menu.open {
     display: flex;
 }
 
-.menu-item:hover {
-    background-color: #444;
+/* Itens do Menu */
+.menu-item, .logout-user {
+    color: #fff;
+    text-decoration: none;
+    padding: 10px;
+    display: block;
+    position: relative;
 }
 
-/* Adicionar margem ao ícone de usuário */
-.menu-item:last-child {
-    margin-left: 0;
+/* Linha animada embaixo do item do menu */
+.menu-item::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #fff;
+    transition: width 0.4s ease;
+}
+
+.menu-item:hover {
+    color: #b40ee6;
+}
+
+.menu-item:hover::after {
+    width: 100%;
+    background-color: #b40ee6
+}
+
+/* Estilo do botão de logout */
+.logout-user {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: ease 0.5s;
+}
+
+.logout-user:hover {
+    background-color: #6530a7;
 }
