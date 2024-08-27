@@ -3,7 +3,7 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    background-color: #F9F9F9;
+    background-color: #130d2e;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 8px;
@@ -17,17 +17,25 @@
     align-items: center;
     width: 100%;
     justify-content: space-between;
-    margin: 0 0 20px 0;
+    margin-bottom: 20px;
 }
 
 .title {
     font-family: 'Poppins', sans-serif;
+    color: #fff;
     font-size: 21px;
     font-weight: 600;
-    margin: 0 15px 0 0;
+    margin: 0;
 }
 
-/* Botão de adicionar despesa */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 19px;
+}
+
 .add-button {
     display: flex;
     align-items: center;
@@ -45,59 +53,25 @@
     background: #d1d1d1;
 }
 
-/* Estilos do filtro de mês */
-.filter-container {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.filter-icon {
-    cursor: pointer;
-}
-
-.filter-popup {
-    position: absolute;
-    top: 100%;
-    right: 0; /* Ajustado para posicionar o popup à direita */
-    background: white;
+.month-select {
+    border-radius: 8px;
     border: 1px solid #ddd;
-    padding: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-    width: 200px; /* Ajuste a largura do popup conforme necessário */
-}
-
-.filter-popup label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.filter-popup select {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
-}
-
-.clear-filter {
-    background: transparent;
-    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
     cursor: pointer;
-    color: #f00;
-    display: flex;
-    align-items: center;
+    outline: none;
+    transition: border-color 0.3s ease;
 }
 
-/* Tabela de despesas */
-.expenses-table {
+.launches-table {
     width: 100%;
-    margin-top: 20px;
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
-    border-collapse: collapse; /* Importante para as bordas entre células */
+    border-collapse: collapse;
 }
 
-/* Cabeçalho da tabela */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -106,16 +80,14 @@ table {
 thead th {
     font-weight: 600;
     padding: 10px;
-    background-color: #f4f4f4;
-    border-radius: 5px;
+    color: #fff;
+    background-color: #410E6E;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
-    white-space: nowrap; /* Garante que o cabeçalho não quebre */
-    border-right: 1px solid #ddd; /* Linha entre as colunas do cabeçalho */
+    white-space: nowrap;
 }
 
-/* Adiciona uma borda direita em todas as células exceto a última */
-th:not(:last-child), td:not(:last-child) {
+td:not(:last-child) {
     border-right: 1px solid #ddd;
 }
 
@@ -124,7 +96,6 @@ th, td {
     padding: 10px;
 }
 
-/* Colunas específicas */
 th.info-icon, td.info-icon {
     width: 50px;
     text-align: center;
@@ -148,20 +119,13 @@ th.paid, td.paid {
     width: 50px;
 }
 
-/* Linha de despesas */
 tbody tr {
-    background-color: #f9f9f9;
+    background-color: #f0ecf2;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
 }
 
-/* Estilos do checkbox 'Pago' */
-input[type="checkbox"] {
-    cursor: pointer;
-}
-
-/* Saldo */
 .balance {
     font-weight: bold;
     text-align: right;
@@ -173,4 +137,8 @@ input[type="checkbox"] {
 
 .balance-negative {
     color: red;
+}
+
+input[type="checkbox"] {
+    cursor: pointer;
 }

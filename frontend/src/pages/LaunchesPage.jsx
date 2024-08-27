@@ -152,20 +152,18 @@ const LaunchesPage = () => {
     return (
         <div>
             <div className="container" ref={containerRef}>
-                <div className="header">
-                    <h1 className="title">Lançamentos</h1>
+                <div className="header-content">
                     <div className="sort-container">
-                        <label htmlFor="monthSelect">Filtrar por mês:</label>
-                        <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange}>
+                        <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange} className="month-select">
                             {months.map(month => (
                                 <option key={month.value} value={month.value}>{month.label}</option>
                             ))}
                         </select>
                     </div>
                     <div className="add-container">
-                        <button className="add-button" onClick={handleOpenModal}>
-                            <FaPlus size={17} />
-                        </button>
+                            <button className="add-button" onClick={handleOpenModal}>
+                                <FaPlus size={17} />
+                            </button>
                     </div>
                 </div>
                 <div className="launches-table">
