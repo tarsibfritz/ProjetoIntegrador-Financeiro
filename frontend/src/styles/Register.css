@@ -4,9 +4,11 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-size: cover; 
-    background-color: #f1f2f8;
     padding: 20px;
+    background-image: url('../assets/second-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* Container do formulário */
@@ -25,7 +27,7 @@
 .register-title {
     font-family: 'Poppins', sans-serif;
     font-weight: 800;
-    color: #ee9c3b;
+    color: #7127a0;
     text-align: center;
     margin-bottom: 20px;
 }
@@ -58,7 +60,7 @@
 }
 
 .register-form-group input:focus {
-    border-color: #57a0e8; 
+    border-color: #7e1cbc; 
     outline: none; 
 }
 
@@ -78,19 +80,19 @@
     border: none;
     border-radius: 5px;
     color: #fff; 
-    background-color: #ee9c3b; 
+    background-color: #7127a0; 
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .register-form-button:hover {
-    background-color: #ec7f26; 
+    background-color: #40167a; 
 }
 
 /* Link para Login */
 .register-login-button {
     font-size: 14px;
-    color: #9c9c9c; 
+    color: #40167a; 
     text-decoration: none;
     margin-left: 10px;
 }
@@ -108,14 +110,14 @@
     bottom: -2px; 
     width: 100%;
     height: 1px;
-    background-color: #ec7f26; 
+    background-color: #7127a0; 
     transform: scaleX(0); 
     transform-origin: bottom right; 
     transition: transform 0.3s ease; 
 }
 
 .register-login-button span:hover {
-    color: #ec7f26;
+    color: #7127a0;
 }
 
 .register-login-button span:hover::after {

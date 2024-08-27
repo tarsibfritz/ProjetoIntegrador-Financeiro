@@ -35,10 +35,6 @@ const Navbar = () => {
                 <div className="navbar-left">
                     <h1 className="site-name">Nome do Site</h1>
                 </div>
-                <div className="navbar-links">
-                    <Link to="/home" className="menu-item" onClick={closeMenu}>Home</Link>
-                    <Link to="/lançamentos" className="menu-item" onClick={closeMenu}>Lançamentos</Link>
-                </div>
                 <div className="navbar-right">
                     <button className="menu-toggle" onClick={toggleMenu}>
                         <FaUser size={24} />
@@ -47,6 +43,8 @@ const Navbar = () => {
                         <div className="user-info">
                             <span className="user-name">{userName}</span>
                         </div>
+                        <Link to="/home" className="menu-item" onClick={closeMenu}>Home</Link>
+                        <Link to="/lançamentos" className="menu-item" onClick={closeMenu}>Lançamentos</Link>
                         <button onClick={handleLogout} className="logout-user">Sair</button>
                     </div>
                 </div>

@@ -14,7 +14,7 @@
     max-width: 1200px;
 }
 
-.navbar-left, .navbar-links, .navbar-right {
+.navbar-left, .navbar-right {
     display: flex;
     align-items: center;
 }
@@ -24,11 +24,6 @@
     font-size: 24px;
     font-weight: 600;
     margin: 0;
-}
-
-.navbar-links {
-    display: flex;
-    gap: 20px;
 }
 
 /* Botão de Toggle */
@@ -62,43 +57,22 @@
 }
 
 /* Itens do Menu */
+.user-info {
+    margin: 10px 0;
+}
+
 .menu-item, .logout-user {
     color: #fff;
     text-decoration: none;
     padding: 10px;
     display: block;
     position: relative;
-}
-
-.menu-item::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 0;
-    height: 2px;
-    background-color: #fff;
-    transition: width 0.4s ease;
-}
-
-.menu-item:hover {
-    color: #b40ee6;
-}
-
-.menu-item:hover::after {
-    width: 100%;
-    background-color: #b40ee6
-}
-
-/* Estilo do botão de logout */
-.logout-user {
     border: none;
     background: none;
     cursor: pointer;
-    margin-top: 4px;
     transition: ease 0.5s;
 }
 
-.logout-user:hover {
+.menu-item:hover, .logout-user:hover {
     background-color: #6530a7;
 }
