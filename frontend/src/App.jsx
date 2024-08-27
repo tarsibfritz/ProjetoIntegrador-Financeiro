@@ -1,12 +1,8 @@
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, useLocation } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import HomePage from './pages/HomePage';
-import LaunchesPage from './pages/LaunchesPage';
 import Navbar from './components/Navbar';
-import PrivateRoute from './components/PrivateRoute'; // Importe o componente PrivateRoute
+import AppRoutes from './Routes';
 import './index.css';
 
 // Componente para renderizar o Navbar condicionalmente
@@ -19,26 +15,7 @@ const Layout = () => {
   return (
     <>
       {!isAuthPage && <Navbar />}
-      <Routes>
-        <Route path="/login" element={<Login />} />
-        <Route path="/cadastro" element={<Register />} />
-        <Route
-          path="/home"
-          element={
-            <PrivateRoute>
-              <HomePage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/lançamentos"
-          element={
-            <PrivateRoute>
-              <LaunchesPage />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
+      <AppRoutes />
     </>
   );
 };

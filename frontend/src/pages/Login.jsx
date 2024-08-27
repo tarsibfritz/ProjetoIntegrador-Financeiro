@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { toast } from 'react-toastify';
 import axios from 'axios'; 
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import "../styles/Login.css";
 
 const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate(); // Hook para navegação
+    const navigate = useNavigate();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -36,17 +36,17 @@ const Login = () => {
             if (response.status === 200) {
                 const { token, user } = response.data;
 
-                console.log('Resposta da API:', response.data); // Log da resposta
+                console.log('Resposta da API:', response.data);
 
                 localStorage.setItem('token', token);
-                localStorage.setItem('userName', user.name); // Armazenar o nome do usuário
-                localStorage.setItem('userEmail', user.email); // Armazenar o e-mail do usuário
+                localStorage.setItem('userName', user.name);
+                localStorage.setItem('userEmail', user.email);
 
-                console.log('Nome do usuário armazenado:', localStorage.getItem('userName')); // Log do nome
-                console.log('Token armazenado:', localStorage.getItem('token')); // Log do token
+                console.log('Nome do usuário armazenado:', localStorage.getItem('userName'));
+                console.log('Token armazenado:', localStorage.getItem('token'));
 
                 toast.success("Login realizado com sucesso!");
-                navigate('/home'); // Redireciona para a página /home
+                navigate('/home');
             } else {
                 toast.error("Erro ao realizar o login. Tente novamente.");
             }
@@ -85,7 +85,7 @@ const Login = () => {
                         </div>
                         <div className="login-form-footer">
                             <button className="login-form-button" type="submit">Entrar</button>
-                            <a href='/cadastro' className="login-register-button">Não possui conta? <span>Cadastre-se</span></a>
+                            <Link to='/cadastro' className="login-register-button">Não possui conta? <span>Cadastre-se</span></Link>
                         </div>
                     </div>
                 </div>

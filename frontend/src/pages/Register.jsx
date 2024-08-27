@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useNavigate, Link } from 'react-router-dom';
 import "../styles/Register.css";
 
 const Register = () => {
@@ -8,6 +9,7 @@ const Register = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
+    const navigate = useNavigate();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -42,6 +44,7 @@ const Register = () => {
             if (response.status === 201) {
                 console.log('Resposta do registro:', response.data); // Log da resposta
                 toast.success("Cadastro realizado com sucesso!");
+                navigate('/login');
             } else {
                 toast.error("Erro ao realizar o cadastro. Tente novamente.");
             }
@@ -98,7 +101,7 @@ const Register = () => {
                         </div>
                         <div className="register-form-footer">
                             <button className="register-form-button" type="submit">Cadastrar</button>
-                            <a href='/login' className="register-login-button">Já possui cadastro? <span>Login</span></a>
+                            <Link to='/login' className="register-login-button">Já possui cadastro? <span>Login</span></Link>
                         </div>
                     </div>
                 </div>
