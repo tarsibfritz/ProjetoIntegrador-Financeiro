@@ -1,10 +1,9 @@
-/* Estilos gerais da Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px;
-    background-color: #333;
+    padding: 20px 30px;
+    background-color: transparent;
     color: #fff;
 }
 
@@ -36,20 +35,6 @@
 
 /* Menu */
 .menu {
-    display: flex;
-    align-items: center;
-}
-
-.menu-item {
-    color: #fff;
-    text-decoration: none;
-    margin: 0 10px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 18px;
-}
-
-/* Menu Responsivo */
-.menu {
     display: none;
     flex-direction: column;
     position: absolute;
@@ -60,13 +45,18 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.menu.open {
-    display: flex;
-}
-
 .menu-item {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 18px;
     padding: 10px;
     text-align: center;
+}
+
+.menu.open {
+    display: flex;
 }
 
 .menu-item:hover {

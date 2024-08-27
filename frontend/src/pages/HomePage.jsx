@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { PieChart, Pie, Cell, Tooltip, Legend, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from 'recharts';
+import { useNavigate } from 'react-router-dom';
+import { PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from 'recharts';
 import '../styles/Home.css';
 
 // Funções para cálculo
@@ -47,6 +48,8 @@ const HomePage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
         const name = localStorage.getItem('userName');
         setUserName(name || 'Usuário');
@@ -89,50 +92,58 @@ const HomePage = () => {
     return (
         <div className="user-container">
             <div className="profile-section">
-                <div className="profile-info">
-                    <h1 id="user-welcome">Olá, {userName}</h1>
-                    <div className="user-buttons">
-                        <button id="user-launch-button">Lançamentos</button>
-                        <button id="user-simulation-button">Simulação</button>
+                <div className="profile-info-balance-container">
+                    <div className="profile-info">
+                        <h1 id="user-welcome">Olá, {userName}</h1>
+                        <div className="user-buttons">
+                            <button id="user-launch-button" onClick={() => navigate('/lançamentos')}>Lançamentos</button>
+                            <button id="user-simulation-button">Simulação</button>
+                        </div>
+                    </div>
+                    <div className="balance-container">
+                        <h2>Saldo Total</h2>
+                        <p>R${balance.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
 
             <div className="info-section">
-                <div className="balance-container">
-                    <h2>Saldo Total</h2>
-                    <p>R${balance.toFixed(2)}</p>
-                </div>
+                <div className="charts-wrapper">
+                    <div className="chart-container">
+                        <h2>Despesas por Tag</h2>
+                        <PieChart width={300} height={300}>
+                            <Pie
+                                data={expensesData}
+                                dataKey="value"
+                                nameKey="name"
+                                outerRadius={100}
+                                fill="#8884d8"
+                            >
+                                {expensesData.map((entry, index) => (
+                                    <Cell 
+                                        key={`cell-${index}`} 
+                                        fill={[
+                                            '#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'
+                                        ][index % 10]} 
+                                    />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                            <Legend />
+                        </PieChart>
+                    </div>
 
-                <div className="chart-container">
-                    <h2>Despesas por Tag</h2>
-                    <PieChart width={300} height={300}>
-                        <Pie
-                            data={expensesData}
-                            dataKey="value"
-                            nameKey="name"
-                            outerRadius={100}
-                            fill="#8884d8"
-                        >
-                            {expensesData.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={['#ff9999', '#66b3ff', '#99ff99'][index % 3]} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                        <Legend />
-                    </PieChart>
+                    <div className="monthly-balance-container">
+                        <h2>Saldo Final por Mês</h2>
+                        <LineChart width={500} height={300} data={monthlyBalanceData}>
+                            <CartesianGrid strokeDasharray="3 3" />
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <RechartsTooltip />
+                            <Line type="monotone" dataKey="balance" stroke="#fff" />
+                        </LineChart>
+                    </div>
                 </div>
-            </div>
-
-            <div className="monthly-balance-container">
-                <h2>Saldo Final por Mês</h2>
-                <BarChart width={600} height={300} data={monthlyBalanceData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <RechartsTooltip />
-                    <Bar dataKey="balance" fill="#82ca9d" />
-                </BarChart>
             </div>
         </div>
     );
