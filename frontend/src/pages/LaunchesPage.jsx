@@ -157,7 +157,6 @@ const LaunchesPage = () => {
                     <div className="sort-container">
                         <label htmlFor="monthSelect">Filtrar por mês:</label>
                         <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange}>
-                            <option value="">Todos os meses</option>
                             {months.map(month => (
                                 <option key={month.value} value={month.value}>{month.label}</option>
                             ))}
@@ -222,7 +221,7 @@ const LaunchesPage = () => {
                 <LaunchModal
                     isOpen={isModalOpen}
                     onClose={handleCloseModal}
-                    onAddLaunch={handleSaveLaunch} // Corrigido o nome da prop
+                    onAddLaunch={handleSaveLaunch}
                 />
                 {selectedLaunch && (
                     <>
@@ -247,8 +246,8 @@ const LaunchesPage = () => {
                 <ConfirmModal
                     show={showConfirmModal}
                     onConfirm={handleConfirmDelete}
-                    onCancel={() => setShowConfirmModal(false)} // Adicionado onCancel
-                    message="Tem certeza de que deseja excluir este lançamento?" // Verifique se esta prop é esperada pelo ConfirmModal
+                    onCancel={() => setShowConfirmModal(false)}
+                    message="Tem certeza de que deseja excluir este lançamento?"
                 />
                 <ToastContainer />
             </div>

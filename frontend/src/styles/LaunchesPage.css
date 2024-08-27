@@ -1,27 +1,25 @@
-/* Estilos gerais do contêiner da página */
 .container {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    background-color: #ffffff;
+    background-color: #F9F9F9;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 8px;
     width: 80%;
     max-width: 700px;
-    margin: 50px auto;
+    margin: 20px auto;
 }
 
-/* Estilos do cabeçalho */
 .header {
     display: flex;
     align-items: center;
     width: 100%;
-    justify-content: space-between; /* Ajusta os itens para as extremidades do cabeçalho */
+    justify-content: space-between;
+    margin: 0 0 20px 0;
 }
 
-/* Título */
 .title {
     font-family: 'Poppins', sans-serif;
     font-size: 21px;
@@ -96,7 +94,7 @@
     margin-top: 20px;
     font-family: 'Poppins', sans-serif;
     font-size: 13px;
-    border-collapse: collapse;
+    border-collapse: collapse; /* Importante para as bordas entre células */
 }
 
 /* Cabeçalho da tabela */
@@ -113,6 +111,12 @@ thead th {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     text-align: left;
     white-space: nowrap; /* Garante que o cabeçalho não quebre */
+    border-right: 1px solid #ddd; /* Linha entre as colunas do cabeçalho */
+}
+
+/* Adiciona uma borda direita em todas as células exceto a última */
+th:not(:last-child), td:not(:last-child) {
+    border-right: 1px solid #ddd;
 }
 
 th, td {

@@ -1,14 +1,12 @@
-/* Navbar Container */
 .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 30px;
-    background-color: #150E33; /* Ajuste a cor de fundo para melhor contraste */
+    padding: 10px 30px;
+    background-color: #150E33;
     color: #fff;
 }
 
-/* Conteúdo da Navbar */
 .navbar-content {
     display: flex;
     justify-content: space-between;
@@ -16,13 +14,11 @@
     max-width: 1200px;
 }
 
-/* Alinhamento dos Itens */
 .navbar-left, .navbar-links, .navbar-right {
     display: flex;
     align-items: center;
 }
 
-/* Nome do Site */
 .site-name {
     font-family: 'Poppins', sans-serif;
     font-size: 24px;
@@ -30,13 +26,12 @@
     margin: 0;
 }
 
-/* Links da Navbar */
 .navbar-links {
     display: flex;
     gap: 20px;
 }
 
-/* Botão de Toggle do Menu */
+/* Botão de Toggle */
 .menu-toggle {
     background: none;
     border: none;
@@ -44,10 +39,10 @@
     cursor: pointer;
     font-size: 24px;
     margin-left: 10px;
-    position: relative; /* Para posicionar o menu corretamente */
+    position: relative;
 }
 
-/* Menu (invisível por padrão) */
+/* Menu  */
 .menu {
     display: none;
     flex-direction: column;
@@ -62,7 +57,6 @@
     z-index: 1000;
 }
 
-/* Menu visível quando aberto */
 .menu.open {
     display: flex;
 }
@@ -76,7 +70,6 @@
     position: relative;
 }
 
-/* Linha animada embaixo do item do menu */
 .menu-item::after {
     content: "";
     position: absolute;
