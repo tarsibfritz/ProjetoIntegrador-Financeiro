@@ -10,6 +10,7 @@ import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/
 import { groupLaunchesByMonth } from '../utils/launchesUtils';
 import "../styles/LaunchesPage.css";
 
+// Funções utilitárias...
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
@@ -37,6 +38,7 @@ const calculateBalance = (launches) => {
 };
 
 const LaunchesPage = () => {
+    // Estados do componente...
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -65,8 +67,10 @@ const LaunchesPage = () => {
         loadLaunches();
     }, []);
 
+    // Agrupando lançamentos por mês...
     const groupedLaunches = groupLaunchesByMonth(launches);
 
+    // Funções para lidar com ações do usuário...
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenInfoModal = (launch) => {
@@ -136,12 +140,16 @@ const LaunchesPage = () => {
         setSelectedMonth(event.target.value);
     };
 
+    // Lista de meses disponíveis para o filtro
     const months = Object.keys(groupedLaunches).map(key => {
         const [year, month] = key.split('-');
         const monthIndex = parseInt(month, 10) - 1;
         const monthName = getMonthNameInPortuguese(monthIndex);
         return { value: key, label: `${monthName} ${year}` };
     }).sort((a, b) => new Date(b.value) - new Date(a.value));
+
+    // Adiciona "Todos os meses" como a primeira opção na lista
+    months.unshift({ value: '', label: 'Todos os meses' });
 
     const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] :
         Object.values(groupedLaunches).flat();
