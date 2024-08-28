@@ -62,9 +62,9 @@ export const getProgressBySimulationId = async (simulationId) => {
   }
 };
 
-export const updateProgress = async (simulationId, progress) => {
+export const updateProgress = async (progressId, progress) => {
   try {
-    const response = await api.put(`${PROGRESS_API_URL}?simulationId=${simulationId}`, { progress });
+    const response = await api.put(`${PROGRESS_API_URL}/${progressId}`, progress);
     return response.data;
   } catch (error) {
     console.error('Error updating progress:', error);
