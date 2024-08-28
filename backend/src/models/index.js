@@ -1,4 +1,4 @@
-const { Sequelize } = require('sequelize');
+const { Sequelize, DataTypes } = require('sequelize');
 const config = require('../config/config'); 
 
 // Configuração do ambiente
@@ -22,6 +22,7 @@ db.sequelize = sequelize;
 // Modelos
 db.User = require('./userModel')(sequelize, Sequelize.DataTypes);
 db.Launch = require('./launchModel')(sequelize, Sequelize.DataTypes);
+db.Simulation = require('./simulationModel')(sequelize, Sequelize.DataTypes);
 
 // Relacionamentos
 Object.values(db).forEach(model => {

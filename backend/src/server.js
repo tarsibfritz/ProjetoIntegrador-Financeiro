@@ -10,6 +10,7 @@ const port = process.env.PORT || 3000;
 // Importar as rotas
 const userRoutes = require('./routes/userRoutes');
 const launchRoutes = require('./routes/launchRoutes');
+const simulationRoutes = require('./routes/simulationRoutes');
 
 // Middleware
 app.use(cors()); // Habilitar CORS
@@ -18,6 +19,7 @@ app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
 // Rotas
 app.use('/api/users', userRoutes);
 app.use('/api/launches', launchRoutes);
+app.use('/api/simulations', simulationRoutes);
 
 // Conectar ao banco de dados e sincronizar modelos
 const db = require('./models/index');
@@ -43,4 +45,4 @@ db.sequelize.authenticate()
   })
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
-});
+  });
