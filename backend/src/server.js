@@ -11,7 +11,7 @@ const port = process.env.PORT || 3000;
 const userRoutes = require('./routes/userRoutes');
 const launchRoutes = require('./routes/launchRoutes');
 const simulationRoutes = require('./routes/simulationRoutes');
-
+const progressRoutes = require('./routes/progressRoutes');
 // Middleware
 app.use(cors()); // Habilitar CORS
 app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
@@ -20,7 +20,7 @@ app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
 app.use('/api/users', userRoutes);
 app.use('/api/launches', launchRoutes);
 app.use('/api/simulations', simulationRoutes);
-app.use('/api/progresses', simulationRoutes);
+app.use('/api/progresses', progressRoutes);
 
 // Conectar ao banco de dados e sincronizar modelos
 const db = require('./models/index');

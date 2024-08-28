@@ -1,7 +1,6 @@
 import api from './api';
 
 const SIMULATIONS_API_URL = '/simulations';
-const PROGRESS_API_URL = '/progresses';
 
 export const getSimulations = async () => {
   try {
@@ -48,26 +47,6 @@ export const deleteSimulation = async (id) => {
     await api.delete(`${SIMULATIONS_API_URL}/${id}`);
   } catch (error) {
     console.error('Error deleting simulation:', error);
-    throw error;
-  }
-};
-
-export const getProgressBySimulationId = async (simulationId) => {
-  try {
-    const response = await api.get(`${PROGRESS_API_URL}?simulationId=${simulationId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching progress:', error);
-    throw error;
-  }
-};
-
-export const updateProgress = async (progressId, progress) => {
-  try {
-    const response = await api.put(`${PROGRESS_API_URL}/${progressId}`, progress);
-    return response.data;
-  } catch (error) {
-    console.error('Error updating progress:', error);
     throw error;
   }
 };

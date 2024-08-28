@@ -20,24 +20,27 @@ exports.createSimulation = async (req, res) => {
     const newSimulation = await Simulation.create({
       name,
       description,
-      totalValue,
-      monthlySavings,
+      totalValue: total,
+      monthlySavings: savings,
       monthsToSave,
       goalAchieved: false,
     });
 
     // Inicializar o progresso para cada mês
+    const progressData = [];
     for (let month = 1; month <= monthsToSave; month++) {
-      await Progress.create({
+      progressData.push({
         simulationId: newSimulation.id,
         month,
         isChecked: false,
       });
     }
 
+    await Progress.bulkCreate(progressData);
+
     res.status(201).json(newSimulation);
   } catch (error) {
-    res.status(400).json({ erro: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -45,11 +48,11 @@ exports.createSimulation = async (req, res) => {
 exports.getAllSimulations = async (req, res) => {
   try {
     const simulations = await Simulation.findAll({
-      include: [{ model: Progress }]
+      include: [{ model: Progress }],
     });
     res.status(200).json(simulations);
   } catch (error) {
-    res.status(500).json({ erro: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -57,29 +60,29 @@ exports.getAllSimulations = async (req, res) => {
 exports.getSimulationById = async (req, res) => {
   try {
     const simulation = await Simulation.findByPk(req.params.id, {
-      include: [{ model: Progress }]
+      include: [{ model: Progress }],
     });
     if (simulation) {
       res.status(200).json(simulation);
     } else {
-      res.status(404).json({ mensagem: 'Simulação não encontrada' });
+      res.status(404).json({ message: 'Simulação não encontrada' });
     }
   } catch (error) {
-    res.status(500).json({ erro: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Atualização de uma simulação específica (atualização do progresso)
+// Atualização de uma simulação específica
 exports.updateSimulation = async (req, res) => {
   try {
     const { savedAmount, progress } = req.body;
 
     const simulation = await Simulation.findByPk(req.params.id, {
-      include: [{ model: Progress }]
+      include: [{ model: Progress }],
     });
 
     if (!simulation) {
-      return res.status(404).json({ mensagem: 'Simulação não encontrada' });
+      return res.status(404).json({ message: 'Simulação não encontrada' });
     }
 
     // Atualizar o valor economizado e verificar se a meta foi alcançada
@@ -94,15 +97,15 @@ exports.updateSimulation = async (req, res) => {
 
     // Atualizar o progresso
     if (progress && Array.isArray(progress)) {
-      for (const prog of progress) {
+      await Promise.all(progress.map(async (prog) => {
         const progRecord = await Progress.findOne({
-          where: { id: prog.id, simulationId: simulation.id }
+          where: { id: prog.id, simulationId: simulation.id },
         });
         if (progRecord) {
           progRecord.isChecked = prog.isChecked;
           await progRecord.save();
         }
-      }
+      }));
     }
 
     await simulation.save();
@@ -110,7 +113,7 @@ exports.updateSimulation = async (req, res) => {
     res.status(200).json(simulation);
   } catch (error) {
     console.error('Erro ao atualizar simulação:', error.message);
-    res.status(400).json({ erro: error.message });
+    res.status(400).json({ error: error.message });
   }
 };
 
@@ -120,7 +123,7 @@ exports.deleteSimulation = async (req, res) => {
     const simulation = await Simulation.findByPk(req.params.id);
 
     if (!simulation) {
-      return res.status(404).json({ mensagem: 'Simulação não encontrada' });
+      return res.status(404).json({ message: 'Simulação não encontrada' });
     }
 
     await Progress.destroy({ where: { simulationId: simulation.id } });
@@ -128,39 +131,6 @@ exports.deleteSimulation = async (req, res) => {
 
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ erro: error.message });
-  }
-};
-
-// Listar progresso de uma simulação específica
-exports.getProgressBySimulationId = async (req, res) => {
-  try {
-    const { simulationId } = req.query;
-    const progress = await Progress.findAll({
-      where: { simulationId }
-    });
-    res.status(200).json(progress);
-  } catch (error) {
-    res.status(500).json({ erro: error.message });
-  }
-};
-
-// Atualização de progresso de uma simulação específica
-exports.updateProgress = async (req, res) => {
-  try {
-    const progressId = req.params.id;
-    const { isChecked } = req.body;
-
-    const progress = await Progress.findByPk(progressId);
-    if (!progress) {
-      return res.status(404).json({ mensagem: 'Progresso não encontrado' });
-    }
-
-    progress.isChecked = isChecked;
-    await progress.save();
-
-    res.status(200).json(progress);
-  } catch (error) {
-    res.status(500).json({ erro: error.message });
+    res.status(500).json({ error: error.message });
   }
 };

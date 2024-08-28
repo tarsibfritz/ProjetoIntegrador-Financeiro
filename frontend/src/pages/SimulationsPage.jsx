@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { addSimulation, getSimulations } from '../services/simulationService';
+import { getProgressBySimulationId, updateProgress } from '../services/progressService';
 import '../styles/SimulationsPage.css';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
@@ -11,17 +12,25 @@ const SimulationPage = () => {
   const [monthsToSave, setMonthsToSave] = useState(null);
   const [savedSimulations, setSavedSimulations] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
-  const [monthValues, setMonthValues] = useState({});
 
   useEffect(() => {
     const loadSimulations = async () => {
       try {
         const simulations = await getSimulations();
-        setSavedSimulations(simulations.map(sim => ({
-          ...sim,
-          monthValues: {}, // Inicializa monthValues para simulações salvas
-          goalAchieved: calculateRemainingValue(sim, {}) <= 0
-        })));
+        const simulationsWithProgress = await Promise.all(simulations.map(async (sim) => {
+          const progress = await getProgressBySimulationId(sim.id);
+          const progressMap = progress.reduce((acc, curr) => {
+            acc[curr.month] = curr.isChecked;
+            return acc;
+          }, {});
+          
+          return {
+            ...sim,
+            monthValues: progressMap,
+            goalAchieved: calculateRemainingValue(sim, progressMap) <= 0
+          };
+        }));
+        setSavedSimulations(simulationsWithProgress);
       } catch (error) {
         console.error('Erro ao carregar simulações:', error);
         toast.error('Erro ao carregar simulações salvas.');
@@ -57,11 +66,25 @@ const SimulationPage = () => {
         monthsToSave,
         createdAt: new Date()
       });
+
+      const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
+        simulationId: newSimulation.id,
+        month: i + 1,
+        amountSaved: 0,
+        isChecked: false
+      }));
+
+      // Adicionar progresso inicial para a nova simulação
+      await Promise.all(initialProgress.map(progressItem =>
+        updateProgress(progressItem.id, progressItem)
+      ));
+
       const updatedSimulation = {
         ...newSimulation,
-        monthValues: {}, // Inicializa monthValues para a nova simulação
+        monthValues: {},
         goalAchieved: calculateRemainingValue(newSimulation, {}) <= 0
       };
+
       toast.success('Simulação salva com sucesso!');
       setSavedSimulations([...savedSimulations, updatedSimulation]);
       handleRestartSimulation();
@@ -76,7 +99,6 @@ const SimulationPage = () => {
     setTotalValue('');
     setMonthlySavings('');
     setMonthsToSave(null);
-    setMonthValues({});
   };
 
   const toggleDetails = (id) => {
@@ -99,27 +121,41 @@ const SimulationPage = () => {
     return monthsArray;
   };
 
-  const handleMonthValueChange = (simulationId, month) => {
-    setSavedSimulations(prevSimulations => prevSimulations.map(simulation => {
-      if (simulation.id === simulationId) {
-        const updatedMonthValues = {
-          ...simulation.monthValues,
-          [month]: !simulation.monthValues[month]
-        };
+  const handleMonthValueChange = async (simulationId, month) => {
+    try {
+      const updatedSimulations = await Promise.all(savedSimulations.map(async (simulation) => {
+        if (simulation.id === simulationId) {
+          const updatedMonthValues = {
+            ...simulation.monthValues,
+            [month]: !simulation.monthValues[month]
+          };
 
-        const goalAchieved = calculateRemainingValue({
-          ...simulation,
-          monthValues: updatedMonthValues
-        }, updatedMonthValues) <= 0;
+          const progress = await getProgressBySimulationId(simulationId);
+          const progressItem = progress.find(p => p.month === month);
 
-        return {
-          ...simulation,
-          monthValues: updatedMonthValues,
-          goalAchieved
-        };
-      }
-      return simulation;
-    }));
+          if (progressItem) {
+            await updateProgress(progressItem.id, { ...progressItem, isChecked: !progressItem.isChecked });
+          }
+
+          const goalAchieved = calculateRemainingValue({
+            ...simulation,
+            monthValues: updatedMonthValues
+          }, updatedMonthValues) <= 0;
+
+          return {
+            ...simulation,
+            monthValues: updatedMonthValues,
+            goalAchieved
+          };
+        }
+        return simulation;
+      }));
+
+      setSavedSimulations(updatedSimulations);
+    } catch (error) {
+      console.error('Erro ao atualizar progresso:', error);
+      toast.error('Erro ao atualizar progresso.');
+    }
   };
 
   const calculateRemainingValue = (simulation, monthValues) => {
@@ -128,7 +164,7 @@ const SimulationPage = () => {
     const checkedMonths = Object.keys(monthValues).filter(month => monthValues[month]).length;
     const totalSavings = checkedMonths * monthlySavings;
     const remainingValue = totalValue - totalSavings;
-    return Math.max(0, remainingValue); // Retorna 0 se o valor restante for menor que 0
+    return Math.max(0, remainingValue);
   };
 
   return (
