@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { addSimulation, getSimulations, updateProgress, getProgressBySimulationId } from '../services/simulationService';
+import { addSimulation, getSimulations } from '../services/simulationService';
 import '../styles/SimulationsPage.css';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
@@ -11,26 +11,17 @@ const SimulationPage = () => {
   const [monthsToSave, setMonthsToSave] = useState(null);
   const [savedSimulations, setSavedSimulations] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
-  const [months, setMonths] = useState([]);
+  const [monthValues, setMonthValues] = useState({});
 
   useEffect(() => {
     const loadSimulations = async () => {
       try {
         const simulations = await getSimulations();
-        const simulationsWithProgress = await Promise.all(
-          simulations.map(async (simulation) => {
-            try {
-              const progress = await getProgressBySimulationId(simulation.id);
-              const monthsCount = simulation.monthsToSave || 0;
-              const updatedProgress = Array.from({ length: monthsCount }, (_, index) => progress[index]?.isChecked || false);
-              return { ...simulation, progress: updatedProgress };
-            } catch (error) {
-              console.error(`Erro ao obter progresso para a simulação ${simulation.id}:`, error);
-              return { ...simulation, progress: Array.from({ length: simulation.monthsToSave || 0 }, () => false) };
-            }
-          })
-        );
-        setSavedSimulations(simulationsWithProgress);
+        setSavedSimulations(simulations.map(sim => ({
+          ...sim,
+          monthValues: {}, // Inicializa monthValues para simulações salvas
+          goalAchieved: calculateRemainingValue(sim, {}) <= 0
+        })));
       } catch (error) {
         console.error('Erro ao carregar simulações:', error);
         toast.error('Erro ao carregar simulações salvas.');
@@ -51,16 +42,6 @@ const SimulationPage = () => {
 
       const calculatedMonths = total <= 0 ? 0 : Math.ceil(total / savings);
       setMonthsToSave(calculatedMonths);
-
-      const initializeMonths = () => {
-        const monthsArray = [];
-        for (let i = 1; i <= calculatedMonths; i++) {
-          monthsArray.push({ month: i, checked: false });
-        }
-        setMonths(monthsArray);
-      };
-
-      initializeMonths();
     } catch (error) {
       toast.error(error.message || 'Erro ao calcular a simulação.');
     }
@@ -74,11 +55,15 @@ const SimulationPage = () => {
         totalValue,
         monthlySavings,
         monthsToSave,
-        createdAt: new Date(),
-        progress: Array.from({ length: monthsToSave }, () => false) // Inicializa o progresso como um array de falsos
+        createdAt: new Date()
       });
+      const updatedSimulation = {
+        ...newSimulation,
+        monthValues: {}, // Inicializa monthValues para a nova simulação
+        goalAchieved: calculateRemainingValue(newSimulation, {}) <= 0
+      };
       toast.success('Simulação salva com sucesso!');
-      setSavedSimulations([...savedSimulations, newSimulation]);
+      setSavedSimulations([...savedSimulations, updatedSimulation]);
       handleRestartSimulation();
     } catch (error) {
       console.error('Erro ao salvar simulação:', error);
@@ -91,7 +76,7 @@ const SimulationPage = () => {
     setTotalValue('');
     setMonthlySavings('');
     setMonthsToSave(null);
-    setMonths([]);
+    setMonthValues({});
   };
 
   const toggleDetails = (id) => {
@@ -114,27 +99,36 @@ const SimulationPage = () => {
     return monthsArray;
   };
 
-  const handleMonthCheck = async (simulationId, month) => {
-    const updatedSimulations = savedSimulations.map((simulation) => {
+  const handleMonthValueChange = (simulationId, month) => {
+    setSavedSimulations(prevSimulations => prevSimulations.map(simulation => {
       if (simulation.id === simulationId) {
-        const updatedProgress = simulation.progress.map((p, index) =>
-          index === month - 1 ? !p : p
-        );
-        return { ...simulation, progress: updatedProgress };
+        const updatedMonthValues = {
+          ...simulation.monthValues,
+          [month]: !simulation.monthValues[month]
+        };
+
+        const goalAchieved = calculateRemainingValue({
+          ...simulation,
+          monthValues: updatedMonthValues
+        }, updatedMonthValues) <= 0;
+
+        return {
+          ...simulation,
+          monthValues: updatedMonthValues,
+          goalAchieved
+        };
       }
       return simulation;
-    });
+    }));
+  };
 
-    setSavedSimulations(updatedSimulations);
-
-    try {
-      const updatedSimulation = updatedSimulations.find((sim) => sim.id === simulationId);
-      await updateProgress(simulationId, updatedSimulation.progress);
-      toast.success('Progresso atualizado com sucesso!');
-    } catch (error) {
-      console.error('Erro ao atualizar progresso:', error);
-      toast.error('Erro ao atualizar o progresso.');
-    }
+  const calculateRemainingValue = (simulation, monthValues) => {
+    const totalValue = parseFloat(simulation.totalValue);
+    const monthlySavings = parseFloat(simulation.monthlySavings);
+    const checkedMonths = Object.keys(monthValues).filter(month => monthValues[month]).length;
+    const totalSavings = checkedMonths * monthlySavings;
+    const remainingValue = totalValue - totalSavings;
+    return Math.max(0, remainingValue); // Retorna 0 se o valor restante for menor que 0
   };
 
   return (
@@ -184,6 +178,7 @@ const SimulationPage = () => {
                   <div className={`circle ${simulation.goalAchieved ? 'checked' : ''}`}></div>
                   <div className="item-details">
                     <h3>{simulation.name}</h3>
+                    <p className="monthly-savings">Valor Mensal: {simulation.monthlySavings}</p>
                     <span
                       className="toggle-button"
                       onClick={() => toggleDetails(simulation.id)}
@@ -193,20 +188,22 @@ const SimulationPage = () => {
                     {activeItem === simulation.id && (
                       <div className="toggle-content">
                         <p><strong>Valor Total:</strong> {simulation.totalValue}</p>
-                        <p><strong>Valor Mensal:</strong> {simulation.monthlySavings}</p>
                         <div className="months-checklist">
-                          {monthsArray.map((m) => (
-                            <div key={m.month}>
+                          {monthsArray.map(({ month, label }) => (
+                            <div key={month} className="month-checkbox">
                               <input
                                 type="checkbox"
-                                id={`month-${m.month}-${simulation.id}`}
-                                checked={simulation.progress[m.month - 1] || false}
-                                onChange={() => handleMonthCheck(simulation.id, m.month)}
+                                id={`month-${month}`}
+                                checked={!!(simulation.monthValues[month] || false)}
+                                onChange={() => handleMonthValueChange(simulation.id, month)}
                               />
-                              <label htmlFor={`month-${m.month}-${simulation.id}`}>Mês {m.month} ({m.label})</label>
+                              <label htmlFor={`month-${month}`}>
+                                {label}
+                              </label>
                             </div>
                           ))}
                         </div>
+                        <p className="remaining-value"><strong>Total:</strong> {calculateRemainingValue(simulation, simulation.monthValues).toFixed(2)}</p>
                       </div>
                     )}
                   </div>
