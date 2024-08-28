@@ -97,7 +97,7 @@ const HomePage = () => {
                         <h1 id="user-welcome">Olá, {userName}</h1>
                         <div className="user-buttons">
                             <button id="user-launch-button" onClick={() => navigate('/lançamentos')}>Lançamentos</button>
-                            <button id="user-simulation-button">Simulação</button>
+                            <button id="user-simulation-button" onClick={() => navigate('/simulação')}>Simulação</button>
                         </div>
                     </div>
                     <div className="balance-container">

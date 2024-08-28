@@ -4,6 +4,7 @@ import Register from '../src/pages/Register';
 import HomePage from '../src/pages/HomePage';
 import LaunchesPage from '../src/pages/LaunchesPage';
 import PrivateRoute from '../src/components/PrivateRoute';
+import SimulationsPage from '../src/pages/SimulationsPage';
 
 const AppRoutes = () => {
     return (
@@ -23,6 +24,14 @@ const AppRoutes = () => {
                 element={
                     <PrivateRoute>
                         <LaunchesPage />
+                    </PrivateRoute>
+                }
+            />
+            <Route
+                path="/simulação"
+                element={
+                    <PrivateRoute>
+                        <SimulationsPage />
                     </PrivateRoute>
                 }
             />

@@ -4,14 +4,23 @@ const Simulation = db.Simulation;
 // Criação de uma nova simulação
 exports.createSimulation = async (req, res) => {
   try {
-    const { name, description, totalValue, monthsToSave, monthlySavings } = req.body;
+    const { name, description, totalValue, monthlySavings } = req.body;
+
+    const total = parseFloat(totalValue);
+    const savings = parseFloat(monthlySavings);
+
+    if (isNaN(total) || isNaN(savings) || savings <= 0) {
+      throw new Error('Valor total e valor mensal devem ser números válidos e o valor mensal deve ser maior que zero.');
+    }
+
+    const monthsToSave = total <= 0 ? 0 : Math.ceil(total / savings);
 
     const newSimulation = await Simulation.create({
       name,
       description,
       totalValue,
-      monthsToSave,
       monthlySavings,
+      monthsToSave,
       savedAmount: 0,
       goalAchieved: false,
     });
@@ -21,6 +30,7 @@ exports.createSimulation = async (req, res) => {
     res.status(400).json({ erro: error.message });
   }
 };
+
 
 // Listagem de todas as simulações
 exports.getAllSimulations = async (req, res) => {
