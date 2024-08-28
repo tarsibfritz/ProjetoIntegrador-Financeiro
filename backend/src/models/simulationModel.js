@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 
-module.exports = (sequelize, DataTypes) => {
-  return sequelize.define('Simulation', {
+module.exports = (sequelize) => {
+  const Simulation = sequelize.define('Simulation', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -22,13 +22,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    progress: {
-      type: DataTypes.JSON,
-      defaultValue: [],
-    },
     goalAchieved: {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     }
   });
+
+  return Simulation;
 };

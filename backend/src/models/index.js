@@ -19,16 +19,14 @@ const db = {};
 db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
-// Modelos
+// Definindo modelos
 db.User = require('./userModel')(sequelize, Sequelize.DataTypes);
 db.Launch = require('./launchModel')(sequelize, Sequelize.DataTypes);
 db.Simulation = require('./simulationModel')(sequelize, Sequelize.DataTypes);
+db.Progress = require('./progressModel')(sequelize, Sequelize.DataTypes);
 
-// Relacionamentos
-Object.values(db).forEach(model => {
-  if (model.associate) {
-    model.associate(db);
-  }
-});
+// Definindo associações
+db.Simulation.hasMany(db.Progress, { foreignKey: 'simulationId' });
+db.Progress.belongsTo(db.Simulation, { foreignKey: 'simulationId' });
 
 module.exports = db;

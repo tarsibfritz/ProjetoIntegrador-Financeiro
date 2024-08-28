@@ -20,6 +20,7 @@ app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
 app.use('/api/users', userRoutes);
 app.use('/api/launches', launchRoutes);
 app.use('/api/simulations', simulationRoutes);
+app.use('/api/progresses', simulationRoutes);
 
 // Conectar ao banco de dados e sincronizar modelos
 const db = require('./models/index');

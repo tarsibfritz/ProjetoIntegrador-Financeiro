@@ -9,4 +9,7 @@ router.post('/', simulationController.createSimulation);
 router.put('/:id', simulationController.updateSimulation);
 router.delete('/:id', simulationController.deleteSimulation);
 
+router.get('/progress', simulationController.getProgressBySimulationId);
+router.put('/progress/:id', simulationController.updateProgress);
+
 module.exports = router;
