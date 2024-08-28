@@ -4,13 +4,13 @@ const API_URL = '/simulations';
 
 // Listagem de todas as simulações
 export const getSimulations = async () => {
-   try {
-      const response = await api.get(API_URL);
-      return response.data;
-   } catch (error) {
+  try {
+    const response = await api.get(API_URL);
+    return response.data;
+  } catch (error) {
     console.error('Error fetching simulations:', error);
     throw error;
-   }
+  }
 };
 
 // Criação de uma nova simulação
@@ -23,7 +23,6 @@ export const addSimulation = async (simulation) => {
     throw error;
   }
 };
-
 
 // Obter uma simulação específica pelo ID
 export const getSimulationById = async (id) => {

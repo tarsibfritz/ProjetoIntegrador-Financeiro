@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    savedAmount: {
-      type: DataTypes.FLOAT,
-      defaultValue: 0,
+    progress: {
+      type: DataTypes.JSON,
+      defaultValue: [],
     },
     goalAchieved: {
       type: DataTypes.BOOLEAN,

@@ -11,6 +11,7 @@ const SimulationPage = () => {
   const [monthsToSave, setMonthsToSave] = useState(null);
   const [savedSimulations, setSavedSimulations] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
+  const [months, setMonths] = useState([]);
 
   useEffect(() => {
     // Carregar simulações salvas ao montar o componente
@@ -38,6 +39,17 @@ const SimulationPage = () => {
       // Calcular os meses para alcançar a meta
       const calculatedMonths = total <= 0 ? 0 : Math.ceil(total / savings);
       setMonthsToSave(calculatedMonths);
+
+      // Inicializar os meses com base na simulação
+      const initializeMonths = () => {
+        const monthsArray = [];
+        for (let i = 1; i <= calculatedMonths; i++) {
+          monthsArray.push({ month: i, checked: false });
+        }
+        setMonths(monthsArray);
+      };
+
+      initializeMonths();
     } catch (error) {
       toast.error(error.message || 'Erro ao calcular a simulação.');
     }
@@ -46,7 +58,14 @@ const SimulationPage = () => {
   const handleSaveSimulation = async () => {
     if (!window.confirm('Deseja converter essa simulação em um plano real?')) return;
     try {
-      const newSimulation = await addSimulation({ name, totalValue, monthlySavings, monthsToSave });
+      const newSimulation = await addSimulation({
+        name,
+        totalValue,
+        monthlySavings,
+        monthsToSave,
+        progress: months.map(m => m.checked), // Adiciona o progresso
+        createdAt: new Date()
+      });
       toast.success('Simulação salva com sucesso!');
       setSavedSimulations([...savedSimulations, newSimulation]); // Atualizar lista de simulações salvas
       handleRestartSimulation(); // Zerar o formulário após salvar a simulação
@@ -60,10 +79,35 @@ const SimulationPage = () => {
     setTotalValue('');
     setMonthlySavings('');
     setMonthsToSave(null);
+    setMonths([]);
   };
 
   const toggleDetails = (id) => {
     setActiveItem(activeItem === id ? null : id);
+  };
+
+  const calculateMonths = (createdAt, totalMonths) => {
+    const creationDate = new Date(createdAt);
+    const monthsArray = [];
+
+    for (let i = 0; i < totalMonths; i++) {
+      const monthDate = new Date(creationDate);
+      monthDate.setMonth(monthDate.getMonth() + i);
+      monthsArray.push({
+        month: i + 1,
+        label: monthDate.toLocaleString('default', { month: 'short', year: 'numeric' })
+      });
+    }
+
+    return monthsArray;
+  };
+
+  const handleMonthCheck = (month) => {
+    setMonths((prevMonths) =>
+      prevMonths.map((m) =>
+        m.month === month ? { ...m, checked: !m.checked } : m
+      )
+    );
   };
 
   return (
@@ -103,32 +147,45 @@ const SimulationPage = () => {
           <p className="no-items">Nenhuma simulação salva.</p>
         ) : (
           <ul>
-            {savedSimulations.map((simulation) => (
-              <li
-                key={simulation.id}
-                className={`simulation-item ${activeItem === simulation.id ? 'active' : ''}`}
-              >
-                <div className={`circle ${simulation.goalAchieved ? 'checked' : ''}`}></div>
-                <div className="item-details">
-                  <h3>{simulation.name}</h3>
-                  <span
-                    className="toggle-button"
-                    onClick={() => toggleDetails(simulation.id)}
-                  >
-                    {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
-                  </span>
-                  {activeItem === simulation.id && (
-                    <div className="toggle-content">
-                      <p><strong>Valor Total:</strong> {simulation.totalValue}</p>
-                      <p><strong>Valor Mensal:</strong> {simulation.monthlySavings}</p>
-                      <p><strong>Meses Necessários:</strong> {simulation.monthsToSave}</p>
-                      <p><strong>Valor Economizado:</strong> {simulation.savedAmount}</p>
-                      <p><strong>Meta Alcançada:</strong> {simulation.goalAchieved ? 'Sim' : 'Não'}</p>
-                    </div>
-                  )}
-                </div>
-              </li>
-            ))}
+            {savedSimulations.map((simulation) => {
+              const monthsArray = calculateMonths(simulation.createdAt, simulation.monthsToSave);
+              return (
+                <li
+                  key={simulation.id}
+                  className={`simulation-item ${activeItem === simulation.id ? 'active' : ''}`}
+                >
+                  <div className={`circle ${simulation.goalAchieved ? 'checked' : ''}`}></div>
+                  <div className="item-details">
+                    <h3>{simulation.name}</h3>
+                    <span
+                      className="toggle-button"
+                      onClick={() => toggleDetails(simulation.id)}
+                    >
+                      {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
+                    </span>
+                    {activeItem === simulation.id && (
+                      <div className="toggle-content">
+                        <p><strong>Valor Total:</strong> {simulation.totalValue}</p>
+                        <p><strong>Valor Mensal:</strong> {simulation.monthlySavings}</p>
+                        <div className="months-checklist">
+                          {monthsArray.map((m) => (
+                            <div key={m.month}>
+                              <input
+                                type="checkbox"
+                                id={`month-${m.month}`}
+                                checked={simulation.progress[m.month - 1] || false}
+                                onChange={() => handleMonthCheck(m.month)} // Atualizar estado ao clicar
+                              />
+                              <label htmlFor={`month-${m.month}`}>Mês {m.label}</label>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
           </ul>
         )}
       </div>

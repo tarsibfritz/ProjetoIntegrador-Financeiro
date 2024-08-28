@@ -21,7 +21,7 @@ exports.createSimulation = async (req, res) => {
       totalValue,
       monthlySavings,
       monthsToSave,
-      savedAmount: 0,
+      progress: [], // Inicialmente vazio
       goalAchieved: false,
     });
 
@@ -30,7 +30,6 @@ exports.createSimulation = async (req, res) => {
     res.status(400).json({ erro: error.message });
   }
 };
-
 
 // Listagem de todas as simulações
 exports.getAllSimulations = async (req, res) => {
@@ -59,7 +58,7 @@ exports.getSimulationById = async (req, res) => {
 // Atualização de uma simulação específica (atualização do progresso)
 exports.updateSimulation = async (req, res) => {
   try {
-    const { savedAmount } = req.body;
+    const { savedAmount, progress } = req.body;
 
     const simulation = await Simulation.findByPk(req.params.id);
 
@@ -76,6 +75,9 @@ exports.updateSimulation = async (req, res) => {
       const monthsRequired = Math.ceil((simulation.totalValue - simulation.savedAmount) / simulation.monthlySavings);
       simulation.monthsToSave = monthsRequired;
     }
+
+    // Atualizar o progresso
+    simulation.progress = progress || simulation.progress;
 
     await simulation.save();
 

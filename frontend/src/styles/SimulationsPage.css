@@ -19,21 +19,15 @@
 }
 
 .simulation-form input,
-.simulation-form textarea,
 .simulation-form button {
     width: 100%;
     margin-bottom: 10px;
 }
 
-.simulation-form input,
-.simulation-form textarea {
+.simulation-form input {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-}
-
-.simulation-form textarea {
-    resize: vertical; /* Permitir redimensionamento vertical apenas */
 }
 
 .simulation-form button {
@@ -87,62 +81,65 @@
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    border: 2px solid #6c5ce7;
-    background-color: #fff;
-    margin-bottom: 10px; /* Ajuste para espaçar o círculo do nome */
+    border: 2px solid #6c5ce7; /* Cor do contorno */
+    background-color: #fff; /* Fundo branco */
+    margin-right: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative;
+    position: absolute;
+    top: 10px;
+    left: 10px;
 }
 
 .saved-simulations .circle.checked {
-    background-color: #6c5ce7;
-    border: 2px solid #6c5ce7;
+    background-color: #6c5ce7; /* Cor do círculo preenchido */
 }
 
-.saved-simulations .circle.checked::before {
-    content: '\f00c'; /* Código do ícone do check do FontAwesome */
-    font-family: 'Font Awesome 5 Free';
-    font-weight: 900;
+.saved-simulations .circle.checked::after {
+    content: '✔'; /* Ícone de check */
     color: #fff;
+    font-size: 16px;
 }
 
 .saved-simulations .item-details {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-
-.saved-simulations .item-details h3 {
-    margin: 0; /* Remove a margem padrão do título */
-}
-
-.saved-simulations .toggle-content {
-    display: none;
-    margin-top: 10px;
-}
-
-.saved-simulations .simulation-item.active .toggle-content {
-    display: block;
+    margin-left: 40px; /* Espaço suficiente para a bola */
 }
 
 .saved-simulations .toggle-button {
-    margin-top: 5px;
-    font-size: 16px;
-    color: #6c5ce7;
+    cursor: pointer;
+    font-size: 20px;
+    color: #6c5ce7; /* Cor do ícone do toggle */
 }
 
-.saved-simulations p {
-    margin: 5px 0;
+.saved-simulations .toggle-content {
+    margin-top: 10px;
 }
 
-.saved-simulations strong {
-    color: #333;
+.months-checklist {
+    margin-top: 10px;
 }
 
-/* Estilo para texto de nenhum item salvo */
-.saved-simulations p.no-items {
-    color: #777;
-    font-style: italic;
+.months-checklist div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.months-checklist input[type="checkbox"] {
+    accent-color: #6c5ce7; /* Cor personalizada para o estado selecionado */
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer; /* Cursor de mão para interação */
+}
+
+.months-checklist label {
+    font-size: 14px;
+    color: #4a4a4a;
+}
+
+.no-items {
+    text-align: center;
+    color: #888;
 }
