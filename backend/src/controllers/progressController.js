@@ -18,19 +18,32 @@ exports.getProgressBySimulationId = async (req, res) => {
 exports.updateProgress = async (req, res) => {
   try {
     const progressId = req.params.id;
-    const { isChecked, amountSaved } = req.body; // Alterado para isChecked
+    const { isChecked, amountSaved } = req.body;
 
     const progress = await Progress.findByPk(progressId);
     if (!progress) {
       return res.status(404).json({ message: 'Progresso não encontrado' });
     }
 
-    // Atualiza os campos isChecked e amountSaved
-    progress.isChecked = isChecked; // Alterado para isChecked
+    progress.isChecked = isChecked;
     progress.amountSaved = amountSaved;
     await progress.save();
 
     res.status(200).json(progress);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Adicione a função addProgress aqui
+exports.addProgress = async (req, res) => {
+  try {
+    const { simulationId, amountSaved } = req.body;
+    const progress = await Progress.create({
+      simulationId,
+      amountSaved,
+    });
+    res.status(201).json(progress);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
