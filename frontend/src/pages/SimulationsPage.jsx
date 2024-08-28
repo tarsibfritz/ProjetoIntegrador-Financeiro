@@ -32,6 +32,7 @@ const SimulationPage = () => {
     try {
       await addSimulation({ name, description, totalValue, monthlySavings, monthsToSave });
       toast.success('Simulação salva com sucesso!');
+      handleRestartSimulation(); // Zerar o formulário após salvar a simulação
     } catch (error) {
       toast.error(error.message || 'Erro ao salvar a simulação.');
     }
