@@ -7,6 +7,7 @@ import '../styles/SimulationsPage.css';
 import { FaChevronDown, FaChevronUp, FaTrash, FaCheck } from 'react-icons/fa';
 
 const SimulationPage = () => {
+  // Estado para armazenar informações da simulação e simulações salvas
   const [name, setName] = useState('');
   const [totalValue, setTotalValue] = useState('');
   const [monthlySavings, setMonthlySavings] = useState('');
@@ -14,6 +15,7 @@ const SimulationPage = () => {
   const [savedSimulations, setSavedSimulations] = useState([]);
   const [activeItem, setActiveItem] = useState(null);
 
+  // Efeito para carregar simulações salvas e seus progressos
   useEffect(() => {
     const loadSimulations = async () => {
       try {
@@ -41,13 +43,53 @@ const SimulationPage = () => {
     loadSimulations();
   }, []);
 
+  // Validação para permitir apenas números e pontos em campos numéricos
+  const validateNumberInput = (e) => {
+    const key = e.key;
+    const isNumber = /^[0-9.]$/.test(key) || e.key === 'Backspace' || e.key === 'Tab';
+    if (!isNumber) {
+      e.preventDefault();
+      toast.warning('Somente números maiores que zero e pontos são permitidos.');
+    }
+  };
+
+  // Validação para garantir que o valor é positivo
+  const validatePositiveNumber = (value) => {
+    if (parseFloat(value) < 0) {
+      toast.warning('O valor não pode ser negativo.');
+      return false;
+    }
+    return true;
+  };
+
+  // Validação para garantir que todos os campos foram preenchidos antes de iniciar uma simulação
   const handleStartSimulation = () => {
+    if (!name.trim() || !totalValue.trim() || !monthlySavings.trim()) {
+      toast.warning('Todos os campos são obrigatórios para iniciar uma simulação.');
+      return;
+    }
+
+    if (totalValue.trim() === '.' || monthlySavings.trim() === '.') {
+      toast.warning('O valor não pode ser apenas um ponto.');
+      return;
+    }
+
     try {
       const total = parseFloat(totalValue);
       const savings = parseFloat(monthlySavings);
 
-      if (isNaN(total) || isNaN(savings) || savings <= 0) {
-        throw new Error('Valor total e valor mensal devem ser números válidos e o valor mensal deve ser maior que zero.');
+      if (!validatePositiveNumber(total) || !validatePositiveNumber(savings)) {
+        return;
+      }
+
+      if (total === 0 || savings === 0) {
+        toast.warning('Os valores não podem ser iguais zero.');
+        return;
+      }
+
+      if (savings > total) {
+        toast.warning('O valor mensal não pode ser maior que o valor total do item/meta.');
+        return;
       }
 
       const calculatedMonths = total <= 0 ? 0 : Math.ceil(total / savings);
@@ -57,6 +99,7 @@ const SimulationPage = () => {
     }
   };
 
+  // Sistema para salvar a simulação e o progresso no banco de dados
   const handleSaveSimulation = async () => {
     const result = await Swal.fire({
       title: 'Deseja salvar essa simulação?',
@@ -105,6 +148,7 @@ const SimulationPage = () => {
     }
   };
 
+  // Sistema para reiniciar/limpar os campos do formulário
   const handleRestartSimulation = () => {
     setName('');
     setTotalValue('');
@@ -116,6 +160,7 @@ const SimulationPage = () => {
     setActiveItem(activeItem === id ? null : id);
   };
 
+  // Cálculo dos meses a partir da data de criação da simulação
   const calculateMonths = (createdAt, totalMonths) => {
     const creationDate = new Date(createdAt);
     const monthsArray = [];
@@ -132,6 +177,7 @@ const SimulationPage = () => {
     return monthsArray;
   };
 
+  // Atualiza o progresso da simulação ao alterar o estado das checkboxes
   const handleMonthValueChange = async (simulationId, month) => {
     try {
       const updatedSimulations = await Promise.all(savedSimulations.map(async (simulation) => {
@@ -176,6 +222,7 @@ const SimulationPage = () => {
     }
   };
 
+  // Sistema para excluir uma simulação do banco de dados
   const handleDeleteSimulation = async (id) => {
     const result = await Swal.fire({
       title: 'Tem certeza que deseja excluir esta simulação?',
@@ -200,6 +247,7 @@ const SimulationPage = () => {
     }
   };
 
+  // Cálculo do valor restante da meta com base no progresso
   const calculateRemainingValue = (simulation, monthValues) => {
     const totalValue = parseFloat(simulation.totalValue);
     const monthlySavings = parseFloat(simulation.monthlySavings);
@@ -219,25 +267,30 @@ const SimulationPage = () => {
             placeholder="Nome"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            aria-label="Nome da simulação"
           />
           <input
             type="number"
             placeholder="Valor total do item/meta"
             value={totalValue}
             onChange={(e) => setTotalValue(e.target.value)}
+            onKeyDown={validateNumberInput}
+            aria-label="Valor total do item/meta"
           />
           <input
             type="number"
             placeholder="Valor mensal que você pode economizar"
             value={monthlySavings}
             onChange={(e) => setMonthlySavings(e.target.value)}
+            onKeyDown={validateNumberInput}
+            aria-label="Valor mensal para economizar"
           />
-          <button className="simulation-form-button" onClick={handleStartSimulation}>Iniciar Simulação</button>
+          <button className="simulation-form-button" onClick={handleStartSimulation} aria-label="Calcular meses necessários para atingir a meta">Iniciar Simulação</button>
           {monthsToSave !== null && (
             <div>
               <p className="simulation-result">Tempo estimado para alcançar a meta: {monthsToSave} meses</p>
-              <button className="simulation-form-button save-simulation" onClick={handleSaveSimulation}>Salvar Simulação</button>
-              <button className="restart-simulation" onClick={handleRestartSimulation}>Reiniciar Simulação</button>
+              <button className="simulation-form-button save-simulation" onClick={handleSaveSimulation} aria-label="Salvar a simulação">Salvar Simulação</button>
+              <button className="restart-simulation" onClick={handleRestartSimulation} aria-label="Reiniciar o formulário">Reiniciar Simulação</button>
             </div>
           )}
         </div>
@@ -261,12 +314,13 @@ const SimulationPage = () => {
                   <div className="simulation-content">
                     <div className="simulation-name">
                       <span>{simulation.name}</span>
+                      <span className="monthly-savings">R$ {parseFloat(simulation.monthlySavings).toFixed(2)}/mês</span>
                     </div>
                     <div className="simulation-actions">
-                      <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
+                      <button className="toggle-button" onClick={() => toggleDetails(simulation.id)} aria-label={`Expandir detalhes da simulação ${simulation.name}`}>
                         {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
                       </button>
-                      <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
+                      <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)} aria-label={`Excluir simulação ${simulation.name}`}>
                         <FaTrash />
                       </button>
                     </div>
@@ -282,6 +336,7 @@ const SimulationPage = () => {
                               type="checkbox"
                               checked={simulation.monthValues[month] || false}
                               onChange={() => handleMonthValueChange(simulation.id, month)}
+                              aria-label={`Mês ${month} - ${simulation.monthValues[month] ? 'Selecionado' : 'Não selecionado'}`}
                             />
                             {label}
                           </label>
@@ -289,7 +344,7 @@ const SimulationPage = () => {
                       ))}
                     </div>
                     <div className="simulation-total">
-                      Total restante: R${simulation.remainingValue.toFixed(2)}
+                      Total restante: R$ {simulation.remainingValue.toFixed(2)}
                     </div>
                   </div>
                 )}

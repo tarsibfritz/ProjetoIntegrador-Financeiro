@@ -1,6 +1,7 @@
 .page-container {
   display: flex;
   flex-direction: column;
+  padding: 20px;
 }
 
 .simulation-container {
@@ -25,22 +26,22 @@
   box-shadow: 0 4px 12px rgba(78, 16, 159, 0.1);
   box-sizing: border-box; 
 }
-  
+
 .simulation-form h2 {
   margin-bottom: 20px;
   font-size: 24px;
   color: #ffffff;
 }
-  
+
 .simulation-form input {
-  width: calc(100%); 
+  width: 100%; 
   padding: 10px;
   margin-bottom: 15px;
   border: 1px solid #870fd6;
   border-radius: 8px;
   box-sizing: border-box;
 }
-  
+
 .simulation-form-button {
   width: 100%;
   padding: 10px;
@@ -53,11 +54,11 @@
   transition: background-color 0.3s ease;
   box-sizing: border-box;
 }
-  
+
 .simulation-form-button:hover {
   background-color: var(--light-button);
 }
-  
+
 .save-simulation {
   margin-bottom: 10px;
 }
@@ -90,16 +91,15 @@
   background-color: var(--main-containers);
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
   box-sizing: border-box;
 }
-  
+
 .saved-simulations h2 {
   margin-bottom: 20px;
   font-size: 24px;
   color: #e7e7e7;
 }
-  
+
 .saved-simulations .simulation-item {
   margin-bottom: 14px;
   padding: 15px;
@@ -109,18 +109,18 @@
   box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
 }
-  
+
 .saved-simulations .simulation-item:last-child {
   margin-bottom: 0;
 }
-  
+
 .saved-simulations .simulation-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 10px;
 }
-  
+
 .saved-simulations .circle-checkbox {
   display: flex;
   align-items: center;
@@ -131,7 +131,7 @@
   border-radius: 50%;
   margin-right: 10px;
 }
-  
+
 .circle-checked {
   display: flex;
   align-items: center;
@@ -143,30 +143,43 @@
   border-radius: 50%;
   font-size: 16px;
 }
-  
+
 .circle-unchecked {
   width: 100%;
   height: 100%;
 }
-  
+
 .saved-simulations .simulation-content {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-  
+
 .saved-simulations .simulation-name {
-  font-size: 18px;
+  font-size: 15px;
+  margin-bottom: 2px;
   font-weight: bold;
   color: #333;
 }
-  
-  .saved-simulations .simulation-actions {
+
+.simulation-name {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.monthly-savings {
+  font-size: 14px;
+  color: #333;
+  margin-left: 10px;
+}
+
+.saved-simulations .simulation-actions {
   display: flex;
   align-items: center;
   gap: 10px;
 }
-  
+
 .saved-simulations .delete-button,
 .saved-simulations .toggle-button {
   display: flex;
@@ -174,31 +187,31 @@
   background: transparent;
   color: var(--simulation-icons);
   cursor: pointer;
-  font-size: 20px;
+  font-size: 17px;
   transition: color 0.3s ease;
 }
-  
+
 .saved-simulations .delete-button:hover,
 .saved-simulations .toggle-button:hover {
   color: #744ba1;
 }
-  
+
 .saved-simulations .simulation-details {
   margin-top: 10px;
   padding-top: 10px;
   border-top: 1px solid #ddd;
 }
-  
+
 .saved-simulations .simulation-progress {
   margin-top: 10px;
 }
-  
+
 .saved-simulations .month-checkbox {
   display: flex;
   align-items: center;
   margin-bottom: 8px;
 }
-  
+
 .saved-simulations .month-checkbox input[type="checkbox"] {
   accent-color: var(--month-checkbox);
   width: 20px;
@@ -206,12 +219,12 @@
   margin-right: 10px;
   cursor: pointer;
 }
-  
+
 .saved-simulations .month-checkbox label {
   font-size: 14px;
   color: #4a4a4a;
 }
-  
+
 .saved-simulations .no-items {
   text-align: center;
   color: #888;
@@ -371,67 +384,5 @@
   .simulation-result,
   .simulation-total {
     font-size: 16px;
-  }
-}
-
-/* Desktops (large screens) */
-@media (min-width: 1025px) {
-  .page-container {
-    padding: 20px;
-  }
-
-  .simulation-container {
-    flex-direction: row;
-    gap: 20px;
-    padding: 20px;
-  }
-
-  .simulation-form,
-  .saved-simulations {
-    max-width: 100%;
-    padding: 20px;
-  }
-
-  .simulation-form h2,
-  .saved-simulations h2 {
-    font-size: 24px;
-  }
-
-  .simulation-form input,
-  .simulation-form-button,
-  .restart-simulation {
-    width: 100%;
-    font-size: 18px;
-  }
-
-  .saved-simulations .simulation-item {
-    padding: 15px;
-  }
-
-  .saved-simulations .simulation-name {
-    font-size: 20px;
-  }
-
-  .saved-simulations .month-checkbox input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-  }
-
-  .saved-simulations .month-checkbox label {
-    font-size: 16px;
-  }
-
-  .circle-checkbox {
-    width: 32px;
-    height: 32px;
-  }
-
-  .circle-checked {
-    font-size: 18px;
-  }
-
-  .simulation-result,
-  .simulation-total {
-    font-size: 18px;
   }
 }
