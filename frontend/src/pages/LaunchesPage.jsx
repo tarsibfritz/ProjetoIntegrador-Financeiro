@@ -208,11 +208,13 @@ const LaunchesPage = () => {
                                         {launch.type === 'expense' ? 'Despesa' : 'Receita'}
                                     </td>
                                     <td className="paid">
-                                        <input 
-                                            type="checkbox" 
-                                            checked={launch.paid || false} 
-                                            onChange={() => handlePaidChange(launch.id)} 
-                                        />
+                                        <div className="paid-checkbox-container">
+                                            <input 
+                                                type="checkbox" 
+                                                checked={launch.paid || false} 
+                                                onChange={() => handlePaidChange(launch.id)} 
+                                            />
+                                        </div>
                                     </td>
                                 </tr>
                             ))}

@@ -21,6 +21,7 @@ body {
   /* Containers */
   --main-containers: #150e33;
   --light-border: 1px solid #6f0ab3;
+  --dark-border: 1px solid #63088d;
   /* Checkboxes */
   --completedSimulation-border: 2px solid #8359b4;
   --completedSimulation-circle: #8359b4;

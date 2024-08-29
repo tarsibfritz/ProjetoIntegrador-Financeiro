@@ -3,7 +3,8 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    background-color: #281651;
+    background-color: var(--main-containers);
+    border: var(--dark-border);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     border-radius: 8px;
@@ -139,6 +140,50 @@ tbody tr {
     color: red;
 }
 
-input[type="checkbox"] {
-    cursor: pointer;
+/* Estilos personalizados para os checkboxes na coluna "Pago" */
+
+/* Container do checkbox */
+.paid-checkbox-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
 }
+  
+/* Estilo do checkbox */
+.paid-checkbox-container input[type="checkbox"] {
+    appearance: none; /* Remove o estilo padrão do checkbox */
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    cursor: pointer;
+    border: 2px solid #410E6E; /* Borda roxo-azulada */
+    border-radius: 4px; /* Bordas arredondadas */
+    background-color: #fff; /* Fundo branco */
+    transition: background-color 0.3s, border-color 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+/* Estilo do checkbox marcado */
+.paid-checkbox-container input[type="checkbox"]:checked {
+    background-color: #410E6E; /* Fundo roxo-azulado quando marcado */
+    border-color: #410E6E;
+}
+  
+/* Adiciona um símbolo de check ao checkbox quando marcado */
+.paid-checkbox-container input[type="checkbox"]:checked::before {
+    content: '✓'; /* Símbolo de check */
+    font-size: 16px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  
+/* Ajusta o label, se necessário */
+.paid-checkbox-container label {
+    font-size: 14px;
+    color: #4a4a4a;
+}  
