@@ -1,5 +1,4 @@
 .user-container {
-    font-family: Arial, sans-serif;
     color: #333;
     margin: 10px 20px;
 }
@@ -36,7 +35,7 @@
 }
 
 .user-buttons button {
-    background-color: #420e70;
+    background-color: var(--dark-button);
     border: none;
     color: white;
     padding: 10px 20px;
@@ -48,12 +47,12 @@
 }
 
 .user-buttons button:hover {
-    background-color: #2a0c42;
+    background-color: #3a1658;
 }
 
 /* Saldo Total */
 .balance-container {
-    background-color: #3d00e44a;
+    background-color: #2e0c6137;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -115,29 +114,68 @@
     font-size: 20px;
 }
 
-/* Adicionando responsividade para os gráficos */
+/* Responsividade */
 @media (max-width: 768px) {
+    .profile-section {
+        background-size: cover;
+        background-position: center;
+    }
+
+    .profile-info-balance-container { 
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    #user-welcome {
+        font-size: 20px;
+    }
+
+    .user-buttons {
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .user-buttons button {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .balance-container {
+        padding: 15px;
+    }
+
+    .balance-container h2 {
+        font-size: 18px;
+    }
+
+    .balance-container p {
+        font-size: 30px;
+    }
+
+    .info-section {
+        margin-top: 15px;
+    }
+
     .charts-wrapper {
-        flex-direction: column; /* Ajusta para empilhar verticalmente em telas menores */
-        align-items: center;
-    }
-
-    .profile-info-balance-container {
         flex-direction: column;
-        align-items: center;
+        gap: 15px;
     }
 
-    .balance-container, .chart-container, .monthly-balance-container {
+    .chart-container, .monthly-balance-container {
         width: 100%;
-        margin-bottom: 20px;
+        padding: 15px;
     }
 
-    .monthly-balance-container .recharts-cartesian-axis-x, 
-    .monthly-balance-container .recharts-cartesian-axis-y {
-        font-size: 12px;
+    .chart-container::before, .monthly-balance-container::before {
+        background-color: rgba(0, 0, 0, 0.2);
     }
 
-    .monthly-balance-container .recharts-label {
-        font-size: 12px;
+    .chart-container h2 {
+        font-size: 18px;
+    }
+
+    .monthly-balance-container {
+        display: none;
     }
 }

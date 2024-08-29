@@ -139,7 +139,11 @@ const HomePage = () => {
                             <CartesianGrid strokeDasharray="3 3" />
                             <XAxis dataKey="name" />
                             <YAxis />
-                            <RechartsTooltip />
+                            <RechartsTooltip 
+                                labelStyle={{ color: '#000', 
+                                fontWeight: 'bold' }}
+                                itemStyle={{ color: '#000' }} 
+                            />
                             <Line type="monotone" dataKey="balance" stroke="#fff" />
                         </LineChart>
                     </div>
