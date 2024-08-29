@@ -1,10 +1,10 @@
+/* Estilo base */
 .navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    position: relative;
     padding: 10px 30px;
     background-color: #150E33;
     color: #fff;
+    width: 100%;
 }
 
 .navbar-content {
@@ -12,6 +12,8 @@
     justify-content: space-between;
     width: 100%;
     max-width: 1200px;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .navbar-left, .navbar-right {
@@ -20,7 +22,6 @@
 }
 
 .site-name {
-    font-family: 'Poppins', sans-serif;
     font-size: 24px;
     font-weight: 600;
     margin: 0;
@@ -75,4 +76,21 @@
 
 .menu-item:hover, .logout-user:hover {
     background-color: #6530a7;
+}
+
+/* Responsividade */
+@media (max-width: 387px) {
+    .navbar {
+        padding: 10px 15px;
+    }
+
+    .navbar-content {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .menu {
+        width: 100%;
+        right: 0;
+    }
 }

@@ -3,6 +3,8 @@ import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
 import { getProgressBySimulationId, updateProgress, createProgress } from '../services/progressService';
+import { format, addMonths, startOfMonth } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import '../styles/SimulationsPage.css';
 import { FaChevronDown, FaChevronUp, FaTrash, FaCheck } from 'react-icons/fa';
 
@@ -166,11 +168,10 @@ const SimulationPage = () => {
     const monthsArray = [];
 
     for (let i = 0; i < totalMonths; i++) {
-      const monthDate = new Date(creationDate);
-      monthDate.setMonth(monthDate.getMonth() + i);
+      const monthDate = addMonths(startOfMonth(creationDate), i);
       monthsArray.push({
         month: i + 1,
-        label: monthDate.toLocaleString('default', { month: 'short', year: 'numeric' })
+        label: format(monthDate, 'MMMM yyyy', { locale: ptBR })
       });
     }
 

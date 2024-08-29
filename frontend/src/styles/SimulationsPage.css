@@ -1,9 +1,11 @@
+/* Container da página */
 .page-container {
   display: flex;
   flex-direction: column;
   padding: 20px;
 }
 
+/* Container principal da simulação */
 .simulation-container {
   display: flex;
   flex-direction: row;
@@ -42,6 +44,7 @@
   box-sizing: border-box;
 }
 
+/* Botão do formulário */
 .simulation-form-button {
   width: 100%;
   padding: 10px;
@@ -76,11 +79,13 @@
   color: var(--lightGrey-Tone1);
 }
 
+/* Resultado da simulação */
 .simulation-result {
   color: #fff;
   margin: 20px 0px;
 }
 
+/* Simulações salvas */
 .saved-simulations {
   flex: 1;
   min-width: 380px;
@@ -121,6 +126,7 @@
   margin-bottom: 10px;
 }
 
+/* Estilo dos círculos de checkbox */
 .saved-simulations .circle-checkbox {
   display: flex;
   align-items: center;
@@ -149,6 +155,7 @@
   height: 100%;
 }
 
+/* Conteúdo das simulações salvas */
 .saved-simulations .simulation-content {
   flex: 1;
   display: flex;
@@ -180,6 +187,7 @@
   gap: 10px;
 }
 
+/* Estilo dos botões de ação (excluir e toggle) */
 .saved-simulations .delete-button,
 .saved-simulations .toggle-button {
   display: flex;
@@ -202,10 +210,12 @@
   border-top: 1px solid #ddd;
 }
 
+/* Progresso da simulação */
 .saved-simulations .simulation-progress {
   margin-top: 10px;
 }
 
+/* Checkbox dos meses */
 .saved-simulations .month-checkbox {
   display: flex;
   align-items: center;
@@ -225,27 +235,27 @@
   color: #4a4a4a;
 }
 
+/* Mensagem quando não há itens */
 .saved-simulations .no-items {
   text-align: center;
   color: #888;
 }
 
 /* Barra de rolagem */
-/* Estilo geral */
 .saved-simulations::-webkit-scrollbar,
 .simulation-form::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
-/* Estilo do track (pista) da barra de rolagem */
+/* Track da barra de rolagem */
 .saved-simulations::-webkit-scrollbar-track,
 .simulation-form::-webkit-scrollbar-track {
   background: var(--main-containers);
   border-radius: 8px;
 }
 
-/* Estilo do thumb (polegar) da barra de rolagem */
+/* Thumb da barra de rolagem */
 .saved-simulations::-webkit-scrollbar-thumb,
 .simulation-form::-webkit-scrollbar-thumb {
   background-color: var(--light-border);
@@ -253,20 +263,20 @@
   border: 2px solid var(--main-containers);
 }
 
-/* Estilo ao passar o mouse sobre o thumb */
+/* Hover do thumb */
 .saved-simulations::-webkit-scrollbar-thumb:hover,
 .simulation-form::-webkit-scrollbar-thumb:hover {
   background-color: var(--dark-button);
 }
 
-/* Estilo da barra de rolagem para navegadores Firefox */
+/* Estilo da barra de rolagem para Firefox */
 .saved-simulations,
 .simulation-form {
   scrollbar-width: thin;
   scrollbar-color: var(--light-border) var(--main-containers);
 }
 
-/* Mobile devices (portrait) */
+/* Responsividade */
 @media (max-width: 767px) {
   .page-container {
     padding: 10px;
@@ -320,69 +330,6 @@
   }
 
   .circle-checked {
-    font-size: 14px;
-  }
-
-  .simulation-result,
-  .simulation-total {
-    font-size: 14px;
-  }
-}
-
-/* Tablets (portrait) */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .simulation-container {
-    flex-direction: column;
-    gap: 20px;
-    padding: 15px;
-  }
-
-  .simulation-form,
-  .saved-simulations {
-    max-width: 100%;
-    padding: 15px;
-  }
-
-  .simulation-form h2,
-  .saved-simulations h2 {
-    font-size: 22px;
-  }
-
-  .simulation-form input,
-  .simulation-form-button,
-  .restart-simulation {
-    width: 100%;
-    font-size: 18px;
-  }
-
-  .saved-simulations .simulation-item {
-    padding: 12px;
-  }
-
-  .saved-simulations .simulation-name {
-    font-size: 18px;
-  }
-
-  .saved-simulations .month-checkbox input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-  }
-
-  .saved-simulations .month-checkbox label {
-    font-size: 14px;
-  }
-
-  .circle-checkbox {
-    width: 28px;
-    height: 28px;
-  }
-
-  .circle-checked {
-    font-size: 16px;
-  }
-
-  .simulation-result,
-  .simulation-total {
-    font-size: 16px;
+    font-size: 12px;
   }
 }
