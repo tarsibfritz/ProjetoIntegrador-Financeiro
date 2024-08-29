@@ -143,3 +143,21 @@
     text-align: center;
     color: #888;
 }
+
+/* Botão para deletar simulação */
+.delete-button {
+    background: none; /* Remove o fundo padrão */
+    border: none; /* Remove a borda padrão */
+    color: #5a4fdb; /* Cor do ícone (vermelho) */
+    cursor: pointer; /* Cursor de mão para indicar que é clicável */
+    font-size: 20px; /* Tamanho do ícone */
+    transition: color 0.3s ease; /* Transição suave para a cor */
+}
+
+.delete-button:hover {
+    color: #3c32a4; /* Cor do ícone ao passar o mouse (vermelho mais escuro) */
+}
+
+.delete-button:focus {
+    outline: none; /* Remove o contorno de foco */
+}

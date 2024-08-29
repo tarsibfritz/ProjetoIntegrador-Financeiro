@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { addSimulation, getSimulations } from '../services/simulationService';
+import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
 import { getProgressBySimulationId, updateProgress } from '../services/progressService';
 import '../styles/SimulationsPage.css';
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
 
 const SimulationPage = () => {
   const [name, setName] = useState('');
@@ -20,7 +20,7 @@ const SimulationPage = () => {
         const simulationsWithProgress = await Promise.all(simulations.map(async (sim) => {
           const progress = await getProgressBySimulationId(sim.id);
           const progressMap = progress.reduce((acc, curr) => {
-            acc[curr.month] = curr.isChecked;
+            acc[curr.month] = curr.isChecked === 1; // Convert tinyint to boolean
             return acc;
           }, {});
 
@@ -75,7 +75,7 @@ const SimulationPage = () => {
 
       // Adicionar progresso inicial para a nova simulação
       await Promise.all(initialProgress.map(progressItem =>
-        updateProgress(progressItem.simulationId, progressItem)
+        updateProgress(newSimulation.id, progressItem)
       ));
 
       const updatedSimulation = {
@@ -134,6 +134,8 @@ const SimulationPage = () => {
 
           if (progressItem) {
             await updateProgress(progressItem.id, { ...progressItem, isChecked: !progressItem.isChecked });
+          } else {
+            await updateProgress(simulationId, { month, isChecked: !updatedMonthValues[month] });
           }
 
           const remainingValue = calculateRemainingValue({
@@ -154,6 +156,18 @@ const SimulationPage = () => {
     } catch (error) {
       console.error('Erro ao atualizar progresso:', error);
       toast.error('Erro ao atualizar progresso.');
+    }
+  };
+
+  const handleDeleteSimulation = async (id) => {
+    if (!window.confirm('Tem certeza de que deseja excluir esta simulação?')) return;
+    try {
+      await deleteSimulation(id);
+      setSavedSimulations(savedSimulations.filter(sim => sim.id !== id));
+      toast.success('Simulação excluída com sucesso!');
+    } catch (error) {
+      console.error('Erro ao excluir simulação:', error);
+      toast.error('Erro ao excluir a simulação.');
     }
   };
 
@@ -220,6 +234,12 @@ const SimulationPage = () => {
                     >
                       {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
                     </span>
+                    <button
+                      className="delete-button"
+                      onClick={() => handleDeleteSimulation(simulation.id)}
+                    >
+                      <FaTrash />
+                    </button>
                     {activeItem === simulation.id && (
                       <div className="toggle-content">
                         <p><strong>Valor Total:</strong> {simulation.totalValue}</p>
@@ -229,7 +249,7 @@ const SimulationPage = () => {
                               <input
                                 type="checkbox"
                                 id={`month-${month}`}
-                                checked={!!(simulation.monthValues[month] || false)}
+                                checked={!!simulation.monthValues[month]}
                                 onChange={() => handleMonthValueChange(simulation.id, month)}
                               />
                               <label htmlFor={`month-${month}`}>
@@ -238,7 +258,7 @@ const SimulationPage = () => {
                             </div>
                           ))}
                         </div>
-                        <p className="remaining-value"><strong>Total:</strong> {simulation.remainingValue.toFixed(2)}</p>
+                        <p><strong>Total:</strong> {simulation.remainingValue}</p>
                       </div>
                     )}
                   </div>

@@ -25,7 +25,8 @@ exports.updateProgress = async (req, res) => {
       return res.status(404).json({ message: 'Progresso não encontrado' });
     }
 
-    progress.isChecked = isChecked;
+    // Convert boolean to integer for MySQL if needed
+    progress.isChecked = isChecked ? 1 : 0;
     progress.amountSaved = amountSaved;
     await progress.save();
 
@@ -42,6 +43,7 @@ exports.addProgress = async (req, res) => {
     const progress = await Progress.create({
       simulationId,
       amountSaved,
+      isChecked: 0, // Default to false (0)
     });
     res.status(201).json(progress);
   } catch (error) {
