@@ -23,11 +23,11 @@ const SimulationPage = () => {
             acc[curr.month] = curr.isChecked;
             return acc;
           }, {});
-          
+
           return {
             ...sim,
             monthValues: progressMap,
-            goalAchieved: calculateRemainingValue(sim, progressMap) <= 0
+            remainingValue: calculateRemainingValue(sim, progressMap)
           };
         }));
         setSavedSimulations(simulationsWithProgress);
@@ -70,19 +70,18 @@ const SimulationPage = () => {
       const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
         simulationId: newSimulation.id,
         month: i + 1,
-        amountSaved: 0,
         isChecked: false
       }));
 
       // Adicionar progresso inicial para a nova simulação
       await Promise.all(initialProgress.map(progressItem =>
-        updateProgress(progressItem.id, progressItem)
+        updateProgress(progressItem.simulationId, progressItem)
       ));
 
       const updatedSimulation = {
         ...newSimulation,
         monthValues: {},
-        goalAchieved: calculateRemainingValue(newSimulation, {}) <= 0
+        remainingValue: calculateRemainingValue(newSimulation, {})
       };
 
       toast.success('Simulação salva com sucesso!');
@@ -137,15 +136,15 @@ const SimulationPage = () => {
             await updateProgress(progressItem.id, { ...progressItem, isChecked: !progressItem.isChecked });
           }
 
-          const goalAchieved = calculateRemainingValue({
+          const remainingValue = calculateRemainingValue({
             ...simulation,
             monthValues: updatedMonthValues
-          }, updatedMonthValues) <= 0;
+          }, updatedMonthValues);
 
           return {
             ...simulation,
             monthValues: updatedMonthValues,
-            goalAchieved
+            remainingValue
           };
         }
         return simulation;
@@ -211,7 +210,7 @@ const SimulationPage = () => {
                   key={simulation.id}
                   className={`simulation-item ${activeItem === simulation.id ? 'active' : ''}`}
                 >
-                  <div className={`circle ${simulation.goalAchieved ? 'checked' : ''}`}></div>
+                  <div className={`circle ${simulation.remainingValue <= 0 ? 'checked' : ''}`}></div>
                   <div className="item-details">
                     <h3>{simulation.name}</h3>
                     <p className="monthly-savings">Valor Mensal: {simulation.monthlySavings}</p>
@@ -239,7 +238,7 @@ const SimulationPage = () => {
                             </div>
                           ))}
                         </div>
-                        <p className="remaining-value"><strong>Total:</strong> {calculateRemainingValue(simulation, simulation.monthValues).toFixed(2)}</p>
+                        <p className="remaining-value"><strong>Total:</strong> {simulation.remainingValue.toFixed(2)}</p>
                       </div>
                     )}
                   </div>

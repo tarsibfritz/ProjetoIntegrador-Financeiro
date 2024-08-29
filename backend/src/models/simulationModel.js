@@ -22,15 +22,6 @@ module.exports = (sequelize) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    goalAchieved: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-    progress: {
-      type: DataTypes.JSON,
-      defaultValue: {},  // Valor padrão como objeto vazio
-      allowNull: false,
-    }
   });
 
   return Simulation;

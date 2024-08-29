@@ -23,7 +23,6 @@ exports.createSimulation = async (req, res) => {
       totalValue: total,
       monthlySavings: savings,
       monthsToSave,
-      goalAchieved: false,
     });
 
     // Inicializar o progresso para cada mês
@@ -75,7 +74,7 @@ exports.getSimulationById = async (req, res) => {
 // Atualização de uma simulação específica
 exports.updateSimulation = async (req, res) => {
   try {
-    const { savedAmount, progress } = req.body;
+    const { progress } = req.body;
 
     const simulation = await Simulation.findByPk(req.params.id, {
       include: [{ model: Progress }],
@@ -85,15 +84,9 @@ exports.updateSimulation = async (req, res) => {
       return res.status(404).json({ message: 'Simulação não encontrada' });
     }
 
-    // Atualizar o valor economizado e verificar se a meta foi alcançada
-    simulation.savedAmount = savedAmount;
-    simulation.goalAchieved = savedAmount >= simulation.totalValue;
-
     // Recalcular o tempo necessário para atingir a meta com base no monthlySavings
-    if (simulation.monthlySavings > 0) {
-      const monthsRequired = Math.ceil((simulation.totalValue - simulation.savedAmount) / simulation.monthlySavings);
-      simulation.monthsToSave = monthsRequired;
-    }
+    const monthsRequired = Math.ceil((simulation.totalValue - simulation.monthlySavings) / simulation.monthlySavings);
+    simulation.monthsToSave = Math.max(monthsRequired, 0);
 
     // Atualizar o progresso
     if (progress && Array.isArray(progress)) {
