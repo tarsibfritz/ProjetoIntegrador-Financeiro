@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
-import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
-import { getProgressBySimulationId, updateProgress, createProgress } from '../services/progressService';
-import '../styles/SimulationsPage.css';
-import { FaChevronDown, FaChevronUp, FaTrash, FaCheck } from 'react-icons/fa';
+import { FaCheck, FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import '../styles/SimulationsPage.css'; // Certifique-se de que o caminho esteja correto
+import { createSimulation, getSavedSimulations, deleteSimulation, updateSimulationProgress } from '../services/simulationService'; // Ajuste o caminho do serviço conforme necessário
 
 const SimulationPage = () => {
   const [name, setName] = useState('');
@@ -14,175 +12,75 @@ const SimulationPage = () => {
   const [activeItem, setActiveItem] = useState(null);
 
   useEffect(() => {
-    const loadSimulations = async () => {
-      try {
-        const simulations = await getSimulations();
-        const simulationsWithProgress = await Promise.all(simulations.map(async (sim) => {
-          const progress = await getProgressBySimulationId(sim.id);
-          const progressMap = progress.reduce((acc, curr) => {
-            acc[curr.month] = curr.isChecked;
-            return acc;
-          }, {});
-
-          return {
-            ...sim,
-            monthValues: progressMap,
-            remainingValue: calculateRemainingValue(sim, progressMap)
-          };
-        }));
-        setSavedSimulations(simulationsWithProgress);
-      } catch (error) {
-        console.error('Erro ao carregar simulações:', error);
-        toast.error('Erro ao carregar simulações salvas.');
-      }
+    // Carrega simulações salvas ao carregar a página
+    const fetchSimulations = async () => {
+      const simulations = await getSavedSimulations();
+      setSavedSimulations(simulations);
     };
-
-    loadSimulations();
+    fetchSimulations();
   }, []);
 
   const handleStartSimulation = () => {
-    try {
-      const total = parseFloat(totalValue);
-      const savings = parseFloat(monthlySavings);
-
-      if (isNaN(total) || isNaN(savings) || savings <= 0) {
-        throw new Error('Valor total e valor mensal devem ser números válidos e o valor mensal deve ser maior que zero.');
-      }
-
-      const calculatedMonths = total <= 0 ? 0 : Math.ceil(total / savings);
-      setMonthsToSave(calculatedMonths);
-    } catch (error) {
-      toast.error(error.message || 'Erro ao calcular a simulação.');
+    const total = parseFloat(totalValue);
+    const monthly = parseFloat(monthlySavings);
+    if (total > 0 && monthly > 0) {
+      const months = Math.ceil(total / monthly);
+      setMonthsToSave(months);
+    } else {
+      alert('Por favor, insira valores válidos para o valor total e a economia mensal.');
     }
   };
 
   const handleSaveSimulation = async () => {
-    if (!window.confirm('Deseja converter essa simulação em um plano real?')) return;
-    try {
-      const newSimulation = await addSimulation({
-        name,
-        totalValue,
-        monthlySavings,
-        monthsToSave,
-        createdAt: new Date()
-      });
-
-      const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
-        simulationId: newSimulation.id,
-        month: i + 1,
-        amountSaved: 0,
-        isChecked: false
-      }));
-
-      await Promise.all(initialProgress.map(progressItem =>
-        createProgress(progressItem)
-      ));
-
-      const updatedSimulation = {
-        ...newSimulation,
-        monthValues: {},
-        remainingValue: calculateRemainingValue(newSimulation, {})
-      };
-
-      toast.success('Simulação salva com sucesso!');
-      setSavedSimulations([...savedSimulations, updatedSimulation]);
-      handleRestartSimulation();
-    } catch (error) {
-      console.error('Erro ao salvar simulação:', error);
-      toast.error(error.message || 'Erro ao salvar a simulação.');
-    }
+    const simulation = {
+      name,
+      totalValue: parseFloat(totalValue),
+      monthlySavings: parseFloat(monthlySavings),
+      monthsToSave
+    };
+    await createSimulation(simulation);
+    const simulations = await getSavedSimulations();
+    setSavedSimulations(simulations);
+    resetForm();
   };
 
   const handleRestartSimulation = () => {
+    resetForm();
+  };
+
+  const resetForm = () => {
     setName('');
     setTotalValue('');
     setMonthlySavings('');
     setMonthsToSave(null);
   };
 
+  const handleDeleteSimulation = async (id) => {
+    await deleteSimulation(id);
+    const simulations = await getSavedSimulations();
+    setSavedSimulations(simulations);
+  };
+
   const toggleDetails = (id) => {
     setActiveItem(activeItem === id ? null : id);
   };
 
-  const calculateMonths = (createdAt, totalMonths) => {
-    const creationDate = new Date(createdAt);
-    const monthsArray = [];
+  const handleMonthValueChange = async (simulationId, month) => {
+    // Atualiza o progresso da simulação
+    await updateSimulationProgress(simulationId, month);
+    const simulations = await getSavedSimulations();
+    setSavedSimulations(simulations);
+  };
 
-    for (let i = 0; i < totalMonths; i++) {
-      const monthDate = new Date(creationDate);
-      monthDate.setMonth(monthDate.getMonth() + i);
-      monthsArray.push({
-        month: i + 1,
-        label: monthDate.toLocaleString('default', { month: 'short', year: 'numeric' })
+  const calculateMonths = (createdAt, monthsToSave) => {
+    const months = [];
+    for (let i = 1; i <= monthsToSave; i++) {
+      months.push({
+        month: i,
+        label: `${i}° mês`
       });
     }
-
-    return monthsArray;
-  };
-
-  const handleMonthValueChange = async (simulationId, month) => {
-    try {
-      const updatedSimulations = await Promise.all(savedSimulations.map(async (simulation) => {
-        if (simulation.id === simulationId) {
-          const updatedMonthValues = {
-            ...simulation.monthValues,
-            [month]: !simulation.monthValues[month]
-          };
-
-          const progress = await getProgressBySimulationId(simulationId);
-          const progressItem = progress.find(p => p.month === month);
-
-          if (progressItem) {
-            await updateProgress(progressItem.id, { ...progressItem, isChecked: updatedMonthValues[month] });
-          } else {
-            await createProgress({
-              simulationId,
-              month,
-              amountSaved: simulation.monthlySavings,
-              isChecked: updatedMonthValues[month]
-            });
-          }
-
-          const remainingValue = calculateRemainingValue({
-            ...simulation,
-            monthValues: updatedMonthValues
-          }, updatedMonthValues);
-
-          return {
-            ...simulation,
-            monthValues: updatedMonthValues,
-            remainingValue
-          };
-        }
-        return simulation;
-      }));
-
-      setSavedSimulations(updatedSimulations);
-    } catch (error) {
-      console.error('Erro ao atualizar progresso:', error);
-      toast.error('Erro ao atualizar progresso.');
-    }
-  };
-
-  const handleDeleteSimulation = async (id) => {
-    if (!window.confirm('Tem certeza de que deseja excluir esta simulação?')) return;
-    try {
-      await deleteSimulation(id);
-      setSavedSimulations(savedSimulations.filter(sim => sim.id !== id));
-      toast.success('Simulação excluída com sucesso!');
-    } catch (error) {
-      console.error('Erro ao excluir simulação:', error);
-      toast.error('Erro ao excluir a simulação.');
-    }
-  };
-
-  const calculateRemainingValue = (simulation, monthValues) => {
-    const totalValue = parseFloat(simulation.totalValue);
-    const monthlySavings = parseFloat(simulation.monthlySavings);
-    const checkedMonths = Object.keys(monthValues).filter(month => monthValues[month]).length;
-    const totalSavings = checkedMonths * monthlySavings;
-    const remainingValue = totalValue - totalSavings;
-    return Math.max(0, remainingValue);
+    return months;
   };
 
   return (
@@ -263,7 +161,7 @@ const SimulationPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="simulation-total">
+                  <div className="simulation-footer">
                     Total restante: R${simulation.remainingValue.toFixed(2)}
                   </div>
                 </div>

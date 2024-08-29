@@ -1,19 +1,22 @@
 .simulation-container {
     display: flex;
     flex-direction: row;
-    gap: 40px;
+    gap: 20px;
     padding: 20px;
-    margin: 0 30px;
+    margin: 0 auto;
+    max-width: 1200px; /* Ajuste conforme necessário */
+    box-sizing: border-box;
   }
   
   .simulation-form {
     flex: 2;
-    max-width: 800px;
+    max-width: 100%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 12px;
     background-color: #f9f9f9;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box; /* Garante que padding e border não extrapolem o container */
   }
   
   .simulation-form h2 {
@@ -23,14 +26,16 @@
   }
   
   .simulation-form input {
-    width: 100%;
+    width: calc(100% - 22px); /* Ajusta a largura para acomodar padding e border */
     padding: 10px;
     margin-bottom: 10px;
     border: 1px solid #ddd;
     border-radius: 8px;
+    box-sizing: border-box; /* Garante que padding e border não extrapolem o container */
   }
   
   .simulation-form button {
+    width: 100%; /* Garante que o botão ocupe toda a largura disponível */
     padding: 10px;
     border: none;
     border-radius: 8px;
@@ -38,6 +43,7 @@
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    box-sizing: border-box;
   }
   
   .simulation-form button:hover {
@@ -53,6 +59,7 @@
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    box-sizing: border-box;
   }
   
   .saved-simulations h2 {
@@ -68,6 +75,7 @@
     border-radius: 8px;
     background-color: #f9f9f9;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
   }
   
   .saved-simulations .simulation-item:last-child {
