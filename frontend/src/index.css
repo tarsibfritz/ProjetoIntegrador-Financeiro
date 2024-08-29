@@ -7,3 +7,21 @@
 body {
   background-color: #19103a;
 }
+
+/* Variáveis */
+:root {
+  /* Botões principais */
+  --dark-button: #530c7c;
+  --light-button: #6d1e9b;
+  --simulation-icons: #8359b4;  /* delete-button e toggle-button*/
+  /* Botões secundários */
+  --lightGrey-Tone1: #d2ceda;
+  --lightGrey-Tone2: #9590b4ba;
+  /* Containers */
+  --main-containers: #150e33;
+  --light-border: 1px solid #6f0ab3;
+  /* Checkboxes */
+  --completedSimulation-border: 2px solid #8359b4;
+  --completedSimulation-circle: #8359b4;
+  --month-checkbox: #9e70d1;
+}
