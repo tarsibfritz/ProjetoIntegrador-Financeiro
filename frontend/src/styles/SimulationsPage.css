@@ -12,44 +12,67 @@
     flex: 2;
     max-width: 100%;
     padding: 20px;
-    border: 1px solid #ddd;
+    border: 1px solid #6f0ab3;
     border-radius: 12px;
-    background-color: #f9f9f9;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box; /* Garante que padding e border não extrapolem o container */
+    background-color: #150e33;
+    box-shadow: 0 4px 12px rgba(78, 16, 159, 0.1);
+    box-sizing: border-box; 
   }
   
   .simulation-form h2 {
     margin-bottom: 20px;
     font-size: 24px;
-    color: #333;
+    color: #ffffff;
   }
   
   .simulation-form input {
-    width: calc(100% - 22px); /* Ajusta a largura para acomodar padding e border */
+    width: calc(100%); 
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
+    margin-bottom: 15px;
+    border: 1px solid #870fd6;
     border-radius: 8px;
-    box-sizing: border-box; /* Garante que padding e border não extrapolem o container */
+    box-sizing: border-box;
   }
   
-  .simulation-form button {
-    width: 100%; /* Garante que o botão ocupe toda a largura disponível */
+  .simulation-form-button {
+    width: 100%;
     padding: 10px;
     border: none;
-    border-radius: 8px;
-    background-color: #6c5ce7;
+    border-radius: 7px;
+    font-weight: bold;
+    background-color: #420e70;
     color: #fff;
     cursor: pointer;
     transition: background-color 0.3s ease;
     box-sizing: border-box;
   }
   
-  .simulation-form button:hover {
-    background-color: #5a4eae;
+  .simulation-form-button:hover {
+    background-color: #5a2186;
   }
   
+  .save-simulation {
+    margin-bottom: 10px;
+  }
+
+  .restart-simulation {
+    width: 100%;
+    color: #9590b4ba;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: color ease 0.9s;
+  }
+
+  .restart-simulation:hover {
+    color: #d2ceda;
+  }
+
+  .simulation-result {
+    color: #fff;
+    margin: 20px 0px;
+  }
+
   .saved-simulations {
     flex: 1;
     min-width: 300px;

@@ -207,12 +207,12 @@ const SimulationPage = () => {
           value={monthlySavings}
           onChange={(e) => setMonthlySavings(e.target.value)}
         />
-        <button onClick={handleStartSimulation}>Iniciar Simulação</button>
+        <button className="simulation-form-button" onClick={handleStartSimulation}>Iniciar Simulação</button>
         {monthsToSave !== null && (
           <div>
-            <p>Tempo estimado para alcançar a meta: {monthsToSave} meses</p>
-            <button onClick={handleSaveSimulation}>Salvar Simulação</button>
-            <button onClick={handleRestartSimulation}>Reiniciar Simulação</button>
+            <p className="simulation-result">Tempo estimado para alcançar a meta: {monthsToSave} meses</p>
+            <button className="simulation-form-button save-simulation" onClick={handleSaveSimulation}>Salvar Simulação</button>
+            <button className="restart-simulation" onClick={handleRestartSimulation}>Reiniciar Simulação</button>
           </div>
         )}
       </div>

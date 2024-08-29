@@ -45,6 +45,7 @@ const Navbar = () => {
                         </div>
                         <Link to="/home" className="menu-item" onClick={closeMenu}>Home</Link>
                         <Link to="/lançamentos" className="menu-item" onClick={closeMenu}>Lançamentos</Link>
+                        <Link to="/simulação" className="menu-item" onClick={closeMenu}>Simulação</Link>
                         <button onClick={handleLogout} className="logout-user">Sair</button>
                     </div>
                 </div>
