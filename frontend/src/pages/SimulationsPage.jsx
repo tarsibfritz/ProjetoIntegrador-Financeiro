@@ -3,7 +3,7 @@ import { toast } from 'react-toastify';
 import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
 import { getProgressBySimulationId, updateProgress, createProgress } from '../services/progressService';
 import '../styles/SimulationsPage.css';
-import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
+import { FaChevronDown, FaChevronUp, FaTrash, FaCheck } from 'react-icons/fa';
 
 const SimulationPage = () => {
   const [name, setName] = useState('');
@@ -70,11 +70,10 @@ const SimulationPage = () => {
       const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
         simulationId: newSimulation.id,
         month: i + 1,
-        amountSaved: 0, // Inicialmente, nenhum valor foi economizado
-        isChecked: false // Checkbox desmarcada inicialmente
+        amountSaved: 0,
+        isChecked: false
       }));
 
-      // Adicionar progresso inicial para a nova simulação
       await Promise.all(initialProgress.map(progressItem =>
         createProgress(progressItem)
       ));
@@ -134,15 +133,13 @@ const SimulationPage = () => {
           const progressItem = progress.find(p => p.month === month);
 
           if (progressItem) {
-            // Atualize o item existente
             await updateProgress(progressItem.id, { ...progressItem, isChecked: updatedMonthValues[month] });
           } else {
-            // Crie um novo item
             await createProgress({
               simulationId,
               month,
               amountSaved: simulation.monthlySavings,
-              isChecked: updatedMonthValues[month] // Atualize o estado da checkbox
+              isChecked: updatedMonthValues[month]
             });
           }
 
@@ -227,13 +224,28 @@ const SimulationPage = () => {
           savedSimulations.map((simulation) => (
             <div key={simulation.id} className="simulation-item">
               <div className="simulation-header">
-                <span>{simulation.name}</span>
-                <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
-                  <FaTrash />
-                </button>
-                <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
-                  {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
-                </button>
+                <div className="circle-checkbox">
+                  {simulation.remainingValue === 0 ? (
+                    <div className="circle-checked">
+                      <FaCheck />
+                    </div>
+                  ) : (
+                    <div className="circle-unchecked" />
+                  )}
+                </div>
+                <div className="simulation-content">
+                  <div className="simulation-name">
+                    <span>{simulation.name}</span>
+                  </div>
+                  <div className="simulation-actions">
+                    <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
+                      {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
+                    </button>
+                    <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
+                      <FaTrash />
+                    </button>
+                  </div>
+                </div>
               </div>
               {activeItem === simulation.id && (
                 <div className="simulation-details">
@@ -251,9 +263,8 @@ const SimulationPage = () => {
                       </div>
                     ))}
                   </div>
-                  <div className="simulation-footer">
-                    <p>Total: {simulation.remainingValue.toFixed(2)}</p>
-                    <p>Valor Mensal: {simulation.monthlySavings}</p>
+                  <div className="simulation-total">
+                    Total restante: R${simulation.remainingValue.toFixed(2)}
                   </div>
                 </div>
               )}
