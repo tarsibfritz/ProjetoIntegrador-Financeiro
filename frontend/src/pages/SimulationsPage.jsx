@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 import { toast } from 'react-toastify';
 import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
 import { getProgressBySimulationId, updateProgress, createProgress } from '../services/progressService';
@@ -57,39 +58,50 @@ const SimulationPage = () => {
   };
 
   const handleSaveSimulation = async () => {
-    if (!window.confirm('Deseja converter essa simulação em um plano real?')) return;
-    try {
-      const newSimulation = await addSimulation({
-        name,
-        totalValue,
-        monthlySavings,
-        monthsToSave,
-        createdAt: new Date()
-      });
+    const result = await Swal.fire({
+      title: 'Deseja salvar essa simulação?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, salvar!',
+      cancelButtonText: 'Cancelar'
+    });
 
-      const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
-        simulationId: newSimulation.id,
-        month: i + 1,
-        amountSaved: 0,
-        isChecked: false
-      }));
+    if (result.isConfirmed) {
+      try {
+        const newSimulation = await addSimulation({
+          name,
+          totalValue,
+          monthlySavings,
+          monthsToSave,
+          createdAt: new Date()
+        });
 
-      await Promise.all(initialProgress.map(progressItem =>
-        createProgress(progressItem)
-      ));
+        const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
+          simulationId: newSimulation.id,
+          month: i + 1,
+          amountSaved: 0,
+          isChecked: false
+        }));
 
-      const updatedSimulation = {
-        ...newSimulation,
-        monthValues: {},
-        remainingValue: calculateRemainingValue(newSimulation, {})
-      };
+        await Promise.all(initialProgress.map(progressItem =>
+          createProgress(progressItem)
+        ));
 
-      toast.success('Simulação salva com sucesso!');
-      setSavedSimulations([...savedSimulations, updatedSimulation]);
-      handleRestartSimulation();
-    } catch (error) {
-      console.error('Erro ao salvar simulação:', error);
-      toast.error(error.message || 'Erro ao salvar a simulação.');
+        const updatedSimulation = {
+          ...newSimulation,
+          monthValues: {},
+          remainingValue: calculateRemainingValue(newSimulation, {})
+        };
+
+        toast.success('Simulação salva com sucesso!');
+        setSavedSimulations([...savedSimulations, updatedSimulation]);
+        handleRestartSimulation();
+      } catch (error) {
+        console.error('Erro ao salvar simulação:', error);
+        toast.error(error.message || 'Erro ao salvar a simulação.');
+      }
     }
   };
 
@@ -165,14 +177,26 @@ const SimulationPage = () => {
   };
 
   const handleDeleteSimulation = async (id) => {
-    if (!window.confirm('Tem certeza de que deseja excluir esta simulação?')) return;
-    try {
-      await deleteSimulation(id);
-      setSavedSimulations(savedSimulations.filter(sim => sim.id !== id));
-      toast.success('Simulação excluída com sucesso!');
-    } catch (error) {
-      console.error('Erro ao excluir simulação:', error);
-      toast.error('Erro ao excluir a simulação.');
+    const result = await Swal.fire({
+      title: 'Tem certeza que deseja excluir esta simulação?',
+      text: "Essa ação não pode ser desfeita.",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Cancelar'
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await deleteSimulation(id);
+        setSavedSimulations(savedSimulations.filter(sim => sim.id !== id));
+        toast.success('Simulação excluída com sucesso!');
+      } catch (error) {
+        console.error('Erro ao excluir simulação:', error);
+        toast.error('Erro ao excluir a simulação.');
+      }
     }
   };
 
@@ -186,91 +210,93 @@ const SimulationPage = () => {
   };
 
   return (
-    <div className="simulation-container">
-      <div className="simulation-form">
-        <h2>Criar Simulação</h2>
-        <input
-          type="text"
-          placeholder="Nome"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Valor total do item/meta"
-          value={totalValue}
-          onChange={(e) => setTotalValue(e.target.value)}
-        />
-        <input
-          type="number"
-          placeholder="Valor mensal que você pode economizar"
-          value={monthlySavings}
-          onChange={(e) => setMonthlySavings(e.target.value)}
-        />
-        <button className="simulation-form-button" onClick={handleStartSimulation}>Iniciar Simulação</button>
-        {monthsToSave !== null && (
-          <div>
-            <p className="simulation-result">Tempo estimado para alcançar a meta: {monthsToSave} meses</p>
-            <button className="simulation-form-button save-simulation" onClick={handleSaveSimulation}>Salvar Simulação</button>
-            <button className="restart-simulation" onClick={handleRestartSimulation}>Reiniciar Simulação</button>
-          </div>
-        )}
-      </div>
-      <div className="saved-simulations">
-        <h2>Simulações Salvas</h2>
-        {savedSimulations.length === 0 ? (
-          <p className="no-items">Nenhuma simulação salva.</p>
-        ) : (
-          savedSimulations.map((simulation) => (
-            <div key={simulation.id} className="simulation-item">
-              <div className="simulation-header">
-                <div className="circle-checkbox">
-                  {simulation.remainingValue === 0 ? (
-                    <div className="circle-checked">
-                      <FaCheck />
-                    </div>
-                  ) : (
-                    <div className="circle-unchecked" />
-                  )}
-                </div>
-                <div className="simulation-content">
-                  <div className="simulation-name">
-                    <span>{simulation.name}</span>
-                  </div>
-                  <div className="simulation-actions">
-                    <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
-                      {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
-                    </button>
-                    <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
-                      <FaTrash />
-                    </button>
-                  </div>
-                </div>
-              </div>
-              {activeItem === simulation.id && (
-                <div className="simulation-details">
-                  <div className="simulation-progress">
-                    {calculateMonths(simulation.createdAt, simulation.monthsToSave).map(({ month, label }) => (
-                      <div key={month} className="month-checkbox">
-                        <label>
-                          <input
-                            type="checkbox"
-                            checked={simulation.monthValues[month] || false}
-                            onChange={() => handleMonthValueChange(simulation.id, month)}
-                          />
-                          {label}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="simulation-total">
-                    Total restante: R${simulation.remainingValue.toFixed(2)}
-                  </div>
-                </div>
-              )}
+    <div className="page-container">
+      <div className="simulation-container">
+        <div className="simulation-form">
+          <h2>Criar Simulação</h2>
+          <input
+            type="text"
+            placeholder="Nome"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Valor total do item/meta"
+            value={totalValue}
+            onChange={(e) => setTotalValue(e.target.value)}
+          />
+          <input
+            type="number"
+            placeholder="Valor mensal que você pode economizar"
+            value={monthlySavings}
+            onChange={(e) => setMonthlySavings(e.target.value)}
+          />
+          <button className="simulation-form-button" onClick={handleStartSimulation}>Iniciar Simulação</button>
+          {monthsToSave !== null && (
+            <div>
+              <p className="simulation-result">Tempo estimado para alcançar a meta: {monthsToSave} meses</p>
+              <button className="simulation-form-button save-simulation" onClick={handleSaveSimulation}>Salvar Simulação</button>
+              <button className="restart-simulation" onClick={handleRestartSimulation}>Reiniciar Simulação</button>
             </div>
-          ))
-        )}
+          )}
+        </div>
+        <div className="saved-simulations">
+          <h2>Simulações Salvas</h2>
+          {savedSimulations.length === 0 ? (
+            <p className="no-items">Nenhuma simulação salva.</p>
+          ) : (
+            savedSimulations.map((simulation) => (
+              <div key={simulation.id} className="simulation-item">
+                <div className="simulation-header">
+                  <div className="circle-checkbox">
+                    {simulation.remainingValue === 0 ? (
+                      <div className="circle-checked">
+                        <FaCheck />
+                      </div>
+                    ) : (
+                      <div className="circle-unchecked" />
+                    )}
+                  </div>
+                  <div className="simulation-content">
+                    <div className="simulation-name">
+                      <span>{simulation.name}</span>
+                    </div>
+                    <div className="simulation-actions">
+                      <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
+                        {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
+                      </button>
+                      <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                {activeItem === simulation.id && (
+                  <div className="simulation-details">
+                    <div className="simulation-progress">
+                      {calculateMonths(simulation.createdAt, simulation.monthsToSave).map(({ month, label }) => (
+                        <div key={month} className="month-checkbox">
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={simulation.monthValues[month] || false}
+                              onChange={() => handleMonthValueChange(simulation.id, month)}
+                            />
+                            {label}
+                          </label>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="simulation-total">
+                      Total restante: R${simulation.remainingValue.toFixed(2)}
+                    </div>
+                  </div>
+                )}
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );
