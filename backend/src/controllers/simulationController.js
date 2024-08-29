@@ -16,7 +16,7 @@ exports.createSimulation = async (req, res) => {
 
     const monthsToSave = total <= 0 ? 0 : Math.ceil(total / savings);
 
-    // Crie a simulação
+    // Crie a simulação sem inicializar o progresso
     const newSimulation = await Simulation.create({
       name,
       description,
@@ -24,18 +24,6 @@ exports.createSimulation = async (req, res) => {
       monthlySavings: savings,
       monthsToSave,
     });
-
-    // Inicializar o progresso para cada mês
-    const progressData = [];
-    for (let month = 1; month <= monthsToSave; month++) {
-      progressData.push({
-        simulationId: newSimulation.id,
-        month,
-        isChecked: false,
-      });
-    }
-
-    await Progress.bulkCreate(progressData);
 
     res.status(201).json(newSimulation);
   } catch (error) {

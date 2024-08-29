@@ -70,7 +70,8 @@ const SimulationPage = () => {
       const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
         simulationId: newSimulation.id,
         month: i + 1,
-        amountSaved: 0 // Inicialmente, nenhum valor foi economizado
+        amountSaved: 0, // Inicialmente, nenhum valor foi economizado
+        isChecked: false // Checkbox desmarcada inicialmente
       }));
 
       // Adicionar progresso inicial para a nova simulação
@@ -133,12 +134,15 @@ const SimulationPage = () => {
           const progressItem = progress.find(p => p.month === month);
 
           if (progressItem) {
-            await updateProgress(progressItem.id, { ...progressItem, isChecked: +!updatedMonthValues[month] });
+            // Atualize o item existente
+            await updateProgress(progressItem.id, { ...progressItem, isChecked: updatedMonthValues[month] });
           } else {
+            // Crie um novo item
             await createProgress({
               simulationId,
               month,
-              amountSaved: simulation.monthlySavings // Define amountSaved como o valor mensal
+              amountSaved: simulation.monthlySavings,
+              isChecked: updatedMonthValues[month] // Atualize o estado da checkbox
             });
           }
 
