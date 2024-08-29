@@ -3,10 +3,12 @@
     justify-content: space-between;
     padding: 20px;
     gap: 20px; /* Espaçamento entre os containers */
+    flex-wrap: wrap; /* Adiciona quebra de linha se necessário */
 }
 
 .simulation-form {
-    width: 60%;
+    flex: 1;
+    min-width: 300px; /* Garantir que o formulário não fique muito pequeno */
     background-color: #f9f9f9; /* Cor de fundo para destacar o formulário */
     padding: 20px;
     border-radius: 8px;
@@ -45,7 +47,8 @@
 }
 
 .saved-simulations {
-    width: 35%;
+    flex: 1;
+    min-width: 300px; /* Garantir que a lista de simulações não fique muito pequena */
     padding: 20px;
     border-left: 1px solid #ddd;
     background-color: #ffffff; /* Cor de fundo para a lista */
@@ -58,52 +61,36 @@
     color: #4a4a4a;
 }
 
-.saved-simulations ul {
-    list-style-type: none;
-    padding: 0;
-}
-
-.saved-simulations li {
-    display: flex;
-    flex-direction: column; /* Alinha o conteúdo na vertical */
+.saved-simulations .simulation-item {
     margin-bottom: 20px;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    cursor: pointer;
-    position: relative;
 }
 
-.saved-simulations li:last-child {
-    border-bottom: none; /* Remover a borda do último item */
+.saved-simulations .simulation-item:last-child {
+    margin-bottom: 0; /* Remove a margem do último item */
 }
 
-.saved-simulations .circle {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    border: 2px solid #6c5ce7; /* Cor do contorno */
-    background-color: #fff; /* Fundo branco */
-    margin-right: 10px;
+.saved-simulations .simulation-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    position: absolute;
-    top: 10px;
-    left: 10px;
 }
 
-.saved-simulations .circle.checked {
-    background-color: #6c5ce7; /* Cor do círculo preenchido */
-}
-
-.saved-simulations .circle.checked::after {
-    content: '✔'; /* Ícone de check */
-    color: #fff;
+.saved-simulations .simulation-header span {
     font-size: 16px;
+    color: #4a4a4a;
 }
 
-.saved-simulations .item-details {
-    margin-left: 40px; /* Espaço suficiente para a bola */
+.saved-simulations .delete-button {
+    background: none; /* Remove o fundo padrão */
+    border: none; /* Remove a borda padrão */
+    color: #5a4fdb; /* Cor do ícone (roxo) */
+    cursor: pointer; /* Cursor de mão para indicar que é clicável */
+    font-size: 20px; /* Tamanho do ícone */
+    transition: color 0.3s ease; /* Transição suave para a cor */
+}
+
+.saved-simulations .delete-button:hover {
+    color: #3c32a4; /* Cor do ícone ao passar o mouse (roxo mais escuro) */
 }
 
 .saved-simulations .toggle-button {
@@ -112,21 +99,23 @@
     color: #6c5ce7; /* Cor do ícone do toggle */
 }
 
-.saved-simulations .toggle-content {
+.saved-simulations .simulation-details {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd; /* Linha de separação */
+}
+
+.saved-simulations .simulation-progress {
     margin-top: 10px;
 }
 
-.months-checklist {
-    margin-top: 10px;
-}
-
-.months-checklist div {
+.saved-simulations .month-checkbox {
     display: flex;
     align-items: center;
     margin-bottom: 5px;
 }
 
-.months-checklist input[type="checkbox"] {
+.saved-simulations .month-checkbox input[type="checkbox"] {
     accent-color: #6c5ce7; /* Cor personalizada para o estado selecionado */
     width: 20px;
     height: 20px;
@@ -134,30 +123,21 @@
     cursor: pointer; /* Cursor de mão para interação */
 }
 
-.months-checklist label {
+.saved-simulations .month-checkbox label {
     font-size: 14px;
     color: #4a4a4a;
 }
 
-.no-items {
+.saved-simulations .simulation-footer {
+    margin-top: 10px;
+}
+
+.saved-simulations .no-items {
     text-align: center;
     color: #888;
 }
 
-/* Botão para deletar simulação */
-.delete-button {
-    background: none; /* Remove o fundo padrão */
-    border: none; /* Remove a borda padrão */
-    color: #5a4fdb; /* Cor do ícone (vermelho) */
-    cursor: pointer; /* Cursor de mão para indicar que é clicável */
-    font-size: 20px; /* Tamanho do ícone */
-    transition: color 0.3s ease; /* Transição suave para a cor */
-}
-
-.delete-button:hover {
-    color: #3c32a4; /* Cor do ícone ao passar o mouse (vermelho mais escuro) */
-}
-
-.delete-button:focus {
-    outline: none; /* Remove o contorno de foco */
+/* Adicionar estilo para a linha de separação entre as simulações */
+.saved-simulations .simulation-item:not(:last-child) {
+    border-bottom: 1px solid #ddd;
 }

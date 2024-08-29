@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { addSimulation, getSimulations, deleteSimulation } from '../services/simulationService';
-import { getProgressBySimulationId, updateProgress } from '../services/progressService';
+import { getProgressBySimulationId, updateProgress, createProgress } from '../services/progressService';
 import '../styles/SimulationsPage.css';
 import { FaChevronDown, FaChevronUp, FaTrash } from 'react-icons/fa';
 
@@ -20,7 +20,7 @@ const SimulationPage = () => {
         const simulationsWithProgress = await Promise.all(simulations.map(async (sim) => {
           const progress = await getProgressBySimulationId(sim.id);
           const progressMap = progress.reduce((acc, curr) => {
-            acc[curr.month] = curr.isChecked === 1; // Convert tinyint to boolean
+            acc[curr.month] = curr.isChecked;
             return acc;
           }, {});
 
@@ -70,12 +70,12 @@ const SimulationPage = () => {
       const initialProgress = Array.from({ length: monthsToSave }, (_, i) => ({
         simulationId: newSimulation.id,
         month: i + 1,
-        isChecked: false
+        amountSaved: 0 // Inicialmente, nenhum valor foi economizado
       }));
 
       // Adicionar progresso inicial para a nova simulação
       await Promise.all(initialProgress.map(progressItem =>
-        updateProgress(newSimulation.id, progressItem)
+        createProgress(progressItem)
       ));
 
       const updatedSimulation = {
@@ -133,9 +133,13 @@ const SimulationPage = () => {
           const progressItem = progress.find(p => p.month === month);
 
           if (progressItem) {
-            await updateProgress(progressItem.id, { ...progressItem, isChecked: !progressItem.isChecked });
+            await updateProgress(progressItem.id, { ...progressItem, isChecked: +!updatedMonthValues[month] });
           } else {
-            await updateProgress(simulationId, { month, isChecked: !updatedMonthValues[month] });
+            await createProgress({
+              simulationId,
+              month,
+              amountSaved: simulation.monthlySavings // Define amountSaved como o valor mensal
+            });
           }
 
           const remainingValue = calculateRemainingValue({
@@ -216,56 +220,41 @@ const SimulationPage = () => {
         {savedSimulations.length === 0 ? (
           <p className="no-items">Nenhuma simulação salva.</p>
         ) : (
-          <ul>
-            {savedSimulations.map((simulation) => {
-              const monthsArray = calculateMonths(simulation.createdAt, simulation.monthsToSave);
-              return (
-                <li
-                  key={simulation.id}
-                  className={`simulation-item ${activeItem === simulation.id ? 'active' : ''}`}
-                >
-                  <div className={`circle ${simulation.remainingValue <= 0 ? 'checked' : ''}`}></div>
-                  <div className="item-details">
-                    <h3>{simulation.name}</h3>
-                    <p className="monthly-savings">Valor Mensal: {simulation.monthlySavings}</p>
-                    <span
-                      className="toggle-button"
-                      onClick={() => toggleDetails(simulation.id)}
-                    >
-                      {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
-                    </span>
-                    <button
-                      className="delete-button"
-                      onClick={() => handleDeleteSimulation(simulation.id)}
-                    >
-                      <FaTrash />
-                    </button>
-                    {activeItem === simulation.id && (
-                      <div className="toggle-content">
-                        <p><strong>Valor Total:</strong> {simulation.totalValue}</p>
-                        <div className="months-checklist">
-                          {monthsArray.map(({ month, label }) => (
-                            <div key={month} className="month-checkbox">
-                              <input
-                                type="checkbox"
-                                id={`month-${month}`}
-                                checked={!!simulation.monthValues[month]}
-                                onChange={() => handleMonthValueChange(simulation.id, month)}
-                              />
-                              <label htmlFor={`month-${month}`}>
-                                {label}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                        <p><strong>Total:</strong> {simulation.remainingValue}</p>
+          savedSimulations.map((simulation) => (
+            <div key={simulation.id} className="simulation-item">
+              <div className="simulation-header">
+                <span>{simulation.name}</span>
+                <button className="delete-button" onClick={() => handleDeleteSimulation(simulation.id)}>
+                  <FaTrash />
+                </button>
+                <button className="toggle-button" onClick={() => toggleDetails(simulation.id)}>
+                  {activeItem === simulation.id ? <FaChevronUp /> : <FaChevronDown />}
+                </button>
+              </div>
+              {activeItem === simulation.id && (
+                <div className="simulation-details">
+                  <div className="simulation-progress">
+                    {calculateMonths(simulation.createdAt, simulation.monthsToSave).map(({ month, label }) => (
+                      <div key={month} className="month-checkbox">
+                        <label>
+                          <input
+                            type="checkbox"
+                            checked={simulation.monthValues[month] || false}
+                            onChange={() => handleMonthValueChange(simulation.id, month)}
+                          />
+                          {label}
+                        </label>
                       </div>
-                    )}
+                    ))}
                   </div>
-                </li>
-              );
-            })}
-          </ul>
+                  <div className="simulation-footer">
+                    <p>Total: {simulation.remainingValue.toFixed(2)}</p>
+                    <p>Valor Mensal: {simulation.monthlySavings}</p>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))
         )}
       </div>
     </div>

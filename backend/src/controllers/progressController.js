@@ -5,6 +5,10 @@ const Progress = db.Progress;
 exports.getProgressBySimulationId = async (req, res) => {
   try {
     const { simulationId } = req.query;
+    if (!simulationId) {
+      return res.status(400).json({ message: 'simulationId é necessário' });
+    }
+    
     const progress = await Progress.findAll({
       where: { simulationId },
     });
@@ -25,9 +29,9 @@ exports.updateProgress = async (req, res) => {
       return res.status(404).json({ message: 'Progresso não encontrado' });
     }
 
-    // Convert boolean to integer for MySQL if needed
-    progress.isChecked = isChecked ? 1 : 0;
-    progress.amountSaved = amountSaved;
+    // Atualiza os campos conforme o modelo
+    progress.isChecked = Boolean(isChecked); // Usando Boolean para garantir que seja um valor booleano
+    progress.amountSaved = amountSaved; // Presumindo que amountSaved também está presente no modelo
     await progress.save();
 
     res.status(200).json(progress);
@@ -36,14 +40,19 @@ exports.updateProgress = async (req, res) => {
   }
 };
 
-// Adicione a função addProgress aqui
+// Adicionar progresso
 exports.addProgress = async (req, res) => {
   try {
-    const { simulationId, amountSaved } = req.body;
+    const { simulationId, month, amountSaved } = req.body;
+    if (month == null || simulationId == null) {
+      return res.status(400).json({ message: 'simulationId e month são necessários' });
+    }
+    
     const progress = await Progress.create({
       simulationId,
+      month,
       amountSaved,
-      isChecked: 0, // Default to false (0)
+      isChecked: false, // Default para false
     });
     res.status(201).json(progress);
   } catch (error) {
