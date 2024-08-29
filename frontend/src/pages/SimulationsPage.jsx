@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { FaCheck, FaTrash, FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import '../styles/SimulationsPage.css'; // Certifique-se de que o caminho esteja correto
+import '../styles/SimulationsPage.css';
 import { createSimulation, getSavedSimulations, deleteSimulation, updateSimulationProgress } from '../services/simulationService'; // Ajuste o caminho do serviço conforme necessário
 
 const SimulationPage = () => {
