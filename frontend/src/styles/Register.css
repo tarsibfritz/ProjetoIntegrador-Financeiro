@@ -40,6 +40,11 @@
     margin-bottom: 15px;
 }
 
+.register-form-group input::placeholder {
+    color: #bababa;
+    font-style: italic;
+}
+
 .register-form-group label {
     font-size: 14px;
     color: #7a7a7a;
