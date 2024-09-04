@@ -12,31 +12,10 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Register />} />
-            <Route path="/reset-password" element={<ResetPassword />} />
-            <Route
-                path="/home"
-                element={
-                    <PrivateRoute>
-                        <HomePage />
-                    </PrivateRoute>
-                }
-            />
-            <Route
-                path="/lançamentos"
-                element={
-                    <PrivateRoute>
-                        <LaunchesPage />
-                    </PrivateRoute>
-                }
-            />
-            <Route
-                path="/simulação"
-                element={
-                    <PrivateRoute>
-                        <SimulationsPage />
-                    </PrivateRoute>
-                }
-            />
+            <Route path="/resetar-senha" element={<ResetPassword />} />
+            <Route path="/home" element={<PrivateRoute><HomePage /></PrivateRoute>} />
+            <Route path="/lançamentos" element={<PrivateRoute><LaunchesPage /></PrivateRoute>} />
+            <Route path="/simulação" element={<PrivateRoute><SimulationsPage /></PrivateRoute>} />
         </Routes>
     );
 };

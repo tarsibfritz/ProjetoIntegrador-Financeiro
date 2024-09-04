@@ -10,7 +10,7 @@ const Layout = () => {
   const location = useLocation();
 
   // Verifica se a rota atual é '/login' ou '/cadastro'
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/cadastro';
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/cadastro' || location.pathname === '/resetar-senha';
 
   return (
     <>

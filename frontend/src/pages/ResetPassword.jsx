@@ -1,12 +1,17 @@
 import { useState } from "react";
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
 import { resetPassword } from '../services/userService';
 import "../styles/ResetPassword.css";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 const ResetPassword = () => {
     const [email, setEmail] = useState("");
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [showNewPassword, setShowNewPassword] = useState(false); // Estado para mostrar/ocultar nova senha
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Estado para mostrar/ocultar confirmar senha
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -45,26 +50,41 @@ const ResetPassword = () => {
                                 required
                             />
                         </div>
-                        <div className="reset-password-group">
+                        <div className="reset-password-group password-group">
                             <label>Nova Senha</label>
-                            <input
-                                type="password"
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                            />
+                            <div className="password-container">
+                                <input
+                                    type={showNewPassword ? "text" : "password"}
+                                    value={newPassword}
+                                    onChange={(e) => setNewPassword(e.target.value)}
+                                    required
+                                />
+                                <FontAwesomeIcon
+                                    icon={showNewPassword ? faEyeSlash : faEye}
+                                    className="password-toggle"
+                                    onClick={() => setShowNewPassword(!showNewPassword)}
+                                />
+                            </div>
                         </div>
-                        <div className="reset-password-group">
+                        <div className="reset-password-group password-group">
                             <label>Confirmar Senha</label>
-                            <input
-                                type="password"
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                            />
+                            <div className="password-container">
+                                <input
+                                    type={showConfirmPassword ? "text" : "password"}
+                                    value={confirmPassword}
+                                    onChange={(e) => setConfirmPassword(e.target.value)}
+                                    required
+                                />
+                                <FontAwesomeIcon
+                                    icon={showConfirmPassword ? faEyeSlash : faEye}
+                                    className="password-toggle"
+                                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                                />
+                            </div>
                         </div>
                         <button className="reset-password-button" type="submit">Redefinir Senha</button>
                     </div>
+                    <Link to='/login' className="back-button">Voltar</Link>
                 </div>
             </form>
         </div>

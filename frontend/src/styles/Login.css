@@ -61,12 +61,38 @@
     outline: none; 
 }
 
+/* Container do campo de senha e ícone */
+.password-group {
+    position: relative;
+}
+
+/* Container que envolve o campo de senha e o ícone */
+.password-container {
+    display: flex;
+    align-items: center;
+}
+
+/* Campo de senha */
+.password-container input {
+    flex: 1;
+    padding-right: 40px;
+}
+
+/* Ícone de mostrar/ocultar senha */
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    color: #7a7a7a;
+    font-size: 19px;
+}
+
 /* Rodapé do formulário */
 .login-form-footer {
     display: flex;
     justify-content: space-between; 
     align-items: center; 
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
 /* Botão de login */
@@ -126,7 +152,7 @@
     font-size: 14px;
     color: #40167a; 
     text-decoration: none;
-    margin-left: 10px;
+    margin-left: 5px;
     transition: color 0.3s ease;
 }
 
