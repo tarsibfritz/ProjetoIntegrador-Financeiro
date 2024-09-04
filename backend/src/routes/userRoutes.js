@@ -5,6 +5,7 @@ const authenticateToken = require('../middleware/authenticateToken');
 
 router.post('/login', userController.loginUser);
 router.post('/', userController.createUser);
+router.post('/reset-password', userController.resetPasswordDirect);
 
 // Rotas protegidas
 router.get('/', authenticateToken, userController.getAllUsers);

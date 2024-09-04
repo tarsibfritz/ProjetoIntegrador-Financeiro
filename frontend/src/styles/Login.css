@@ -122,6 +122,18 @@
     transform-origin: bottom left;
 }
 
+.forgot-password-button {
+    font-size: 14px;
+    color: #40167a; 
+    text-decoration: none;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.forgot-password-button:hover {
+    color: #7127a0;
+}
+
 /* Responsividade */
 @media (max-width: 768px) {
     .login-form-container {

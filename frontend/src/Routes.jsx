@@ -1,6 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Login from '../src/pages/Login';
 import Register from '../src/pages/Register';
+import ResetPassword from './pages/ResetPassword';
 import HomePage from '../src/pages/HomePage';
 import LaunchesPage from '../src/pages/LaunchesPage';
 import PrivateRoute from '../src/components/PrivateRoute';
@@ -11,6 +12,7 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/login" element={<Login />} />
             <Route path="/cadastro" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route
                 path="/home"
                 element={

@@ -22,6 +22,16 @@ export const addUser = async (user) => {
   }
 };
 
+export const resetPassword = async (email, newPassword) => {
+  try {
+    const response = await api.post(`${API_URL}/reset-password`, { email, newPassword });
+    return response.data;
+  } catch (error) {
+    console.error('Error resetting password:', error);
+    throw error;
+  }
+};
+
 export const updateUser = async (id, user) => {
   try {
     const response = await api.put(`${API_URL}/${id}`, user);
