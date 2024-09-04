@@ -6,6 +6,34 @@ import "../styles/Register.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
+// Componente para verificar os requisitos de senha
+const PasswordRequirements = ({ password }) => {
+    const requirements = [
+        { label: "Mínimo de 8 caracteres", regex: /.{8,}/ },
+        { label: "Uma letra minúscula", regex: /[a-z]/ },
+        { label: "Uma letra maiúscula", regex: /[A-Z]/ },
+        { label: "Um número", regex: /\d/ },
+        { label: "Um caractere especial (@#$!%*?&)", regex: /[@$!%*?&#]/ }, // Atualizado aqui
+    ];
+
+    return (
+        <ul className="password-requirements">
+            {requirements.map((requirement, index) => (
+                <li
+                    key={index}
+                    className={
+                        requirement.regex.test(password)
+                            ? "requirement-valid"
+                            : "requirement-invalid"
+                    }
+                >
+                    {requirement.label}
+                </li>
+            ))}
+        </ul>
+    );
+};
+
 const Register = () => {
     const [name, setName] = useState(""); 
     const [email, setEmail] = useState("");
@@ -16,19 +44,9 @@ const Register = () => {
     const navigate = useNavigate();
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const minLengthRegex = /.{8,}/;
-    const lowerCaseRegex = /[a-z]/;
-    const upperCaseRegex = /[A-Z]/;
-    const digitRegex = /\d/;
-    const specialCharRegex = /[@$!%*?&]/;
 
     const handleRegister = async (e) => {
         e.preventDefault();
-
-        console.log('Nome:', name);
-        console.log('Email:', email);
-        console.log('Senha:', password);
-        console.log('Repetir Senha:', repeatPassword);
 
         if (!name || !email || !password || !repeatPassword) {
             toast.info("Todos os campos são obrigatórios!");
@@ -40,32 +58,6 @@ const Register = () => {
             setTimeout(() => {
                 toast.info("Exemplo de email válido: exemplo@gmail.com");
             }, 1500);
-            return;
-        }
-
-        // Verificações de senha
-        if (!minLengthRegex.test(password)) {
-            toast.warning("A senha deve ter pelo menos 8 caracteres.");
-            return;
-        }
-
-        if (!lowerCaseRegex.test(password)) {
-            toast.warning("A senha deve conter pelo menos uma letra minúscula.");
-            return;
-        }
-
-        if (!upperCaseRegex.test(password)) {
-            toast.warning("A senha deve conter pelo menos uma letra maiúscula.");
-            return;
-        }
-
-        if (!digitRegex.test(password)) {
-            toast.warning("A senha deve conter pelo menos um número.");
-            return;
-        }
-
-        if (!specialCharRegex.test(password)) {
-            toast.warning("A senha deve conter pelo menos um caractere especial (@$!%*?&).");
             return;
         }
 
@@ -81,7 +73,6 @@ const Register = () => {
                 password,
             });
 
-            console.log('Resposta do registro:', response.data);
             if (response.status === 201) {
                 toast.success("Cadastro realizado com sucesso!");
                 navigate('/login');
@@ -89,7 +80,6 @@ const Register = () => {
                 toast.error("Erro ao realizar o cadastro. Tente novamente.");
             }
         } catch (error) {
-            console.error('Erro:', error);
             if (error.response && error.response.status === 400) {
                 toast.warning(error.response.data.error || "Erro no cadastro. Tente novamente.");
             } else {
@@ -158,6 +148,7 @@ const Register = () => {
                                     <FontAwesomeIcon icon={showRepeatPassword ? faEyeSlash : faEye} />
                                 </button>
                             </div>
+                            <PasswordRequirements password={password} />
                         </div>
                         <div className="register-form-footer">
                             <button className="register-form-button" type="submit">Cadastrar</button>

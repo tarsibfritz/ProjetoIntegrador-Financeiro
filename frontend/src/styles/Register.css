@@ -14,7 +14,7 @@
     flex-direction: column;
     background-color: #fff;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     width: 450px;
     max-width: 500px;
@@ -55,15 +55,15 @@
 .register-form-group input {
     width: 100%;
     padding: 10px;
-    border: 1px solid #ddd; 
+    border: 1px solid #ddd;
     border-radius: 5px;
     font-size: 16px;
     box-sizing: border-box;
 }
 
 .register-form-group input:focus {
-    border-color: #7e1cbc; 
-    outline: none; 
+    border-color: #7e1cbc;
+    outline: none;
 }
 
 .password-container {
@@ -86,160 +86,74 @@
     font-size: 18px;
 }
 
+/* Estilos do PasswordRequirements */
+.password-requirements {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #7a7a7a;
+}
+
+.password-requirements li {
+    margin-bottom: 2px;
+    list-style-type: none;
+    display: flex;
+    align-items: center;
+}
+
+.password-requirements li::before {
+    color: #aaaaaa;
+    transition: color 0.3s ease;
+}
+
+.requirement-valid::before {
+    color: #28a745;
+}
+
+.requirement-invalid {
+    color: #aaaaaa;
+}
+
+.requirement-valid {
+    color: #28a745; /* Texto verde quando válido */
+}
+
 /* Rodapé do formulário */
 .register-form-footer {
     display: flex;
-    justify-content: space-between; 
-    align-items: center; 
-    margin-top: 20px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 5px;
 }
 
 /* Botão de cadastro */
 .register-form-button {
-    width: auto; 
-    padding: 10px 20px; 
-    font-size: 16px; 
+    width: auto;
+    padding: 10px 20px;
+    font-size: 16px;
     border: none;
     border-radius: 5px;
-    color: #fff; 
-    background-color: #7127a0; 
+    color: #fff;
+    background-color: #7127a0;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
 
 .register-form-button:hover {
-    background-color: #40167a; 
+    background-color: #40167a;
 }
 
 /* Link para Login */
 .register-login-button {
     font-size: 14px;
-    color: #40167a; 
+    color: #40167a;
     text-decoration: none;
-    margin-left: 10px;
 }
 
 .register-login-button span {
-    position: relative;
-    cursor: pointer;
-    transition: color 0.3s ease;
+    font-weight: bold;
+    text-decoration: underline;
 }
 
-.register-login-button span::after {
-    content: ''; 
-    position: absolute;
-    left: 0;
-    bottom: -2px; 
-    width: 100%;
-    height: 1px;
-    background-color: #7127a0; 
-    transform: scaleX(0); 
-    transform-origin: bottom right; 
-    transition: transform 0.3s ease; 
-}
-
-.register-login-button span:hover {
-    color: #7127a0;
-}
-
-.register-login-button span:hover::after {
-    transform: scaleX(1);
-    transform-origin: bottom left;
-}
-
-/* Responsividade */
-@media (max-width: 768px) {
-    .register-form-container {
-        padding: 15px;
-    }
-
-    .register-title {
-        font-size: 24px;
-    }
-
-    .register-form-group input {
-        font-size: 14px;
-    }
-
-    .register-form-button {
-        font-size: 14px;
-        padding: 8px 16px;
-    }
-}
-
-@media (max-width: 480px) {
-    .register-form-container {
-        padding: 10px;
-    }
-
-    .register-title {
-        font-size: 20px;
-    }
-
-    .register-form-group input {
-        font-size: 12px;
-    }
-
-    .register-form-button {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-}
-
-/* transitions.css */
-/* Estado inicial para a entrada */
-.slide-enter {
-    transform: translateX(100%);
-    opacity: 0;
-}
-
-/* Estado final da entrada */
-.slide-enter-active {
-    transform: translateX(0);
-    opacity: 1;
-    transition: transform 500ms cubic-bezier(0.42, 0, 0.58, 1), opacity 500ms ease-in-out;
-}
-
-/* Estado inicial para a saída */
-.slide-exit {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-/* Estado final da saída */
-.slide-exit-active {
-    transform: translateX(-100%);
-    opacity: 0;
-    transition: transform 500ms cubic-bezier(0.42, 0, 0.58, 1), opacity 500ms ease-in-out;
-}
-
-/* Estado inicial para a animação de entrada reversa */
-.slide-enter-reverse {
-    transform: translateX(-100%);
-    opacity: 0;
-}
-
-/* Estado final para a animação de entrada reversa */
-.slide-enter-active-reverse {
-    transform: translateX(0);
-    opacity: 1;
-    transition: transform 500ms cubic-bezier(0.42, 0, 0.58, 1), opacity 500ms ease-in-out;
-}
-
-/* Estado inicial para a animação de saída reversa */
-.slide-exit-reverse {
-    transform: translateX(0);
-    opacity: 1;
-}
-
-/* Estado final para a animação de saída reversa */
-.slide-exit-active-reverse {
-    transform: translateX(100%);
-    opacity: 0;
-    transition: transform 500ms cubic-bezier(0.42, 0, 0.58, 1), opacity 500ms ease-in-out;
-}
-
-/* Evita rolagem no container principal */
-.register-transition-active {
-    overflow: hidden;
+.register-login-button:hover {
+    text-decoration: underline;
 }
