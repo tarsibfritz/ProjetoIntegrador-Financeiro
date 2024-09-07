@@ -62,7 +62,6 @@ const LaunchesPage = () => {
         loadLaunches();
     }, []);
 
-
     // Obtendo uma lista única de meses para o filtro
     const getUniqueMonths = (launches) => {
         const months = new Set();

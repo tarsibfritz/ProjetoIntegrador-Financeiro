@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Dot } from 'recharts';
+import PropTypes from 'prop-types';
 import '../styles/Home.css';
 
 // Funções para cálculo
@@ -41,7 +42,6 @@ const groupMonthlyBalance = (launches) => {
 
 const HomePage = () => {
     const [userName, setUserName] = useState('');
-    const [launches, setLaunches] = useState([]);
     const [balance, setBalance] = useState(0);
     const [expensesData, setExpensesData] = useState([]);
     const [monthlyBalanceData, setMonthlyBalanceData] = useState([]);
@@ -62,7 +62,6 @@ const HomePage = () => {
                     throw new Error('Erro ao buscar lançamentos');
                 }
                 const data = await response.json();
-                setLaunches(data);
 
                 const totalBalance = calculateBalance(data);
                 const expensesByTag = groupExpensesByTag(data);
@@ -96,7 +95,7 @@ const HomePage = () => {
     };
 
     // Função para formatar o texto do tooltip do gráfico de saldo final por mês
-    const customTooltipFormatter = (value, name) => {
+    const customTooltipFormatter = (value) => {
         return [`Saldo: ${currencyFormatter(value)}`];
     };
 
@@ -108,6 +107,7 @@ const HomePage = () => {
     // Função para renderizar o ponto com a cor correta
     const renderCustomizedDot = (props) => {
         const { cx, cy, value } = props;
+
         return (
             <Dot
                 cx={cx}
@@ -118,6 +118,12 @@ const HomePage = () => {
                 r={4}
             />
         );
+    };
+
+    renderCustomizedDot.propTypes = {
+        cx: PropTypes.number.isRequired,
+        cy: PropTypes.number.isRequired,
+        value: PropTypes.number.isRequired,
     };
 
     return (
