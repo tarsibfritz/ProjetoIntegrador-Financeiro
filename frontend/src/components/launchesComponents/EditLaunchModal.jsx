@@ -50,7 +50,7 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
         }
     }, [launch]);
 
-    if (!isOpen) return null;
+    if (!isOpen || !launch) return null;
 
     const handleDescriptionChange = (e) => setDescription(e.target.value);
     const handleAmountChange = (e) => setAmount(e.target.value);
@@ -59,6 +59,11 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
     const handleTagChange = (e) => setTag(e.target.value);
 
     const handleSave = async () => {
+        if (!launch || !launch.id) {
+            toast.error("Lançamento não encontrado.");
+            return;
+        }
+
         const dateISO = new Date(date.split('/').reverse().join('-')).toISOString();
 
         const updatedLaunch = {
@@ -86,7 +91,6 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
         }
     };
 
-    // Determina as tags com base no tipo
     const tags = type === 'income' ? incomeTags : type === 'expense' ? expenseTags : [];
 
     return (
@@ -181,8 +185,8 @@ EditLaunchModal.propTypes = {
         observation: PropTypes.string,
         tag: PropTypes.string,
         type: PropTypes.string,
-        id: PropTypes.number.isRequired,
-    }).isRequired,
+        id: PropTypes.number, // Mudei para não ser requerido aqui
+    }),
     onSave: PropTypes.func.isRequired,
 };
 

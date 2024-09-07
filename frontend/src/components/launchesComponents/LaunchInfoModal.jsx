@@ -12,7 +12,7 @@ const formatDate = (dateString) => {
 };
 
 const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
-    if (!isOpen) return null;
+    if (!isOpen || !launch) return null;
 
     const description = typeof launch.description === 'string' ? launch.description : 'Descrição não disponível';
     const amount = typeof launch.amount === 'number' ? launch.amount.toFixed(2) : '0.00';
@@ -28,6 +28,11 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
     const handleDeleteClick = () => {
         onClose(); // Fechar o modal primeiro
         onDelete(launch.id); // Depois chamar a função de exclusão
+    };
+
+    const handleEditClick = () => {
+        onClose(); // Fechar o modal primeiro
+        onEdit(launch); // Depois chamar a função de edição
     };
 
     return (
@@ -70,7 +75,7 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
                 <div className="launch-info-buttons">
                     <button 
                         className="launch-info-edit-button" 
-                        onClick={() => onEdit(launch)}
+                        onClick={handleEditClick}
                         title="Editar informações"
                     >
                         <FaEdit />
@@ -95,14 +100,14 @@ LaunchInfoModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     launch: PropTypes.shape({
-        id: PropTypes.string.isRequired, // Adiciona a validação do id
-        description: PropTypes.string.isRequired,
-        amount: PropTypes.number.isRequired,
-        date: PropTypes.string.isRequired,
+        id: PropTypes.number.isRequired,
+        description: PropTypes.string,
+        amount: PropTypes.number,
+        date: PropTypes.string,
         observation: PropTypes.string,
-        tag: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired,
-    }).isRequired,
+        tag: PropTypes.string,
+        type: PropTypes.string,
+    }),
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,
 };

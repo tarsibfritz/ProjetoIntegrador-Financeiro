@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { FaCommentDots } from 'react-icons/fa';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import "../../styles/LaunchModal.css";
 import "../../styles/InputStyles.css";

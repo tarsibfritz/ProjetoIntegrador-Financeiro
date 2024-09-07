@@ -82,13 +82,28 @@ const LaunchesPage = () => {
     // Funções para lidar com ações do usuário
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
+
     const handleOpenInfoModal = (launch) => {
         setSelectedLaunch(launch);
         setIsInfoModalOpen(true);
     };
+
     const handleCloseInfoModal = () => {
         setIsInfoModalOpen(false);
         setSelectedLaunch(null);
+    };
+
+    const handleEditLaunch = async (updatedLaunch) => {
+        try {
+            await updateLaunch(updatedLaunch.id, updatedLaunch);
+            const data = await getLaunches();
+            setLaunches(data);
+            setIsEditModalOpen(false);
+            toast.success('Lançamento atualizado com sucesso!');
+        } catch (error) {
+            toast.error('Erro ao atualizar lançamento!');
+            console.error('Erro ao atualizar lançamento:', error);
+        }
     };
 
     const handleSaveLaunch = async (launch) => {
@@ -101,20 +116,6 @@ const LaunchesPage = () => {
         } catch (error) {
             toast.error('Erro ao adicionar lançamento!');
             console.error('Erro ao adicionar lançamento:', error);
-        }
-    };
-
-    const handleEditLaunch = async (updatedLaunch) => {
-        try {
-            await updateLaunch(updatedLaunch.id, updatedLaunch);
-            const data = await getLaunches();
-            setLaunches(data);
-            setIsEditModalOpen(false);
-            handleCloseInfoModal();
-            toast.success('Lançamento atualizado com sucesso!');
-        } catch (error) {
-            toast.error('Erro ao atualizar lançamento!');
-            console.error('Erro ao atualizar lançamento:', error);
         }
     };
 
@@ -247,17 +248,18 @@ const LaunchesPage = () => {
                 isOpen={isInfoModalOpen} 
                 onClose={handleCloseInfoModal}
                 launch={selectedLaunch}
-                onEdit={() => setIsEditModalOpen(true)}
+                onEdit={() => {
+                    handleCloseInfoModal();
+                    setIsEditModalOpen(true);
+                }}
                 onDelete={(id) => handleDeleteLaunch(id)}
             />
-            {isEditModalOpen && selectedLaunch && (
-                <EditLaunchModal 
-                    isOpen={isEditModalOpen} 
-                    onClose={() => setIsEditModalOpen(false)}
-                    launch={selectedLaunch}
-                    onSave={handleEditLaunch}
-                />
-            )}
+            <EditLaunchModal 
+                isOpen={isEditModalOpen} 
+                onClose={() => setIsEditModalOpen(false)}
+                launch={selectedLaunch}
+                onSave={handleEditLaunch}
+            />
 
             <ToastContainer />
         </div>
