@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Dot } from 'recharts';
 import '../styles/Home.css';
 
 // Funções para cálculo
@@ -89,6 +89,37 @@ const HomePage = () => {
         return <div>Erro: {error}</div>;
     }
 
+    // Função para formatar os valores no formato R$ 0,00
+    const currencyFormatter = (value) => {
+        const formattedValue = value.toFixed(2).replace('.', ',');
+        return `R$ ${formattedValue}`;
+    };
+
+    // Função para formatar o texto do tooltip do gráfico de saldo final por mês
+    const customTooltipFormatter = (value, name) => {
+        return [`Saldo: ${currencyFormatter(value)}`];
+    };
+
+    // Função para determinar a cor do ponto
+    const getDotColor = (value) => {
+        return value >= 0 ? '#00C49F' : '#FF204E';
+    };
+
+    // Função para renderizar o ponto com a cor correta
+    const renderCustomizedDot = (props) => {
+        const { cx, cy, value } = props;
+        return (
+            <Dot
+                cx={cx}
+                cy={cy}
+                fill={getDotColor(value)}
+                stroke={getDotColor(value)}
+                strokeWidth={2}
+                r={4}
+            />
+        );
+    };
+
     return (
         <div className="user-container">
             <div className="profile-section">
@@ -102,7 +133,7 @@ const HomePage = () => {
                     </div>
                     <div className="balance-container">
                         <h2>Saldo Total</h2>
-                        <p>R${balance.toFixed(2)}</p>
+                        <p>R${balance.toFixed(2).replace('.', ',')}</p>
                     </div>
                 </div>
             </div>
@@ -131,7 +162,7 @@ const HomePage = () => {
                                         />
                                     ))}
                                 </Pie>
-                                <Tooltip />
+                                <Tooltip formatter={currencyFormatter} />
                                 <Legend />
                             </PieChart>
                         )}
@@ -147,11 +178,16 @@ const HomePage = () => {
                                 <XAxis dataKey="name" />
                                 <YAxis />
                                 <RechartsTooltip 
-                                    labelStyle={{ color: '#000', 
-                                    fontWeight: 'bold' }}
-                                    itemStyle={{ color: '#000' }} 
+                                    formatter={customTooltipFormatter}
+                                    labelStyle={{ color: '#000', fontWeight: 'bold' }}
+                                    itemStyle={{ color: '#000' }}
                                 />
-                                <Line type="monotone" dataKey="balance" stroke="#fff" />
+                                <Line 
+                                    type="monotone" 
+                                    dataKey="balance" 
+                                    stroke="#fff" 
+                                    dot={renderCustomizedDot} 
+                                />
                             </LineChart>
                         )}
                     </div>
