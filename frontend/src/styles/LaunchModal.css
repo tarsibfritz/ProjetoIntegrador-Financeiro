@@ -30,19 +30,12 @@ h2 {
 
 /* Formulário dentro do Modal */
 .modal-form {
-    margin-top: 19px;
-}
-
-/* Grupo de campos no formulário */
-.form-group {
-    margin-bottom: 15px;
-    font-size: 14px;
+    margin-top: 15px;
 }
 
 /* Rótulo dos campos */
 .form-group label {
     display: block;
-    margin-bottom: 5px;
     font-weight: bold;
 }
 
@@ -54,30 +47,40 @@ h2 {
     border-radius: 4px;
 }
 
-/* Wrapper para campos de entrada */
 .input-row-wrapper {
-    margin-top: 15px;
+    margin-top: 3px;
 }
 
-/* Estilo para os campos de entrada em linha */
+/* Estilo para os campos de entrada em linha - Valor & Data */
 .input-row {
     display: flex;
     justify-content: space-between;
     gap: 10px;
+    margin-bottom: 15px;
 }
 
-/* Grupo de campos em linha */
 .input-row .form-group {
     flex: 1;
     margin-bottom: 0;
 }
 
-/* Margem entre grupos de campos em linha */
 .input-row .form-group:first-child {
     margin-right: 10px;
 }
 
-/* Estilo para botões dentro do formulário */
+/* Campo de entrada para observação*/
+.observation-input {
+    width: 100%;
+    height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    white-space: pre-wrap;
+    overflow: auto;
+}
+
+/* Botão para mostrar o campo de entrada para observação */
 .form-actions {
     display: flex;
     justify-content: center;
@@ -85,28 +88,7 @@ h2 {
     margin-bottom: 15px;
 }
 
-/* Estilo geral dos botões 
-button {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}*/
-
-/* Botão de salvar */
-.save-button {
-    background: #4caf50;
-    color: #fff;
-}
-
-/* Botão de fechar */
-.close-button {
-    background: transparent;
-    color: #a5a5a5;
-}
-
-/* Botões de ação para observação e tags */
-.tags-button, .observation-button {
+.observation-button {
     margin-top: 17px;
     background: transparent;
     border: none;
@@ -114,45 +96,35 @@ button {
     cursor: pointer;
 }
 
-/* Estilo para a seleção de tags */
-.tags-input {
+/* Botões de salvar e cancelar */
+.form-group-buttons {
+    display: flex;
+    flex-direction: column;
     margin-top: 10px;
 }
 
-/* Estilo para o seletor de tags */
-.tags-input select {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-/* Estilo para a exibição das tags */
-.tag-input-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    align-items: center;
-}
-
-/* Estilo individual das tags */
-.tag {
-    background: #f0f0f0;
-    border-radius: 4px;
-    padding: 5px 10px;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-/* Botão para remover tags */
-.remove-tag-button {
-    background: transparent;
+#save-button, #close-button {
     border: none;
-    color: #353535;
-    font-size: 12px;
+    padding: 9px;
+    border-radius: 5px;
     cursor: pointer;
-    padding: 0;
-    margin: 0;
+    transition: ease 0.3s;
+}
+
+#save-button {
+    background: #4caf50;
+    color: #fff;
+}
+
+#save-button:hover {
+    background: #3f9752;
+}
+
+#close-button {
+    background: transparent;
+    color: #a5a5a5;
+}
+
+#close-button:hover {
+    color: #8a8a8a
 }

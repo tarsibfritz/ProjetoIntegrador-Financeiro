@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { FaCommentDots, FaTag } from 'react-icons/fa';
+import { FaCommentDots } from 'react-icons/fa';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 import "../../styles/LaunchModal.css";
@@ -27,7 +27,6 @@ const LaunchModal = ({ isOpen, onClose }) => {
     const [observation, setObservation] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
     const [showObservationInput, setShowObservationInput] = useState(false);
-    const [showTagInput, setShowTagInput] = useState(false);
     const [type, setType] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -194,45 +193,39 @@ const LaunchModal = ({ isOpen, onClose }) => {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="form-group">
+                                    <label>Tag</label>
+                                    <select
+                                        value={selectedTag}
+                                        onChange={(e) => setSelectedTag(e.target.value)}
+                                    >
+                                        <option value="">Selecione uma tag</option>
+                                        {tags.map((tag, index) => (
+                                            <option key={index} value={tag}>
+                                                {tag}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
                                 <div className="form-actions">
                                     <button type="button" className="observation-button" onClick={() => setShowObservationInput(!showObservationInput)}>
                                         <FaCommentDots /> Observação
                                     </button>
-                                    <button type="button" className="tags-button" onClick={() => setShowTagInput(!showTagInput)}>
-                                        <FaTag /> Tags
-                                    </button>
                                 </div>
                                 {showObservationInput && (
                                     <div className="form-group">
-                                        <input 
-                                            type="text" 
+                                        <textarea 
+                                            type="text"
+                                            className="observation-input"
                                             value={observation} 
                                             onChange={handleObservationChange} 
                                             placeholder="Adicione uma observação"
                                         />
                                     </div>
                                 )}
-                                {showTagInput && (
-                                    <div className="form-group">
-                                        <label>Tag</label>
-                                        <div className="tags-input">
-                                            <select
-                                                value={selectedTag}
-                                                onChange={(e) => setSelectedTag(e.target.value)}
-                                            >
-                                                <option value="">Selecione uma tag</option>
-                                                {tags.map((tag, index) => (
-                                                    <option key={index} value={tag}>
-                                                        {tag}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    </div>
-                                )}
-                                <div className="form-group">
-                                    <button type="submit" disabled={isSubmitting}>Salvar</button>
-                                    <button type="button" onClick={handleClose}>Fechar</button>
+                                <div className="form-group-buttons">
+                                    <button id="save-button" type="submit" disabled={isSubmitting}>Salvar</button>
+                                    <button id="close-button" type="button" onClick={handleClose}>Cancelar</button>
                                 </div>
                             </>
                         )}
