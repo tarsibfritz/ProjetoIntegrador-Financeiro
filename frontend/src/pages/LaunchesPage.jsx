@@ -7,6 +7,7 @@ import LaunchModal from '../components/launchesComponents/LaunchModal';
 import LaunchInfoModal from '../components/launchesComponents/LaunchInfoModal';
 import EditLaunchModal from '../components/launchesComponents/EditLaunchModal';
 import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/launchService';
+import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 import "../styles/LaunchesPage.css";
 
 // Funções utilitárias
@@ -34,6 +35,23 @@ const calculateBalance = (launches) => {
     }, 0);
 
     return balance;
+};
+
+
+// Nova função para obter dados do gráfico com base nas tags
+const getTagChartData = (launches) => {
+    const tagTotals = launches.reduce((acc, launch) => {
+        if (!acc[launch.tag]) {
+            acc[launch.tag] = 0;
+        }
+        acc[launch.tag] += launch.amount;
+        return acc;
+    }, {});
+
+    return Object.entries(tagTotals).map(([tag, total]) => ({
+        name: tag,
+        value: total
+    }));
 };
 
 const LaunchesPage = () => {
@@ -168,106 +186,141 @@ const LaunchesPage = () => {
         })
         : launches;
 
+    // Função para formatar os valores no formato R$ 0,00
+    const currencyFormatter = (value) => {
+        const formattedValue = value.toFixed(2).replace('.', ',');
+        return `R$ ${formattedValue}`;
+    };
+
     const balance = calculateBalance(filteredLaunches);
     const balanceClass = balance >= 0 ? 'balance-positive' : 'balance-negative';
 
     return (
         <div className="container">
-            <div className="header">
-                <h1 className="title">Lançamentos</h1>
-                <div className="header-content">
-                    <button className="add-button" onClick={handleOpenModal}>
-                        <FaPlus />
-                    </button>
-                    <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
-                        <option value="">Selecionar Mês</option>
-                        {uniqueMonths.map((monthYear, index) => {
-                            const [year, month] = monthYear.split('-');
-                            return (
-                                <option key={index} value={monthYear}>
-                                    {`${getMonthNameInPortuguese(parseInt(month) - 1)} ${year}`}
-                                </option>
-                            );
-                        })}
-                    </select>
+            <div className="main-content">
+                <div className="header">
+                    <h1 className="title">Lançamentos</h1>
+                    <div className="header-content">
+                        <button className="add-button" onClick={handleOpenModal}>
+                            <FaPlus />
+                        </button>
+                        <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
+                            <option value="">Selecionar Mês</option>
+                            {uniqueMonths.map((monthYear, index) => {
+                                const [year, month] = monthYear.split('-');
+                                return (
+                                    <option key={index} value={monthYear}>
+                                        {`${getMonthNameInPortuguese(parseInt(month) - 1)} ${year}`}
+                                    </option>
+                                );
+                            })}
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div className="launches-table-wrapper">
-                <table className="launches-table">
-                    <thead>
-                        <tr>
-                            <th className="info-icon"></th>
-                            <th className="description">Descrição</th>
-                            <th className="date">Data</th>
-                            <th className="amount">Valor</th>
-                            <th className="type">Tipo</th>
-                            <th className="paid">Pago</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredLaunches.map((launch, index) => (
-                            <tr key={index} className="launch-row">
-                                <td className="info-icon">
-                                    <FaInfoCircle 
-                                        className="info-icon" 
-                                        onClick={() => handleOpenInfoModal(launch)} 
-                                    />
-                                </td>
-                                <td className="description">
-                                    {launch.description}
-                                </td>
-                                <td className="date">
-                                    {formatDate(launch.date)}
-                                </td>
-                                <td className="amount">
-                                    R$ {launch.amount.toFixed(2)}
-                                </td>
-                                <td className="type">
-                                    {launch.type === 'expense' ? 'Despesa' : 'Receita'}
-                                </td>
-                                <td className="paid">
-                                    <div className="paid-checkbox-container">
+                <div className="launches-table-wrapper">
+                    <table className="launches-table">
+                        <thead>
+                            <tr>
+                                <th className="info-icon"></th>
+                                <th className="description">Descrição</th>
+                                <th className="date">Data</th>
+                                <th className="amount">Valor</th>
+                                <th className="type">Tipo</th>
+                                <th className="paid">Pago</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {filteredLaunches.map((launch, index) => (
+                                <tr key={index} className="launch-row">
+                                    <td className="info-icon">
+                                        <FaInfoCircle 
+                                            className="info-icon" 
+                                            onClick={() => handleOpenInfoModal(launch)} 
+                                        />
+                                    </td>
+                                    <td className="description">
+                                        {launch.description}
+                                    </td>
+                                    <td className="date">
+                                        {formatDate(launch.date)}
+                                    </td>
+                                    <td className="amount">
+                                        {currencyFormatter(launch.amount)}
+                                    </td>
+                                    <td className="type">
+                                        {launch.type === 'expense' ? 'Despesa' : 'Receita'}
+                                    </td>
+                                    <td className="paid">
                                         <input 
                                             type="checkbox" 
-                                            checked={launch.paid || false} 
+                                            checked={launch.paid} 
                                             onChange={() => handlePaidChange(launch.id)} 
                                         />
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        <tr>
-                            <td colSpan="6" className={`balance ${balanceClass}`}>
-                                Saldo: R$ {balance.toFixed(2)}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+
+                    <div className="balance-container">
+                        <span className={`balance ${balanceClass}`}>
+                            {currencyFormatter(balance)}
+                        </span>
+                    </div>
+                </div>
+
+                <LaunchModal
+                    isOpen={isModalOpen}
+                    onClose={handleCloseModal}
+                    onSave={handleSaveLaunch}
+                />
+
+                {selectedLaunch && (
+                    <LaunchInfoModal
+                        isOpen={isInfoModalOpen}
+                        onClose={handleCloseInfoModal}
+                        launch={selectedLaunch}
+                        onDelete={handleDeleteLaunch}
+                        onEdit={() => {
+                            setIsEditModalOpen(true);
+                            handleCloseInfoModal();
+                        }}
+                    />
+                )}
+
+                {selectedLaunch && (
+                    <EditLaunchModal
+                        isOpen={isEditModalOpen}
+                        onClose={() => setIsEditModalOpen(false)}
+                        launch={selectedLaunch}
+                        onSave={handleEditLaunch}
+                    />
+                )}
             </div>
 
-            <LaunchModal 
-                isOpen={isModalOpen} 
-                onClose={handleCloseModal}
-                onSave={handleSaveLaunch}
-            />
-            <LaunchInfoModal 
-                isOpen={isInfoModalOpen} 
-                onClose={handleCloseInfoModal}
-                launch={selectedLaunch}
-                onEdit={(launch) => {
-                    handleCloseInfoModal(); // Fecha o LaunchInfoModal
-                    setSelectedLaunch(launch); // Define o lançamento selecionado para o EditLaunchModal
-                    setIsEditModalOpen(true); // Abre o EditLaunchModal
-                }}
-                onDelete={(id) => handleDeleteLaunch(id)}
-            />
-            <EditLaunchModal 
-                isOpen={isEditModalOpen} 
-                onClose={() => setIsEditModalOpen(false)}
-                launch={selectedLaunch}
-                onSave={handleEditLaunch}
-            />
+            <div className="chart-container">
+                <h2>Relatório</h2>
+                {/* APARECER VALOR TOTAL DAS RECEITA E VALOR TOTAL DAS DESPESAS DAQUELE MÊS */}
+                <PieChart width={200} height={200}>
+                    <Pie
+                        data={getTagChartData(filteredLaunches)}
+                        dataKey="value"
+                        nameKey="name"
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={70}
+                        fill="#8884d8"
+                        labelLine={false}
+                    >
+                        {getTagChartData(filteredLaunches).map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={['#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'][index % 10]} />
+                        ))}
+                    </Pie>
+                    <Tooltip formatter={currencyFormatter} />
+                    <Legend />
+                </PieChart>
+            </div>
 
             <ToastContainer />
         </div>
