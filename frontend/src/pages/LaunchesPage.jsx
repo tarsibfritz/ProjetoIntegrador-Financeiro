@@ -248,9 +248,10 @@ const LaunchesPage = () => {
                 isOpen={isInfoModalOpen} 
                 onClose={handleCloseInfoModal}
                 launch={selectedLaunch}
-                onEdit={() => {
-                    handleCloseInfoModal();
-                    setIsEditModalOpen(true);
+                onEdit={(launch) => {
+                    handleCloseInfoModal(); // Fecha o LaunchInfoModal
+                    setSelectedLaunch(launch); // Define o lançamento selecionado para o EditLaunchModal
+                    setIsEditModalOpen(true); // Abre o EditLaunchModal
                 }}
                 onDelete={(id) => handleDeleteLaunch(id)}
             />

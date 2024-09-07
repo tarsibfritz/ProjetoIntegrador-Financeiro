@@ -10,6 +10,7 @@
     justify-content: center;
     align-items: center;
     font-family: 'Poppins', sans-serif;
+    z-index: 9999;
 }
 
 /* Container do modal */
@@ -21,6 +22,7 @@
     max-width: 400px; /* Ajustado o max-width */
     position: relative;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Ajustado o box-shadow */
+    z-index: 10000;
 }
 
 /* Título do modal */

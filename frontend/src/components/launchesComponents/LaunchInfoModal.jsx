@@ -26,13 +26,12 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
         : 'Tipo não disponível'; 
 
     const handleDeleteClick = () => {
-        onClose(); // Fechar o modal primeiro
-        onDelete(launch.id); // Depois chamar a função de exclusão
+        onClose();
+        onDelete(launch.id);
     };
 
     const handleEditClick = () => {
-        onClose(); // Fechar o modal primeiro
-        onEdit(launch); // Depois chamar a função de edição
+        onEdit(launch);
     };
 
     return (
