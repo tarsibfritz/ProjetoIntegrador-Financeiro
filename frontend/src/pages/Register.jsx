@@ -6,30 +6,21 @@ import "../styles/Register.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-// Componente para verificar os requisitos de senha
+// Componente para verificar o requisito de tamanho mínimo da senha
 const PasswordRequirements = ({ password }) => {
-    const requirements = [
-        { label: "Mínimo de 8 caracteres", regex: /.{8,}/ },
-        { label: "Uma letra minúscula", regex: /[a-z]/ },
-        { label: "Uma letra maiúscula", regex: /[A-Z]/ },
-        { label: "Um número", regex: /\d/ },
-        { label: "Um caractere especial (@#$!%*?&)", regex: /[@$!%*?&#]/ }, // Atualizado aqui
-    ];
+    const requirement = { label: "Mínimo de 8 caracteres", regex: /.{8,}/ };
 
     return (
         <ul className="password-requirements">
-            {requirements.map((requirement, index) => (
-                <li
-                    key={index}
-                    className={
-                        requirement.regex.test(password)
-                            ? "requirement-valid"
-                            : "requirement-invalid"
-                    }
-                >
-                    {requirement.label}
-                </li>
-            ))}
+            <li
+                className={
+                    requirement.regex.test(password)
+                        ? "requirement-valid"
+                        : "requirement-invalid"
+                }
+            >
+                {requirement.label}
+            </li>
         </ul>
     );
 };
@@ -58,6 +49,11 @@ const Register = () => {
             setTimeout(() => {
                 toast.info("Exemplo de email válido: exemplo@gmail.com");
             }, 1500);
+            return;
+        }
+
+        if (password.length < 8) {
+            toast.warning("A senha deve ter no mínimo 8 caracteres!");
             return;
         }
 
