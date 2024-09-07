@@ -111,41 +111,49 @@ const HomePage = () => {
                 <div className="charts-wrapper">
                     <div className="chart-container">
                         <h2>Despesas por Tag</h2>
-                        <PieChart width={300} height={300}>
-                            <Pie
-                                data={expensesData}
-                                dataKey="value"
-                                nameKey="name"
-                                outerRadius={100}
-                                fill="#8884d8"
-                            >
-                                {expensesData.map((entry, index) => (
-                                    <Cell 
-                                        key={`cell-${index}`} 
-                                        fill={[
-                                            '#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'
-                                        ][index % 10]} 
-                                    />
-                                ))}
-                            </Pie>
-                            <Tooltip />
-                            <Legend />
-                        </PieChart>
+                        {expensesData.length === 0 ? (
+                            <p className="no-data">Nenhum dado encontrado</p>
+                        ) : (
+                            <PieChart width={300} height={300}>
+                                <Pie
+                                    data={expensesData}
+                                    dataKey="value"
+                                    nameKey="name"
+                                    outerRadius={100}
+                                    fill="#8884d8"
+                                >
+                                    {expensesData.map((entry, index) => (
+                                        <Cell 
+                                            key={`cell-${index}`} 
+                                            fill={[
+                                                '#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'
+                                            ][index % 10]} 
+                                        />
+                                    ))}
+                                </Pie>
+                                <Tooltip />
+                                <Legend />
+                            </PieChart>
+                        )}
                     </div>
 
                     <div className="monthly-balance-container">
                         <h2>Saldo Final por Mês</h2>
-                        <LineChart width={500} height={300} data={monthlyBalanceData}>
-                            <CartesianGrid strokeDasharray="3 3" />
-                            <XAxis dataKey="name" />
-                            <YAxis />
-                            <RechartsTooltip 
-                                labelStyle={{ color: '#000', 
-                                fontWeight: 'bold' }}
-                                itemStyle={{ color: '#000' }} 
-                            />
-                            <Line type="monotone" dataKey="balance" stroke="#fff" />
-                        </LineChart>
+                        {monthlyBalanceData.length === 0 ? (
+                            <p className="no-data">Nenhum dado encontrado</p>
+                        ) : (
+                            <LineChart width={500} height={300} data={monthlyBalanceData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="name" />
+                                <YAxis />
+                                <RechartsTooltip 
+                                    labelStyle={{ color: '#000', 
+                                    fontWeight: 'bold' }}
+                                    itemStyle={{ color: '#000' }} 
+                                />
+                                <Line type="monotone" dataKey="balance" stroke="#fff" />
+                            </LineChart>
+                        )}
                     </div>
                 </div>
             </div>

@@ -114,68 +114,7 @@
     font-size: 20px;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-    .profile-section {
-        background-size: cover;
-        background-position: center;
-    }
-
-    .profile-info-balance-container { 
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    #user-welcome {
-        font-size: 20px;
-    }
-
-    .user-buttons {
-        margin-top: 15px;
-        text-align: center;
-    }
-
-    .user-buttons button {
-        padding: 8px 15px;
-        font-size: 14px;
-    }
-
-    .balance-container {
-        padding: 15px;
-    }
-
-    .balance-container h2 {
-        font-size: 18px;
-    }
-
-    .balance-container p {
-        font-size: 30px;
-    }
-
-    .info-section {
-        margin-top: 15px;
-    }
-
-    .charts-wrapper {
-        flex-direction: column;
-        gap: 15px;
-    }
-
-    .chart-container, .monthly-balance-container {
-        width: 100%;
-        padding: 15px;
-    }
-
-    .chart-container::before, .monthly-balance-container::before {
-        background-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .chart-container h2 {
-        font-size: 18px;
-    }
-
-    .monthly-balance-container {
-        display: none;
-    }
+.no-data {
+    margin: 20px 0;
+    color: #d8d8d8;
 }
