@@ -233,33 +233,32 @@ const LaunchesPage = () => {
                 </table>
             </div>
 
-            {isModalOpen && (
-                <LaunchModal 
-                    onClose={handleCloseModal} 
-                    onSave={handleSaveLaunch} 
-                />
-            )}
-            {isInfoModalOpen && selectedLaunch && (
-                <LaunchInfoModal 
-                    launch={selectedLaunch} 
-                    onClose={handleCloseInfoModal}
-                    onEdit={() => setIsEditModalOpen(true)}
-                    onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
-                />
-            )}
+            <LaunchModal 
+                isOpen={isModalOpen} 
+                onClose={handleCloseModal}
+                onSave={handleSaveLaunch}
+            />
+            <LaunchInfoModal 
+                isOpen={isInfoModalOpen} 
+                onClose={handleCloseInfoModal}
+                launch={selectedLaunch}
+                onEdit={() => setIsEditModalOpen(true)}
+                onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
+            />
             {isEditModalOpen && selectedLaunch && (
                 <EditLaunchModal 
-                    launch={selectedLaunch} 
+                    isOpen={isEditModalOpen} 
                     onClose={() => setIsEditModalOpen(false)}
+                    launch={selectedLaunch}
                     onSave={handleEditLaunch}
                 />
             )}
-            {showConfirmModal && (
-                <ConfirmModal 
-                    onConfirm={handleConfirmDelete} 
-                    onCancel={() => setShowConfirmModal(false)} 
-                />
-            )}
+            <ConfirmModal
+                isOpen={showConfirmModal}
+                onClose={() => setShowConfirmModal(false)}
+                onConfirm={handleConfirmDelete}
+                message="Tem certeza que deseja excluir este lançamento?"
+            />
             <ToastContainer />
         </div>
     );

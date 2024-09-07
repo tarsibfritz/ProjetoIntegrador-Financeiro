@@ -20,7 +20,7 @@ const convertToDateInputFormat = (dateStr) => {
     return `20${year}-${month}-${day}`;
 };
 
-const LaunchModal = ({ isOpen, onClose }) => {
+const LaunchModal = ({ isOpen, onClose, onSave }) => {
     const [description, setDescription] = useState('');
     const [amount, setAmount] = useState('');
     const [date, setDate] = useState(formatDateForDisplay(new Date()));
@@ -116,17 +116,10 @@ const LaunchModal = ({ isOpen, onClose }) => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3000/api/launches', launchData);
-
-            if (response.status === 201) {
-                toast.success("Lançamento salvo com sucesso!");
-                handleClose();
-            } else {
-                console.error("Resposta do servidor:", response);
-                toast.error(`Erro: ${response.data.error || 'Não foi possível salvar o lançamento.'}`);
-            }
+            await onSave(launchData);
+            toast.success("Lançamento salvo com sucesso!");
+            handleClose();
         } catch (error) {
-            console.error("Erro ao salvar lançamento:", error);
             toast.error(`Erro ao salvar lançamento: ${error.message}`);
         } finally {
             setIsSubmitting(false);
@@ -144,7 +137,7 @@ const LaunchModal = ({ isOpen, onClose }) => {
         onClose();
     };
 
-    if (!isOpen) return null;
+    if (!isOpen) return null; // Garante que o modal não seja exibido quando isOpen é false
 
     const tags = type === 'Despesa' ? expenseTags : type === 'Receita' ? incomeTags : [];
 
@@ -241,6 +234,7 @@ const LaunchModal = ({ isOpen, onClose }) => {
 LaunchModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
+    onSave: PropTypes.func.isRequired,
 };
 
 export default LaunchModal;
