@@ -199,24 +199,23 @@ const LaunchesPage = () => {
             <div className="main-content">
                 <div className="header">
                     <h1 className="title">Lançamentos</h1>
-                    <div className="header-content">
-                        <button className="add-button" onClick={handleOpenModal}>
-                            <FaPlus />
-                        </button>
-                        <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
-                            <option value="">Selecionar Mês</option>
-                            {uniqueMonths.map((monthYear, index) => {
-                                const [year, month] = monthYear.split('-');
-                                return (
-                                    <option key={index} value={monthYear}>
-                                        {`${getMonthNameInPortuguese(parseInt(month) - 1)} ${year}`}
-                                    </option>
-                                );
-                            })}
-                        </select>
-                    </div>
                 </div>
-
+                <div className="header-content">
+                    <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
+                        <option value="">Selecionar Mês</option>
+                        {uniqueMonths.map((monthYear, index) => {
+                            const [year, month] = monthYear.split('-');
+                            return (
+                                <option key={index} value={monthYear}>
+                                    {`${getMonthNameInPortuguese(parseInt(month) - 1)} ${year}`}
+                                </option>
+                            );
+                        })}
+                    </select>
+                    <button className="add-button" onClick={handleOpenModal}>
+                        <FaPlus />
+                    </button>
+                </div>
                 <div className="launches-table-wrapper">
                     <table className="launches-table">
                         <thead>
