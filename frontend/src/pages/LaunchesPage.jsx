@@ -10,7 +10,7 @@ import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/
 import { groupLaunchesByMonth } from '../utils/launchesUtils';
 import "../styles/LaunchesPage.css";
 
-// Funções utilitárias...
+// Funções utilitárias
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
@@ -67,6 +67,19 @@ const LaunchesPage = () => {
 
     // Agrupando lançamentos por mês
     const groupedLaunches = groupLaunchesByMonth(launches);
+
+    // Obtendo uma lista única de meses para o filtro
+    const getUniqueMonths = (launches) => {
+        const months = new Set();
+        launches.forEach((launch) => {
+            const date = new Date(launch.date);
+            const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
+            months.add(monthYear);
+        });
+        return Array.from(months).sort().reverse(); // Ordena do mais recente para o mais antigo
+    };
+
+    const uniqueMonths = getUniqueMonths(launches);
 
     // Funções para lidar com ações do usuário
     const handleOpenModal = () => setIsModalOpen(true);
@@ -155,11 +168,14 @@ const LaunchesPage = () => {
                     </button>
                     <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
                         <option value="">Selecionar Mês</option>
-                        {groupedLaunches && Object.keys(groupedLaunches).map((month, index) => (
-                            <option key={index} value={month}>
-                                {month}
-                            </option>
-                        ))}
+                        {uniqueMonths.map((monthYear, index) => {
+                            const [year, month] = monthYear.split('-');
+                            return (
+                                <option key={index} value={monthYear}>
+                                    {`${getMonthNameInPortuguese(parseInt(month) - 1)} ${year}`}
+                                </option>
+                            );
+                        })}
                     </select>
                 </div>
             </div>
