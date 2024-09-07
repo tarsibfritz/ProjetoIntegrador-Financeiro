@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,7 +38,6 @@ const calculateBalance = (launches) => {
 };
 
 const LaunchesPage = () => {
-    // Estados do componente...
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -47,7 +46,6 @@ const LaunchesPage = () => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [launchToDelete, setLaunchToDelete] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState('');
-    const containerRef = useRef(null);
 
     useEffect(() => {
         const loadLaunches = async () => {
@@ -67,10 +65,10 @@ const LaunchesPage = () => {
         loadLaunches();
     }, []);
 
-    // Agrupando lançamentos por mês...
+    // Agrupando lançamentos por mês
     const groupedLaunches = groupLaunchesByMonth(launches);
 
-    // Funções para lidar com ações do usuário...
+    // Funções para lidar com ações do usuário
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
     const handleOpenInfoModal = (launch) => {
@@ -140,125 +138,113 @@ const LaunchesPage = () => {
         setSelectedMonth(event.target.value);
     };
 
-    // Lista de meses disponíveis para o filtro
-    const months = Object.keys(groupedLaunches).map(key => {
-        const [year, month] = key.split('-');
-        const monthIndex = parseInt(month, 10) - 1;
-        const monthName = getMonthNameInPortuguese(monthIndex);
-        return { value: key, label: `${monthName} ${year}` };
-    }).sort((a, b) => new Date(b.value) - new Date(a.value));
-
-    // Adiciona "Todos os meses" como a primeira opção na lista
-    months.unshift({ value: '', label: 'Todos os meses' });
-
-    const filteredLaunches = selectedMonth ? groupedLaunches[selectedMonth] || [] :
-        Object.values(groupedLaunches).flat();
+    const filteredLaunches = selectedMonth
+        ? groupedLaunches[selectedMonth] || []
+        : launches;
 
     const balance = calculateBalance(filteredLaunches);
     const balanceClass = balance >= 0 ? 'balance-positive' : 'balance-negative';
 
     return (
-        <div>
-            <div className="container" ref={containerRef}>
+        <div className="container">
+            <div className="header">
+                <h1 className="title">Lançamentos</h1>
                 <div className="header-content">
-                    <div className="sort-container">
-                        <select id="monthSelect" value={selectedMonth} onChange={handleMonthChange} className="month-select">
-                            {months.map(month => (
-                                <option key={month.value} value={month.value}>{month.label}</option>
-                            ))}
-                        </select>
-                    </div>
-                    <div className="add-container">
-                            <button className="add-button" onClick={handleOpenModal}>
-                                <FaPlus size={17} />
-                            </button>
-                    </div>
+                    <button className="add-button" onClick={handleOpenModal}>
+                        <FaPlus />
+                    </button>
+                    <select className="month-select" value={selectedMonth} onChange={handleMonthChange}>
+                        <option value="">Selecionar Mês</option>
+                        {groupedLaunches && Object.keys(groupedLaunches).map((month, index) => (
+                            <option key={index} value={month}>
+                                {month}
+                            </option>
+                        ))}
+                    </select>
                 </div>
-                <div className="launches-table">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th className="info-icon"></th>
-                                <th className="description">Descrição</th>
-                                <th className="date">Data</th>
-                                <th className="amount">Valor</th>
-                                <th className="type">Tipo</th>
-                                <th className="paid">Pago</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {filteredLaunches.map((launch, index) => (
-                                <tr key={index} className="launch-row">
-                                    <td className="info-icon">
-                                        <FaInfoCircle 
-                                            className="info-icon" 
-                                            onClick={() => handleOpenInfoModal(launch)} 
+            </div>
+
+            <div className="launches-table-wrapper">
+                <table className="launches-table">
+                    <thead>
+                        <tr>
+                            <th className="info-icon"></th>
+                            <th className="description">Descrição</th>
+                            <th className="date">Data</th>
+                            <th className="amount">Valor</th>
+                            <th className="type">Tipo</th>
+                            <th className="paid">Pago</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {filteredLaunches.map((launch, index) => (
+                            <tr key={index} className="launch-row">
+                                <td className="info-icon">
+                                    <FaInfoCircle 
+                                        className="info-icon" 
+                                        onClick={() => handleOpenInfoModal(launch)} 
+                                    />
+                                </td>
+                                <td className="description">
+                                    {launch.description}
+                                </td>
+                                <td className="date">
+                                    {formatDate(launch.date)}
+                                </td>
+                                <td className="amount">
+                                    R$ {launch.amount.toFixed(2)}
+                                </td>
+                                <td className="type">
+                                    {launch.type === 'expense' ? 'Despesa' : 'Receita'}
+                                </td>
+                                <td className="paid">
+                                    <div className="paid-checkbox-container">
+                                        <input 
+                                            type="checkbox" 
+                                            checked={launch.paid || false} 
+                                            onChange={() => handlePaidChange(launch.id)} 
                                         />
-                                    </td>
-                                    <td className="description">
-                                        {launch.description}
-                                    </td>
-                                    <td className="date">
-                                        {formatDate(launch.date)}
-                                    </td>
-                                    <td className="amount">
-                                        R$ {launch.amount.toFixed(2)}
-                                    </td>
-                                    <td className="type">
-                                        {launch.type === 'expense' ? 'Despesa' : 'Receita'}
-                                    </td>
-                                    <td className="paid">
-                                        <div className="paid-checkbox-container">
-                                            <input 
-                                                type="checkbox" 
-                                                checked={launch.paid || false} 
-                                                onChange={() => handlePaidChange(launch.id)} 
-                                            />
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))}
-                            <tr>
-                                <td colSpan="6" className={`balance ${balanceClass}`}>
-                                    Saldo: R$ {balance.toFixed(2)}
+                                    </div>
                                 </td>
                             </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <LaunchModal
-                    isOpen={isModalOpen}
-                    onClose={handleCloseModal}
-                    onAddLaunch={handleSaveLaunch}
-                />
-                {selectedLaunch && (
-                    <>
-                        <LaunchInfoModal
-                            isOpen={isInfoModalOpen}
-                            onClose={handleCloseInfoModal}
-                            launch={selectedLaunch}
-                            onEdit={() => {
-                                setIsInfoModalOpen(false);
-                                setIsEditModalOpen(true);
-                            }}
-                            onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
-                        />
-                        <EditLaunchModal
-                            isOpen={isEditModalOpen}
-                            onClose={() => setIsEditModalOpen(false)}
-                            launch={selectedLaunch}
-                            onSave={handleEditLaunch}
-                        />
-                    </>
-                )}
-                <ConfirmModal
-                    show={showConfirmModal}
-                    onConfirm={handleConfirmDelete}
-                    onCancel={() => setShowConfirmModal(false)}
-                    message="Tem certeza de que deseja excluir este lançamento?"
-                />
-                <ToastContainer />
+                        ))}
+                        <tr>
+                            <td colSpan="6" className={`balance ${balanceClass}`}>
+                                Saldo: R$ {balance.toFixed(2)}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
+            {isModalOpen && (
+                <LaunchModal 
+                    onClose={handleCloseModal} 
+                    onSave={handleSaveLaunch} 
+                />
+            )}
+            {isInfoModalOpen && selectedLaunch && (
+                <LaunchInfoModal 
+                    launch={selectedLaunch} 
+                    onClose={handleCloseInfoModal}
+                    onEdit={() => setIsEditModalOpen(true)}
+                    onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
+                />
+            )}
+            {isEditModalOpen && selectedLaunch && (
+                <EditLaunchModal 
+                    launch={selectedLaunch} 
+                    onClose={() => setIsEditModalOpen(false)}
+                    onSave={handleEditLaunch}
+                />
+            )}
+            {showConfirmModal && (
+                <ConfirmModal 
+                    onConfirm={handleConfirmDelete} 
+                    onCancel={() => setShowConfirmModal(false)} 
+                />
+            )}
+            <ToastContainer />
         </div>
     );
 };
