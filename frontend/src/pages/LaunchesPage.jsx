@@ -37,7 +37,6 @@ const calculateBalance = (launches) => {
     return balance;
 };
 
-
 // Nova função para obter dados do gráfico com base nas tags
 const getTagChartData = (launches) => {
     const tagTotals = launches.reduce((acc, launch) => {
@@ -262,8 +261,7 @@ const LaunchesPage = () => {
                             ))}
                         </tbody>
                     </table>
-
-                    <div className="balance-container">
+                    <div className="launches-balance-container">
                         <span className={`balance ${balanceClass}`}>
                             {currencyFormatter(balance)}
                         </span>
@@ -301,25 +299,28 @@ const LaunchesPage = () => {
 
             <div className="chart-container">
                 <h2>Relatório</h2>
-                {/* APARECER VALOR TOTAL DAS RECEITA E VALOR TOTAL DAS DESPESAS DAQUELE MÊS */}
-                <PieChart width={200} height={200}>
-                    <Pie
-                        data={getTagChartData(filteredLaunches)}
-                        dataKey="value"
-                        nameKey="name"
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={70}
-                        fill="#8884d8"
-                        labelLine={false}
-                    >
-                        {getTagChartData(filteredLaunches).map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={['#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'][index % 10]} />
-                        ))}
-                    </Pie>
-                    <Tooltip formatter={currencyFormatter} />
-                    <Legend />
-                </PieChart>
+                {selectedMonth ? (
+                    <PieChart width={200} height={200}>
+                        <Pie
+                            data={getTagChartData(filteredLaunches)}
+                            dataKey="value"
+                            nameKey="name"
+                            cx="50%"
+                            cy="50%"
+                            outerRadius={70}
+                            fill="#8884d8"
+                            labelLine={false}
+                        >
+                            {getTagChartData(filteredLaunches).map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={['#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'][index % 10]} />
+                            ))}
+                        </Pie>
+                        <Tooltip formatter={currencyFormatter} />
+                        <Legend />
+                    </PieChart>
+                ) : (
+                    <p>Filtre um mês específico para gerarmos o relatório</p>
+                )}
             </div>
 
             <ToastContainer />
