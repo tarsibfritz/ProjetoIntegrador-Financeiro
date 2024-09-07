@@ -151,12 +151,12 @@ const HomePage = () => {
                         {expensesData.length === 0 ? (
                             <p className="no-data">Nenhum dado encontrado</p>
                         ) : (
-                            <PieChart width={300} height={300}>
+                            <PieChart width={260} height={260}>
                                 <Pie
                                     data={expensesData}
                                     dataKey="value"
                                     nameKey="name"
-                                    outerRadius={100}
+                                    outerRadius={90}
                                     fill="#8884d8"
                                 >
                                     {expensesData.map((entry, index) => (
@@ -179,7 +179,7 @@ const HomePage = () => {
                         {monthlyBalanceData.length === 0 ? (
                             <p className="no-data">Nenhum dado encontrado</p>
                         ) : (
-                            <LineChart width={500} height={300} data={monthlyBalanceData}>
+                            <LineChart width={500} height={250} data={monthlyBalanceData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />

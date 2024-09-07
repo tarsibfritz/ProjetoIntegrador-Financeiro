@@ -297,7 +297,7 @@ const LaunchesPage = () => {
                 )}
             </div>
 
-            <div className="chart-container">
+            <div className="launches-chart-container">
                 <h2>Relatório</h2>
                 {selectedMonth ? (
                     <PieChart width={200} height={200}>
