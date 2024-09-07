@@ -261,7 +261,9 @@ const LaunchesPage = () => {
                             ))}
                         </tbody>
                     </table>
+                    <hr/>
                     <div className="launches-balance-container">
+                        <span id="total-balance">Saldo: </span>
                         <span className={`balance ${balanceClass}`}>
                             {currencyFormatter(balance)}
                         </span>

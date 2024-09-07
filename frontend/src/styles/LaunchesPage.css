@@ -30,7 +30,7 @@
 }
 
 .launches-chart-container h2,
-.launches-chart-container p{
+.launches-chart-container p {
     color: #fff;
     text-align: center;
 }
@@ -157,9 +157,19 @@ tbody tr {
 }
 
 /* Saldo */
-.balance {
+.launches-balance-container {
+    display: flex;
+    justify-content: space-between;
     font-weight: bold;
     text-align: right;
+    padding: 8px;
+    margin: 0 5px;
+    background-color: #f0ecf2;
+}
+
+#total-balance {
+    color: #000;
+    font-weight: 500;
 }
 
 .balance-positive {
