@@ -1,7 +1,8 @@
-import { FaTimes, FaEdit, FaTrash } from 'react-icons/fa';
 import PropTypes from 'prop-types';
-import '../../styles/LaunchInfoModal.css';
+import { FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
+import "../../styles/LaunchInfoModal.css";
 
+// Função para formatar a data no formato dd/mm/yyyy
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     const day = date.getUTCDate().toString().padStart(2, '0');
@@ -23,6 +24,11 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
     const type = typeof launch.type === 'string' 
         ? (launch.type === 'income' ? 'Receita' : launch.type === 'expense' ? 'Despesa' : 'Tipo não disponível') 
         : 'Tipo não disponível'; 
+
+    const handleDeleteClick = () => {
+        onClose(); // Fechar o modal primeiro
+        onDelete(launch.id); // Depois chamar a função de exclusão
+    };
 
     return (
         <div className="launch-info-modal-overlay" onClick={onClose}>
@@ -71,7 +77,7 @@ const LaunchInfoModal = ({ isOpen, onClose, launch, onEdit, onDelete }) => {
                     </button>
                     <button 
                         className="launch-info-delete-button" 
-                        onClick={() => onDelete(launch)}
+                        onClick={handleDeleteClick}
                         title="Excluir lançamento"
                     >
                         <FaTrash />
@@ -89,12 +95,13 @@ LaunchInfoModal.propTypes = {
     isOpen: PropTypes.bool.isRequired,
     onClose: PropTypes.func.isRequired,
     launch: PropTypes.shape({
+        id: PropTypes.string.isRequired, // Adiciona a validação do id
         description: PropTypes.string.isRequired,
         amount: PropTypes.number.isRequired,
         date: PropTypes.string.isRequired,
         observation: PropTypes.string,
         tag: PropTypes.string.isRequired,
-        type: PropTypes.string.isRequired, // Adicionado para tipo
+        type: PropTypes.string.isRequired,
     }).isRequired,
     onEdit: PropTypes.func.isRequired,
     onDelete: PropTypes.func.isRequired,

@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ConfirmModal from '../components/ConfirmModal';
+import Swal from 'sweetalert2'; // Importe SweetAlert2
 import LaunchModal from '../components/launchesComponents/LaunchModal';
 import LaunchInfoModal from '../components/launchesComponents/LaunchInfoModal';
 import EditLaunchModal from '../components/launchesComponents/EditLaunchModal';
@@ -43,8 +43,6 @@ const LaunchesPage = () => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [selectedLaunch, setSelectedLaunch] = useState(null);
     const [launches, setLaunches] = useState([]);
-    const [showConfirmModal, setShowConfirmModal] = useState(false);
-    const [launchToDelete, setLaunchToDelete] = useState(null);
     const [selectedMonth, setSelectedMonth] = useState('');
 
     useEffect(() => {
@@ -120,21 +118,28 @@ const LaunchesPage = () => {
         }
     };
 
-    const handleDeleteLaunch = (launchId) => {
-        setLaunchToDelete(launchId);
-        setShowConfirmModal(true);
-    };
+    const handleDeleteLaunch = async (launchId) => {
+        const result = await Swal.fire({
+            title: 'Tem certeza?',
+            text: "Você não poderá reverter essa ação!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!',
+            cancelButtonText: 'Cancelar'
+        });
 
-    const handleConfirmDelete = async () => {
-        try {
-            await deleteLaunch(launchToDelete);
-            setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchToDelete));
-            setShowConfirmModal(false);
-            handleCloseInfoModal();
-            toast.success('Lançamento excluído com sucesso!');
-        } catch (error) {
-            toast.error('Erro ao excluir lançamento!');
-            console.error('Erro ao excluir lançamento:', error);
+        if (result.isConfirmed) {
+            try {
+                await deleteLaunch(launchId);
+                setLaunches(prevLaunches => prevLaunches.filter(launch => launch.id !== launchId));
+                handleCloseInfoModal(); // Fechar o modal antes de mostrar o toast
+                toast.success('Lançamento excluído com sucesso!');
+            } catch (error) {
+                toast.error('Erro ao excluir lançamento!');
+                console.error('Erro ao excluir lançamento:', error);
+            }
         }
     };
 
@@ -243,7 +248,7 @@ const LaunchesPage = () => {
                 onClose={handleCloseInfoModal}
                 launch={selectedLaunch}
                 onEdit={() => setIsEditModalOpen(true)}
-                onDelete={() => handleDeleteLaunch(selectedLaunch.id)}
+                onDelete={(id) => handleDeleteLaunch(id)}
             />
             {isEditModalOpen && selectedLaunch && (
                 <EditLaunchModal 
@@ -253,12 +258,7 @@ const LaunchesPage = () => {
                     onSave={handleEditLaunch}
                 />
             )}
-            <ConfirmModal
-                isOpen={showConfirmModal}
-                onClose={() => setShowConfirmModal(false)}
-                onConfirm={handleConfirmDelete}
-                message="Tem certeza que deseja excluir este lançamento?"
-            />
+
             <ToastContainer />
         </div>
     );
