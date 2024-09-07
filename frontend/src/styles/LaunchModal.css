@@ -78,6 +78,17 @@ h2 {
     resize: vertical;
     white-space: pre-wrap;
     overflow: auto;
+    display: block;
+}
+
+/* Inicialmente oculta o campo de entrada para observação */
+.form-group.observation-group {
+    display: none;
+}
+
+/* Exibe o campo de entrada para observação quando showObservationInput é verdadeiro */
+.form-group.observation-group.show-observation {
+    display: block;
 }
 
 /* Botão para mostrar o campo de entrada para observação */

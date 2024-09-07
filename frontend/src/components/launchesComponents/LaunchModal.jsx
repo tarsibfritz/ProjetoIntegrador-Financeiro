@@ -140,6 +140,7 @@ const LaunchModal = ({ isOpen, onClose }) => {
         setObservation('');
         setSelectedTag('');
         setType('');
+        setShowObservationInput(false); // Garante que a observação esteja oculta ao fechar
         onClose();
     };
 
@@ -208,21 +209,22 @@ const LaunchModal = ({ isOpen, onClose }) => {
                                     </select>
                                 </div>
                                 <div className="form-actions">
-                                    <button type="button" className="observation-button" onClick={() => setShowObservationInput(!showObservationInput)}>
+                                    <button 
+                                        type="button" 
+                                        className="observation-button" 
+                                        onClick={() => setShowObservationInput(prev => !prev)}
+                                    >
                                         <FaCommentDots /> Observação
                                     </button>
                                 </div>
-                                {showObservationInput && (
-                                    <div className="form-group">
-                                        <textarea 
-                                            type="text"
-                                            className="observation-input"
-                                            value={observation} 
-                                            onChange={handleObservationChange} 
-                                            placeholder="Adicione uma observação"
-                                        />
-                                    </div>
-                                )}
+                                <div className={`form-group observation-group ${showObservationInput ? 'show-observation' : ''}`}>
+                                    <textarea 
+                                        className="observation-input"
+                                        value={observation} 
+                                        onChange={handleObservationChange} 
+                                        placeholder="Adicione uma observação"
+                                    />
+                                </div>
                                 <div className="form-group-buttons">
                                     <button id="save-button" type="submit" disabled={isSubmitting}>Salvar</button>
                                     <button id="close-button" type="button" onClick={handleClose}>Cancelar</button>
