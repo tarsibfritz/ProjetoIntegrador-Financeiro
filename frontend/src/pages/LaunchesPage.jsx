@@ -2,12 +2,11 @@ import { useState, useEffect } from 'react';
 import { FaPlus, FaInfoCircle } from 'react-icons/fa';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import Swal from 'sweetalert2'; // Importe SweetAlert2
+import Swal from 'sweetalert2';
 import LaunchModal from '../components/launchesComponents/LaunchModal';
 import LaunchInfoModal from '../components/launchesComponents/LaunchInfoModal';
 import EditLaunchModal from '../components/launchesComponents/EditLaunchModal';
 import { getLaunches, addLaunch, deleteLaunch, updateLaunch } from '../services/launchService';
-import { groupLaunchesByMonth } from '../utils/launchesUtils';
 import "../styles/LaunchesPage.css";
 
 // Funções utilitárias
@@ -63,18 +62,22 @@ const LaunchesPage = () => {
         loadLaunches();
     }, []);
 
-    // Agrupando lançamentos por mês
-    const groupedLaunches = groupLaunchesByMonth(launches);
 
     // Obtendo uma lista única de meses para o filtro
     const getUniqueMonths = (launches) => {
         const months = new Set();
         launches.forEach((launch) => {
             const date = new Date(launch.date);
-            const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
+            const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
             months.add(monthYear);
         });
-        return Array.from(months).sort().reverse(); // Ordena do mais recente para o mais antigo
+
+        // Ordena os meses do mais antigo para o mais recente
+        return Array.from(months).sort((a, b) => {
+            const [yearA, monthA] = a.split('-').map(Number);
+            const [yearB, monthB] = b.split('-').map(Number);
+            return yearA !== yearB ? yearA - yearB : monthA - monthB;
+        });
     };
 
     const uniqueMonths = getUniqueMonths(launches);
@@ -157,8 +160,13 @@ const LaunchesPage = () => {
         setSelectedMonth(event.target.value);
     };
 
+    // Filtra lançamentos por mês
     const filteredLaunches = selectedMonth
-        ? groupedLaunches[selectedMonth] || []
+        ? launches.filter(launch => {
+            const date = new Date(launch.date);
+            const monthYear = `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}`;
+            return monthYear === selectedMonth;
+        })
         : launches;
 
     const balance = calculateBalance(filteredLaunches);
