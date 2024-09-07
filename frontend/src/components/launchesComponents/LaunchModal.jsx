@@ -156,8 +156,8 @@ const LaunchModal = ({ isOpen, onClose }) => {
                     <form className="modal-form" onSubmit={handleSave}>
                         {!type && (
                             <div className="type-selection">
-                                <button type="button" onClick={() => setType('Despesa')}>Despesa</button>
-                                <button type="button" onClick={() => setType('Receita')}>Receita</button>
+                                <button id="expense-button" type="button" onClick={() => setType('Despesa')}>Despesa</button>
+                                <button id="income-button" type="button" onClick={() => setType('Receita')}>Receita</button>
                             </div>
                         )}
                         {type && (

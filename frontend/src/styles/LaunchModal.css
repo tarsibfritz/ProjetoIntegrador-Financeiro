@@ -33,6 +33,30 @@ h2 {
     margin-top: 15px;
 }
 
+/* Estilo para a seleção de tipo de lançamento (Receita ou Despesa) */
+.type-selection {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 8px;
+}
+
+.type-selection button {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #fff;
+    border: solid 1px var(--dark-button);
+    background-color: var(--light-button);
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0 5px;
+}
+
+.type-selection button:hover{
+    background-color: var(--dark-button);
+}
+
 /* Rótulo dos campos */
 .form-group label {
     display: block;
@@ -123,12 +147,12 @@ h2 {
 }
 
 #save-button {
-    background: #4caf50;
+    background: var(--light-button);
     color: #fff;
 }
 
 #save-button:hover {
-    background: #3f9752;
+    background: var(--dark-button);
 }
 
 #close-button {
