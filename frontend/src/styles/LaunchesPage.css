@@ -35,6 +35,10 @@
     text-align: center;
 }
 
+.monthly-balance-summary {
+    margin-top: 10px;
+}
+
 .header {
     display: flex;
     align-items: center;
@@ -113,8 +117,24 @@
     white-space: nowrap;
 }
 
+tbody tr {
+    background-color: #f0ecf2;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    transition: background-color 0.3s ease;
+}
+
+tbody tr:not(:last-child) {
+    border-bottom: 1px solid #ddd; /* Cor e estilo da linha horizontal */
+}
+
 td:not(:last-child) {
     border-right: 1px solid #ddd;
+}
+
+tbody tr:hover {
+    background-color: #ece9ed; /* Alterar a cor de fundo ao passar o mouse */
 }
 
 th, td {

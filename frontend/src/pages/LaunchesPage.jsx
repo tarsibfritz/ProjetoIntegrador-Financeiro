@@ -194,6 +194,18 @@ const LaunchesPage = () => {
     const balance = calculateBalance(filteredLaunches);
     const balanceClass = balance >= 0 ? 'balance-positive' : 'balance-negative';
 
+    const calculateTotalExpenses = (launches) => {
+        return launches
+            .filter(launch => launch.type === 'expense')
+            .reduce((acc, launch) => acc + launch.amount, 0);
+    };
+    
+    const calculateTotalIncome = (launches) => {
+        return launches
+            .filter(launch => launch.type === 'income')
+            .reduce((acc, launch) => acc + launch.amount, 0);
+    };
+    
     return (
         <div className="container">
             <div className="main-content">
@@ -260,7 +272,6 @@ const LaunchesPage = () => {
                             ))}
                         </tbody>
                     </table>
-                    <hr/>
                     <div className="launches-balance-container">
                         <span id="total-balance">Saldo: </span>
                         <span className={`balance ${balanceClass}`}>
@@ -301,29 +312,34 @@ const LaunchesPage = () => {
             <div className="launches-chart-container">
                 <h2>Relatório</h2>
                 {selectedMonth ? (
-                    <PieChart width={200} height={200}>
-                        <Pie
-                            data={getTagChartData(filteredLaunches)}
-                            dataKey="value"
-                            nameKey="name"
-                            cx="50%"
-                            cy="50%"
-                            outerRadius={70}
-                            fill="#8884d8"
-                            labelLine={false}
-                        >
-                            {getTagChartData(filteredLaunches).map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={['#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'][index % 10]} />
-                            ))}
-                        </Pie>
-                        <Tooltip formatter={currencyFormatter} />
-                        <Legend />
-                    </PieChart>
+                    <div>
+                        <div className="monthly-balance-summary">
+                            <p><strong>Despesas:</strong> {currencyFormatter(calculateTotalExpenses(filteredLaunches))}</p>
+                            <p><strong>Receitas:</strong> {currencyFormatter(calculateTotalIncome(filteredLaunches))}</p>
+                        </div>
+                        <PieChart width={200} height={200}>
+                            <Pie
+                                data={getTagChartData(filteredLaunches)}
+                                dataKey="value"
+                                nameKey="name"
+                                cx="50%"
+                                cy="50%"
+                                outerRadius={70}
+                                fill="#8884d8"
+                                labelLine={false}
+                            >
+                                {getTagChartData(filteredLaunches).map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={['#FF204E', '#9400FF', '#F94C10', '#00C49F', '#FFBB28', '#FF8042', '#0088FE', '#FF99CC', '#66FF66', '#FF66B2'][index % 10]} />
+                                ))}
+                            </Pie>
+                            <Tooltip formatter={currencyFormatter} />
+                            <Legend />
+                        </PieChart>
+                    </div>
                 ) : (
                     <p>Filtre um mês específico para gerarmos o relatório</p>
                 )}
             </div>
-
             <ToastContainer />
         </div>
     );
