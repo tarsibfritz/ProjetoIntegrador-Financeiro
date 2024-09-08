@@ -16,25 +16,25 @@
 /* Container do modal */
 .edit-launch-modal-container {
     background: #fff;
-    padding: 15px; /* Reduzido o padding */
-    border-radius: 6px; /* Ajustado o border-radius */
-    width: 80%; /* Reduzido a largura */
-    max-width: 400px; /* Ajustado o max-width */
+    padding: 15px;
+    border-radius: 6px;
+    width: 90%;
+    max-width: 500px;
     position: relative;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1); /* Ajustado o box-shadow */
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     z-index: 10000;
 }
 
 /* Título do modal */
 .modal-title {
-    margin: 0 0 10px 0; /* Ajustado a margem */
-    font-size: 18px; /* Reduzido o font-size */
+    margin: 0 0 10px 0;
+    font-size: 18px;
     color: #333;
 }
 
 /* Wrapper do formulário do modal */
 .modal-form-wrapper {
-    margin-top: 10px; /* Reduzido a margem */
+    margin-top: 10px;
 }
 
 /* Formulário do modal */
@@ -46,12 +46,12 @@
 /* Linhas do formulário */
 .form-row {
     display: flex;
-    gap: 15px; /* Reduzido o gap */
+    gap: 15px;
 }
 
 /* Grupos de formulário */
 .form-group {
-    margin-bottom: 10px; /* Reduzido a margem */
+    margin-bottom: 10px; 
 }
 
 /* Estilo dos campos de input, textarea e select */
@@ -59,24 +59,24 @@
 .modal-form textarea,
 .modal-form select {
     width: 100%;
-    padding: 8px; /* Reduzido o padding */
+    padding: 8px;
     border: 1px solid #ddd;
     border-radius: 4px;
     box-sizing: border-box;
-    font-size: 14px; /* Reduzido o font-size */
+    font-size: 14px;
     color: #333;
 }
 
 /* Estilo para textarea */
 .modal-form textarea {
-    height: 80px; /* Reduzido a altura */
+    height: 80px;
     resize: none;
 }
 
 /* Estilo para os labels */
 .modal-form label {
     display: block;
-    margin-bottom: 4px; /* Reduzido a margem */
+    margin-bottom: 4px;
     font-weight: bold;
     color: #555;
 }
@@ -84,49 +84,51 @@
 /* Estilo específico para o grupo de observação e tag */
 .form-group-observation-tag {
     display: flex;
-    flex-direction: column; /* Alterado para coluna */
-    gap: 10px; /* Reduzido o gap */
+    flex-direction: column; 
+    gap: 10px;
 }
 
 /* Botões do modal */
 .modal-buttons {
     display: flex;
-    gap: 8px; /* Reduzido o gap */
-    margin-top: 15px; /* Reduzido a margem */
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 15px;
 }
 
 /* Botões de salvar e cancelar */
 .modal-save-button,
 .modal-cancel-button {
-    padding: 8px 16px; /* Reduzido o padding */
+    padding: 8px 16px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    font-size: 14px; /* Reduzido o font-size */
+    font-size: 14px; 
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.modal-save-button {
-    background-color: #4CAF50;
-    color: white;
+#modal-save-button, #modal-cancel-button {
+    border-radius: 5px;
+    cursor: pointer;
+    transition: ease 0.3s;
+    border: none;
+    padding: 9px;
 }
 
-.modal-save-button:hover {
-    background-color: #45a049;
+#modal-save-button {
+    color: #fff;
+    background-color: var(--light-button);
 }
 
-.modal-cancel-button {
-    background-color: transparent;
-    color: #888;
+#modal-save-button:hover {
+    background: var(--dark-button);
 }
 
-.modal-cancel-button:hover {
-    color: #555;
+#modal-cancel-button {
+    background: transparent;
+    color: #a5a5a5;
 }
 
-/* Alinha o status ao lado do tipo */
-.form-row .form-group.status {
-    display: flex;
-    align-items: center;
-    margin-left: 10px; /* Espaçamento entre o tipo e o status */
+#modal-cancel-button:hover {
+    color: #8a8a8a
 }

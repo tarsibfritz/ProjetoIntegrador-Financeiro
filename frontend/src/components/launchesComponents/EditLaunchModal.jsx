@@ -26,7 +26,6 @@ const expenseTags = [
 const incomeTags = [
     'Salário',
     'Freelance',
-    'Vendas',
     'Investimentos',
     'Outros'
 ];
@@ -167,8 +166,8 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
                     </div>
                 </div>
                 <div className="modal-buttons">
-                    <button onClick={handleSave} className="modal-save-button">Salvar</button>
-                    <button className="modal-cancel-button" onClick={onClose}>Cancelar</button>
+                    <button onClick={handleSave} id="modal-save-button">Salvar</button>
+                    <button id="modal-cancel-button" onClick={onClose}>Cancelar</button>
                 </div>
             </div>
         </div>
