@@ -294,7 +294,6 @@ const LaunchesPage = () => {
                         onDelete={handleDeleteLaunch}
                         onEdit={() => {
                             setIsEditModalOpen(true);
-                            handleCloseInfoModal();
                         }}
                     />
                 )}
