@@ -163,14 +163,28 @@ const LaunchesPage = () => {
         }
     };
 
-    const handlePaidChange = (launchId) => {
+    const handlePaidChange = async (launchId) => {
         setLaunches(prevLaunches => {
             const updatedLaunches = prevLaunches.map(launch =>
                 launch.id === launchId ? { ...launch, paid: !launch.paid } : launch
             );
             return updatedLaunches;
         });
-    };
+    
+        // Busca o lançamento atualizado
+        const launchToUpdate = launches.find(launch => launch.id === launchId);
+    
+        if (launchToUpdate) {
+            try {
+                // Atualiza o status "pago" no backend
+                await updateLaunch(launchId, { ...launchToUpdate, paid: !launchToUpdate.paid });
+                toast.success('Status de pagamento atualizado com sucesso!');
+            } catch (error) {
+                toast.error('Erro ao atualizar status de pagamento!');
+                console.error('Erro ao atualizar status de pagamento:', error);
+            }
+        }
+    };    
 
     const handleMonthChange = (event) => {
         setSelectedMonth(event.target.value);

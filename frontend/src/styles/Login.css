@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    padding: 20px;
+    padding: 15px;
     background-color: #38115d;
 }
 
@@ -15,7 +15,6 @@
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    padding: 20px;
     width: 450px;
     max-width: 500px;
 }
@@ -165,33 +164,108 @@
     color: #7127a0;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
+/* Para telas maiores */
+@media (min-width: 1024px) {
     .login-form-container {
+        max-width: 500px;
         padding: 15px;
     }
-
-    .login-title {
-        font-size: 24px;
+    
+    .login-form-footer {
+        display: flex;
+        flex-direction: column;
     }
-
+    
     .login-form-group input {
-        font-size: 14px;
+        font-size: 18px;
     }
 
     .login-form-button {
+        width: 100%;
         font-size: 14px;
-        padding: 8px 16px;
+        padding: 8px;
+        margin: 5px;
     }
 }
 
-@media (max-width: 480px) {
+/* Responsividade para tablets */
+@media (max-width: 1023px) and (min-width: 768px) {
     .login-form-container {
-        padding: 10px;
+        max-width: 100%;
+        padding: 15px;
     }
 
-    .login-title {
-        font-size: 20px;
+    .login-form-footer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-form-group input {
+        font-size: 16px;
+    }
+
+    .login-form-button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+        margin: 5px;
+    }
+}
+
+/* Responsividade para smartphones (paisagem) */
+@media (max-width: 767px) and (min-width: 480px) {
+    .login-form-container {
+        max-width: 100%;
+        padding: 15px;
+    }
+
+    .login-form-footer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-form-group input {
+        font-size: 15px;
+    }
+
+    .login-form-button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+        margin: 5px;
+    }
+}
+
+/* Responsividade para smartphones (retrato) */
+@media (max-width: 479px) {
+    .login-form-container {
+        width: 100%;
+        max-width: 400px;
+        padding: 15px;
+    }
+
+    .login-form-footer {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .login-form-group input {
+        font-size: 14px;
+    }
+
+    .login-form-button {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px;
+        margin: 5px;
+    }
+}
+
+/* Ajustes adicionais para tamanhos muito pequenos */
+@media (max-width: 320px) {
+    .login-form-container {
+        max-width: 280px;
+        padding: 15px;
     }
 
     .login-form-group input {
@@ -200,6 +274,6 @@
 
     .login-form-button {
         font-size: 12px;
-        padding: 6px 12px;
+        padding: 6px;
     }
 }
