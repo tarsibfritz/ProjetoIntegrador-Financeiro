@@ -276,60 +276,103 @@
   scrollbar-color: var(--light-border) var(--main-containers);
 }
 
-/* Responsividade */
-@media (max-width: 767px) {
-  .page-container {
-    padding: 10px;
-  }
-
+/* Responsividade para tablets */
+@media (max-width: 1023px) and (min-width: 768px) {
   .simulation-container {
     flex-direction: column;
-    gap: 10px;
     padding: 10px;
   }
 
-  .simulation-form,
+  .simulation-form {
+    max-height: none;
+  }
+
   .saved-simulations {
-    max-width: 100%;
+    max-height: none;
+  }
+}
+
+/* Responsividade para smartphones (paisagem) */
+@media (max-width: 767px) and (min-width: 480px) {
+  .simulation-container {
+    flex-direction: column;
     padding: 10px;
-    box-shadow: none;
   }
 
-  .simulation-form h2,
-  .saved-simulations h2 {
-    font-size: 20px;
+  .simulation-form {
+    max-height: none;
   }
 
-  .simulation-form input,
-  .simulation-form-button,
-  .restart-simulation {
-    width: 100%;
-    font-size: 16px;
+  .saved-simulations {
+    max-height: none;
+  }
+}
+
+/* Responsividade para smartphones (retrato) */
+@media (max-width: 479px) {
+  .simulation-container {
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  .simulation-form {
+    padding: 10px;
+  }
+
+  .saved-simulations {
+    padding: 10px;
   }
 
   .saved-simulations .simulation-item {
     padding: 10px;
   }
 
-  .saved-simulations .simulation-name {
-    font-size: 16px;
-  }
-
-  .saved-simulations .month-checkbox input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-  }
-
-  .saved-simulations .month-checkbox label {
-    font-size: 12px;
-  }
-
-  .circle-checkbox {
+  .saved-simulations .circle-checkbox {
     width: 24px;
     height: 24px;
   }
 
   .circle-checked {
+    font-size: 14px;
+  }
+
+  .simulation-name {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* Ajustes adicionais para tamanhos muito pequenos */
+@media (max-width: 320px) {
+  .simulation-form h2 {
+    font-size: 20px;
+  }
+
+  .simulation-form input {
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+
+  .simulation-form-button {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .saved-simulations .simulation-item {
+    padding: 8px;
+  }
+
+  .saved-simulations .circle-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  .circle-checked {
     font-size: 12px;
+  }
+
+  .simulation-name {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

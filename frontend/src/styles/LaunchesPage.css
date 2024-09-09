@@ -95,7 +95,7 @@
 .launches-table-wrapper {
     width: 100%;
     border-radius: 8px; 
-    overflow: hidden;
+    overflow-x: auto; 
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
@@ -198,4 +198,114 @@ tbody tr {
 
 .balance-negative {
     color: red;
+}
+
+/* Responsividade para tablets */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .container {
+        padding: 20px;
+        gap: 20px;
+    }
+
+    .launches-chart-container {
+        width: 250px;
+    }
+
+    .title {
+        font-size: 21px;
+    }
+
+    .launches-table th, .launches-table td {
+        padding: 12px;
+    }
+}
+
+/* Responsividade para smartphones (paisagem) */
+@media (max-width: 767px) and (min-width: 480px) {
+    .container {
+        flex-direction: column;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .launches-chart-container {
+        width: 100%;
+        padding: 10px; 
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .launches-table th, .launches-table td {
+        padding: 8px; 
+    }
+
+    .add-button {
+        padding: 5px;
+        font-size: 14px;
+    }
+}
+
+/* Responsividade para smartphones (retrato) */
+@media (max-width: 479px) {
+    .container {
+        flex-direction: column;
+        padding: 8px;
+        gap: 8px;
+    }
+
+    .launches-chart-container {
+        width: 100%;
+        padding: 8px;
+    }
+
+    .title {
+        font-size: 16px;
+    }
+
+    .launches-table th, .launches-table td {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .add-button {
+        padding: 4px;
+        font-size: 12px;
+    }
+
+    .monthly-balance-summary {
+        font-size: 14px;
+    }
+}
+
+/* Ajustes adicionais para tamanhos muito pequenos */
+@media (max-width: 320px) {
+    .container {
+        padding: 5px;
+        gap: 5px;
+    }
+
+    .launches-chart-container {
+        width: 100%;
+        padding: 5px;
+    }
+
+    .title {
+        font-size: 14px;
+    }
+
+    .launches-table th, .launches-table td {
+        padding: 4px;
+        font-size: 10px;
+    }
+
+    .add-button {
+        padding: 3px;
+        font-size: 10px;
+    }
+
+    .monthly-balance-summary {
+        font-size: 12px;
+    }
 }
