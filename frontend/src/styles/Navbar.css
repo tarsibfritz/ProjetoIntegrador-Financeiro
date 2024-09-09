@@ -1,6 +1,6 @@
 /* Estilo base */
 .navbar {
-    position: relative;
+    position: fixed;
     padding: 10px 30px;
     background-color: #150E33;
     color: #fff;
@@ -76,21 +76,4 @@
 
 .menu-item:hover, .logout-user:hover {
     background-color: #6530a7;
-}
-
-/* Responsividade */
-@media (max-width: 387px) {
-    .navbar {
-        padding: 10px 15px;
-    }
-
-    .navbar-content {
-        flex-direction: row;
-        align-items: flex-start;
-    }
-
-    .menu {
-        width: 100%;
-        right: 0;
-    }
 }
