@@ -3,6 +3,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Navbar from './components/Navbar';
 import AppRoutes from './Routes';
+import Spacer from './components/Spacer';
 import './index.css';
 
 // Componente para renderizar o Navbar condicionalmente
@@ -15,6 +16,7 @@ const Layout = () => {
   return (
     <>
       {!isAuthPage && <Navbar />}
+      <Spacer height="40px" />
       <AppRoutes />
     </>
   );
