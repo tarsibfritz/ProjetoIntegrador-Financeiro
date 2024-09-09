@@ -122,7 +122,6 @@
     color: #555;
 }
 
-/* Aumentando a legibilidade com um espaçamento mais generoso */
 .detail-item-row {
     margin-bottom: 20px;
 }
@@ -135,4 +134,71 @@
 .detail-item-observation, .detail-item-tags, .detail-item-type {
     font-size: 16px;
     color: #666;
+}
+
+/* Responsividade para tablets */
+@media (max-width: 1023px) and (min-width: 768px) {
+    .launch-info-modal-content {
+        width: 95%;
+        max-width: 500px;
+    }
+
+    .launch-info-close-button {
+        font-size: 22px;
+        top: 10px;
+        right: 10px;
+    }
+}
+
+/* Responsividade para smartphones (paisagem) */
+@media (max-width: 767px) and (min-width: 480px) {
+    .launch-info-modal-content {
+        width: 95%;
+        max-width: 400px;
+    }
+
+    .launch-info-close-button {
+        font-size: 20px;
+        top: 10px;
+        right: 10px;
+    }
+}
+
+/* Responsividade para smartphones (retrato) */
+@media (max-width: 479px) {
+    .launch-info-modal-content {
+        width: 95%;
+        max-width: 350px;
+        padding: 15px;
+    }
+
+    .launch-info-close-button {
+        font-size: 18px;
+        top: 8px;
+        right: 8px;
+    }
+
+    .detail-item {
+        font-size: 14px;
+    }
+}
+
+/* Ajustes adicionais para tamanhos muito pequenos */
+@media (max-width: 320px) {
+    .launch-info-modal-content {
+        width: 95%;
+        max-width: 280px;
+        padding: 10px;
+    }
+
+    .launch-info-close-button {
+        font-size: 16px;
+        top: 5px;
+        right: 5px;
+    }
+
+    .detail-item {
+        font-size: 12px;
+    }
+
 }

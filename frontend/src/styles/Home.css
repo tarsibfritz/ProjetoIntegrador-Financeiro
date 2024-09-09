@@ -89,15 +89,15 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    flex: 1; /* Faz com que ambos os contêineres ocupem a largura disponível igualmente */
-    max-width: 50%; /* Garante que cada contêiner não ultrapasse 50% da largura do wrapper */
+    flex: 1;
+    max-width: 50%;
     text-align: center;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     position: relative;
-    box-sizing: border-box; /* Inclui padding e border na largura total do elemento */
+    box-sizing: border-box;
 }
 
 .chart-container::before, .monthly-balance-container::before {
