@@ -4,6 +4,27 @@ import { PieChart, Pie, Cell, Tooltip, Legend, LineChart, Line, XAxis, YAxis, Ca
 import PropTypes from 'prop-types';
 import '../styles/Home.css';
 
+const useWindowDimensions = () => {
+    const [windowDimensions, setWindowDimensions] = useState({
+        width: window.innerWidth,
+        height: window.innerHeight,
+    });
+
+    useEffect(() => {
+        const handleResize = () => {
+            setWindowDimensions({
+                width: window.innerWidth,
+                height: window.innerHeight,
+            });
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    return windowDimensions;
+};
+
 // Funções para cálculo
 const calculateBalance = (launches) => {
     return launches.reduce((acc, launch) => {
@@ -41,6 +62,7 @@ const groupMonthlyBalance = (launches) => {
 };
 
 const HomePage = () => {
+    const { width } = useWindowDimensions();
     const [userName, setUserName] = useState('');
     const [balance, setBalance] = useState(0);
     const [expensesData, setExpensesData] = useState([]);
@@ -151,7 +173,7 @@ const HomePage = () => {
                         {expensesData.length === 0 ? (
                             <p className="no-data">Nenhum dado encontrado</p>
                         ) : (
-                            <PieChart width={260} height={260}>
+                            <PieChart width={width > 768 ? 260 : width - 40} height={260}>
                                 <Pie
                                     data={expensesData}
                                     dataKey="value"
@@ -179,7 +201,7 @@ const HomePage = () => {
                         {monthlyBalanceData.length === 0 ? (
                             <p className="no-data">Nenhum dado encontrado</p>
                         ) : (
-                            <LineChart width={500} height={250} data={monthlyBalanceData}>
+                            <LineChart width={width > 768 ? 400 : width - 80} height={250} data={monthlyBalanceData}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />
