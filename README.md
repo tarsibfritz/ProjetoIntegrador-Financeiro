@@ -1,5 +1,6 @@
 # 🪙 Financeiro
 
+![Imagem da página inicial do site](./frontend/src/assets/screenshot-home.png)
 
 
 ## 📌 Descrição do Projeto
