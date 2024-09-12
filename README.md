@@ -10,7 +10,7 @@
 
 Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida como Projeto Integrador para o curso de desenvolvimento Full-Stack - Rio Pomba Valley. A plataforma permite aos usuários cadastrar receitas e despesas, visualizar gráficos de gastos por categoria e realizar simulações financeiras. O sistema foi projetado para fornecer aos usuários uma ferramenta eficiente de controle financeiro, ajudando-os a tomar decisões informadas e gerenciar melhor suas finanças.
 
-## Funcionalidades
+## ⚙️ Funcionalidades
 
 - **Autenticação de Usuário**: Cadastro, login e recuperação de senha.
 - **Gerenciamento de Finanças**: Cadastro, edição e exclusão de receitas e despesas.
@@ -18,7 +18,7 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
 - **Visualização de Gráficos**: Gráficos interativos mostrando gastos por categoria e por mês.
 - **Painel Resumido**: Visão geral do saldo total e uma visão clara da situação financeira.
 
-## Tecnologias Utilizadas
+## 🔎 Tecnologias Utilizadas
 
 ### Backend
 
