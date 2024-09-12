@@ -1,6 +1,8 @@
 # 🪙 Financeiro
 
 ![Imagem da página inicial do site](./frontend/src/assets/screenshot-home.png)
+![Imagem da página de lançamentos das despesas e receitas](./frontend/src/assets/screenshot-launches.png)
+![Imagem da página de simulação financeira](./frontend/src/assets/screenshot-simulation.png) 
 
 
 ## 📌 Descrição do Projeto
