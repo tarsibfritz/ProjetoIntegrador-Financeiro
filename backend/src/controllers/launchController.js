@@ -1,6 +1,7 @@
 const db = require('../models/index');
 const Launch = db.Launch;
 
+// Criar um novo lançamento
 exports.createLaunch = async (req, res) => {
   try {
     const { description, amount, date, observation, paid, tag, type } = req.body;
@@ -21,6 +22,7 @@ exports.createLaunch = async (req, res) => {
   }
 };
 
+// Listar todos os lançamentos
 exports.getAllLaunches = async (req, res) => {
   try {
     const launches = await Launch.findAll();
@@ -30,6 +32,7 @@ exports.getAllLaunches = async (req, res) => {
   }
 };
 
+// Listar um lançamento específico
 exports.getLaunchById = async (req, res) => {
   try {
     const launch = await Launch.findByPk(req.params.id);
@@ -43,6 +46,7 @@ exports.getLaunchById = async (req, res) => {
   }
 };
 
+// Atualizar um lançamento
 exports.updateLaunch = async (req, res) => {
   try {
     const { description, amount, date, observation, paid, tag, type } = req.body;
@@ -62,6 +66,7 @@ exports.updateLaunch = async (req, res) => {
   }
 };
 
+// Deletar um lançamento
 exports.deleteLaunch = async (req, res) => {
   try {
     const deleted = await Launch.destroy({

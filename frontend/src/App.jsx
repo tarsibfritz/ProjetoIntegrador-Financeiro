@@ -10,13 +10,17 @@ import './index.css';
 const Layout = () => {
   const location = useLocation();
 
-  // Verifica se a rota atual é '/login' ou '/cadastro'
-  const isAuthPage = location.pathname === '/login' || location.pathname === '/cadastro' || location.pathname === '/resetar-senha';
+  // Verifica se a rota atual é '/login', '/cadastro' ou '/resetar-senha'
+  const isAuthPage = ['/login', '/cadastro', '/resetar-senha'].includes(location.pathname);
 
   return (
     <>
-      {!isAuthPage && <Navbar />}
-      <Spacer height="40px" />
+      {!isAuthPage && (
+        <>
+          <Navbar /> {/* Renderiza a Navbar somente quando não estiver nas páginas de autenticação */}
+          <Spacer height="40px" />
+        </>
+      )}
       <AppRoutes />
     </>
   );

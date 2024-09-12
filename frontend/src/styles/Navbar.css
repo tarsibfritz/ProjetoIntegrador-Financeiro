@@ -8,6 +8,7 @@
     background-color: #150E33;
     color: #fff;
     width: 100%;
+    z-index: 1000;
 }
 
 .navbar-content {
