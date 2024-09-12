@@ -36,7 +36,7 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
 - **React Router Dom**: Gerenciamento de rotas no frontend.
 - **React Toastify**: Para exibir notificações de feedback ao usuário.
 
-## Instalação
+##  Instalação
 
 ### Pré-requisitos
 
@@ -78,12 +78,12 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
     DB_NAME=nome-do-banco
     ```
 
-## Uso
+## 💾 Uso
 
 - Acesse a aplicação em `http://localhost:5173` após iniciar o servidor frontend.
 - Use a interface para criar uma conta, fazer login e gerenciar suas finanças pessoais.
 
-## Próximos Passos
+## 🔮 Próximos Passos
 
 Os aprimoramentos futuros para o projeto incluem:
 - Relacionamento entre usuários e suas despesas/receitas no banco de dados.
