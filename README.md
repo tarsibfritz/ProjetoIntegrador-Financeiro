@@ -1,17 +1,5 @@
 # 🪙 Financeiro
 
-<<<<<<< HEAD
-![Imagem da página inicial do site](./frontend/src/assets/screenshot-home.png)
-![Imagem da página de lançamentos das despesas e receitas](./frontend/src/assets/screenshot-launches.png)
-![Imagem da página de simulação](./frontend/src/assets/screenshot-simulation.png) 
-
-=======
-<div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
-  <img src="./frontend/src/assets/screenshot-home.png" alt="Imagem da página inicial do site" width="32%" />
-  <img src="./frontend/src/assets/screenshot-launches.png" alt="Imagem da página de lançamentos das despesas e receitas" width="32%" />
-  <img src="./frontend/src/assets/screenshot-simulation.png" alt="Imagem da página de simulação financeira" width="32%" />
-</div>
->>>>>>> 9cf8ee3bfaaade3a9c3db6dc7b145e6df650da2e
 
 ## 📌 Descrição do Projeto
 
