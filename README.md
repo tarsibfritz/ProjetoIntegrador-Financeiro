@@ -1,15 +1,23 @@
 # 🪙 Financeiro
 
+<<<<<<< HEAD
 ![Imagem da página inicial do site](./frontend/src/assets/screenshot-home.png)
 ![Imagem da página de lançamentos das despesas e receitas](./frontend/src/assets/screenshot-launches.png)
 ![Imagem da página de simulação](./frontend/src/assets/screenshot-simulation.png) 
 
+=======
+<div style="display: flex; justify-content: center; align-items: center; gap: 20px;">
+  <img src="./frontend/src/assets/screenshot-home.png" alt="Imagem da página inicial do site" width="32%" />
+  <img src="./frontend/src/assets/screenshot-launches.png" alt="Imagem da página de lançamentos das despesas e receitas" width="32%" />
+  <img src="./frontend/src/assets/screenshot-simulation.png" alt="Imagem da página de simulação financeira" width="32%" />
+</div>
+>>>>>>> 9cf8ee3bfaaade3a9c3db6dc7b145e6df650da2e
 
 ## 📌 Descrição do Projeto
 
 Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida como Projeto Integrador para o curso de desenvolvimento Full-Stack - Rio Pomba Valley. A plataforma permite aos usuários cadastrar receitas e despesas, visualizar gráficos de gastos por categoria e realizar simulações financeiras. O sistema foi projetado para fornecer aos usuários uma ferramenta eficiente de controle financeiro, ajudando-os a tomar decisões informadas e gerenciar melhor suas finanças.
 
-## Funcionalidades
+## ⚙️ Funcionalidades
 
 - **Autenticação de Usuário**: Cadastro, login e recuperação de senha.
 - **Gerenciamento de Finanças**: Cadastro, edição e exclusão de receitas e despesas.
@@ -17,7 +25,7 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
 - **Visualização de Gráficos**: Gráficos interativos mostrando gastos por categoria e por mês.
 - **Painel Resumido**: Visão geral do saldo total e uma visão clara da situação financeira.
 
-## Tecnologias Utilizadas
+## 🔎 Tecnologias Utilizadas
 
 ### Backend
 
@@ -35,7 +43,7 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
 - **React Router Dom**: Gerenciamento de rotas no frontend.
 - **React Toastify**: Para exibir notificações de feedback ao usuário.
 
-## Instalação
+##  Instalação
 
 ### Pré-requisitos
 
@@ -77,12 +85,12 @@ Este projeto é uma aplicação web de gestão financeira pessoal, desenvolvida 
     DB_NAME=nome-do-banco
     ```
 
-## Uso
+## 💾 Uso
 
 - Acesse a aplicação em `http://localhost:5173` após iniciar o servidor frontend.
 - Use a interface para criar uma conta, fazer login e gerenciar suas finanças pessoais.
 
-## Próximos Passos
+## 🔮 Próximos Passos
 
 Os aprimoramentos futuros para o projeto incluem:
 - Relacionamento entre usuários e suas despesas/receitas no banco de dados.
