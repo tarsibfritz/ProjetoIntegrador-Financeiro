@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const launchController = require('../controllers/launchController');
 
+// Rotas para Lançamento
 router.post('/', launchController.createLaunch);
 router.get('/', launchController.getAllLaunches);
 router.get('/:id', launchController.getLaunchById);

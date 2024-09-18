@@ -30,8 +30,8 @@ exports.updateProgress = async (req, res) => {
     }
 
     // Atualiza os campos conforme o modelo
-    progress.isChecked = Boolean(isChecked); // Usando Boolean para garantir que seja um valor booleano
-    progress.amountSaved = amountSaved; // Presumindo que amountSaved também está presente no modelo
+    progress.isChecked = Boolean(isChecked);
+    progress.amountSaved = amountSaved;
     await progress.save();
 
     res.status(200).json(progress);

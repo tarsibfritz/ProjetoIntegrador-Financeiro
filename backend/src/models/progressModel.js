@@ -5,7 +5,7 @@ module.exports = (sequelize) => {
     simulationId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Simulations', // Nome da tabela correta
+        model: 'Simulations', 
         key: 'id'
       },
       allowNull: false

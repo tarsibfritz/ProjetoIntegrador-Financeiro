@@ -2,7 +2,6 @@ import api from './api';
 
 const PROGRESS_API_URL = '/progresses';
 
-// Função para obter o progresso por ID de simulação
 export const getProgressBySimulationId = async (simulationId) => {
   if (!simulationId) {
     throw new Error('simulationId é necessário');
@@ -16,7 +15,6 @@ export const getProgressBySimulationId = async (simulationId) => {
   }
 };
 
-// Função para atualizar o progresso
 export const updateProgress = async (id, data) => {
   if (!id || !data) {
     throw new Error('ID e dados são necessários para atualizar o progresso');
@@ -30,7 +28,6 @@ export const updateProgress = async (id, data) => {
   }
 };
 
-// Função para criar um novo registro de progresso
 export const createProgress = async (data) => {
   const { simulationId, month, amountSaved } = data;
   if (simulationId == null || month == null || amountSaved == null) {

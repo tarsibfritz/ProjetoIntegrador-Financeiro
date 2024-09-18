@@ -38,14 +38,14 @@ exports.loginUser = async (req, res) => {
         // Encontrar o usuário pelo email
         const user = await User.findOne({ where: { email } });
         if (!user) {
-            console.log('Usuário não encontrado'); // Log de erro
+            console.log('Usuário não encontrado');
             return res.status(404).json({ message: 'User not found' });
         }
 
         // Comparar a senha fornecida com a senha armazenada
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            console.log('Senha inválida'); // Log de erro
+            console.log('Senha inválida'); 
             return res.status(401).json({ message: 'Invalid password' });
         }
 
@@ -53,10 +53,10 @@ exports.loginUser = async (req, res) => {
         const token = jwt.sign({ id: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
 
         // Retornar o token junto com o usuário
-        console.log('Usuário autenticado:', { id: user.id, name: user.name, email: user.email }); // Log de sucesso
+        console.log('Usuário autenticado:', { id: user.id, name: user.name, email: user.email }); 
         res.status(200).json({ token, user: { id: user.id, name: user.name, email: user.email } });
     } catch (error) {
-        console.error('Erro ao autenticar o usuário:', error.message); // Log de erro
+        console.error('Erro ao autenticar o usuário:', error.message); 
         res.status(500).json({ error: error.message });
     }
 };
@@ -72,10 +72,10 @@ exports.createUser = async (req, res) => {
         // Criar o usuário com a senha criptografada
         const user = await User.create({ name, email, password: hashedPassword });
 
-        console.log('Usuário criado:', user); // Log de sucesso
+        console.log('Usuário criado:', user); 
         res.status(201).json(user);
     } catch (error) {
-        console.error('Erro ao criar o usuário:', error.message); // Log de erro
+        console.error('Erro ao criar o usuário:', error.message); 
         res.status(400).json({ error: error.message });
     }
 };
@@ -86,7 +86,7 @@ exports.getAllUsers = async (req, res) => {
         const users = await User.findAll();
         res.status(200).json(users);
     } catch (error) {
-        console.error('Erro ao obter usuários:', error.message); // Log de erro
+        console.error('Erro ao obter usuários:', error.message);
         res.status(500).json({ error: error.message });
     }
 };
@@ -101,7 +101,7 @@ exports.getUserById = async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        console.error('Erro ao obter usuário por ID:', error.message); // Log de erro
+        console.error('Erro ao obter usuário por ID:', error.message); 
         res.status(500).json({ error: error.message });
     }
 };
@@ -118,7 +118,7 @@ exports.updateUser = async (req, res) => {
             {
                 name,
                 email,
-                ...(hashedPassword && { password: hashedPassword }), // Se houver senha nova, atualiza
+                ...(hashedPassword && { password: hashedPassword }),
             },
             {
                 where: { id: req.params.id }
@@ -132,7 +132,7 @@ exports.updateUser = async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        console.error('Erro ao atualizar usuário:', error.message); // Log de erro
+        console.error('Erro ao atualizar usuário:', error.message); 
         res.status(400).json({ error: error.message });
     }
 };
@@ -149,7 +149,7 @@ exports.deleteUser = async (req, res) => {
             res.status(404).json({ message: 'User not found' });
         }
     } catch (error) {
-        console.error('Erro ao excluir usuário:', error.message); // Log de erro
+        console.error('Erro ao excluir usuário:', error.message);
         res.status(500).json({ error: error.message });
     }
 };

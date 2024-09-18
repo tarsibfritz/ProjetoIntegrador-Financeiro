@@ -29,7 +29,6 @@ const ResetPassword = () => {
         try {
             await resetPassword(email, newPassword);
             toast.success("Senha redefinida com sucesso!");
-            // Redirecionar ou limpar os campos conforme necessário
         } catch (error) {
             toast.error("Erro ao redefinir a senha. Tente novamente.");
         }

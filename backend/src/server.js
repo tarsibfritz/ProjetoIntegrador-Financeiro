@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-require('dotenv').config(); // Carregar variáveis de ambiente
+require('dotenv').config();
 
 // Inicialização do Express
 const app = express();
@@ -15,7 +15,7 @@ const progressRoutes = require('./routes/progressRoutes');
 
 // Middleware
 app.use(cors()); // Habilitar CORS
-app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
+app.use(bodyParser.json()); 
 
 // Rotas
 app.use('/api/users', userRoutes);
@@ -31,8 +31,7 @@ db.sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
     // Sincronizar os modelos com o banco de dados
-    db.sequelize.sync() // Para sincronização básica
-    // db.sequelize.sync({ force: true }) // Para sincronização com força (exclui e recria tabelas)
+    db.sequelize.sync()
       .then(() => {
         console.log('Models synchronized with the database.');
         // Iniciar o servidor
