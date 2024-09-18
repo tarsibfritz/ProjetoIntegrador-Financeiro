@@ -37,7 +37,6 @@ const LaunchModal = ({ isOpen, onClose, onSave }) => {
         'Lazer',
         'Moradia',
         'Imprevisto',
-        'Cuidados Pessoais'
     ];
 
     const incomeTags = [
@@ -132,11 +131,11 @@ const LaunchModal = ({ isOpen, onClose, onSave }) => {
         setObservation('');
         setSelectedTag('');
         setType('');
-        setShowObservationInput(false); // Garante que a observação esteja oculta ao fechar
+        setShowObservationInput(false);
         onClose();
     };
 
-    if (!isOpen) return null; // Garante que o modal não seja exibido quando isOpen é false
+    if (!isOpen) return null;
 
     const tags = type === 'Despesa' ? expenseTags : type === 'Receita' ? incomeTags : [];
 

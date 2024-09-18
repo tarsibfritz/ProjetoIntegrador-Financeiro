@@ -20,7 +20,6 @@ const expenseTags = [
     'Lazer',
     'Moradia',
     'Imprevisto',
-    'Cuidados Pessoais'
 ];
 
 const incomeTags = [
@@ -60,6 +59,13 @@ const EditLaunchModal = ({ isOpen, onClose, launch, onSave }) => {
     const handleSave = async () => {
         if (!launch || !launch.id) {
             toast.error("Lançamento não encontrado.");
+            return;
+        }
+
+        // Validação do valor
+        const numericAmount = parseFloat(amount);
+        if (numericAmount <= 0 || isNaN(numericAmount)) {
+            toast.warning("O valor deve ser maior que zero.");
             return;
         }
 
@@ -184,7 +190,7 @@ EditLaunchModal.propTypes = {
         observation: PropTypes.string,
         tag: PropTypes.string,
         type: PropTypes.string,
-        id: PropTypes.number, // Mudei para não ser requerido aqui
+        id: PropTypes.number,
     }),
     onSave: PropTypes.func.isRequired,
 };

@@ -118,9 +118,8 @@ const LaunchesPage = () => {
             const data = await getLaunches();
             setLaunches(data);
             setIsEditModalOpen(false);
-            toast.success('Lançamento atualizado com sucesso!');
+            handleCloseInfoModal();
         } catch (error) {
-            toast.error('Erro ao atualizar lançamento!');
             console.error('Erro ao atualizar lançamento:', error);
         }
     };
