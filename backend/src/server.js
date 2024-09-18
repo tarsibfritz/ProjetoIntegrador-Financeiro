@@ -12,6 +12,7 @@ const userRoutes = require('./routes/userRoutes');
 const launchRoutes = require('./routes/launchRoutes');
 const simulationRoutes = require('./routes/simulationRoutes');
 const progressRoutes = require('./routes/progressRoutes');
+
 // Middleware
 app.use(cors()); // Habilitar CORS
 app.use(bodyParser.json()); // Analisar o corpo das requisições como JSON
@@ -29,16 +30,17 @@ const db = require('./models/index');
 db.sequelize.authenticate()
   .then(() => {
     console.log('Connection has been established successfully.');
-
     // Sincronizar os modelos com o banco de dados
     db.sequelize.sync() // Para sincronização básica
     // db.sequelize.sync({ force: true }) // Para sincronização com força (exclui e recria tabelas)
       .then(() => {
         console.log('Models synchronized with the database.');
         // Iniciar o servidor
-        app.listen(port, () => {
-          console.log(`Server is running on port ${port}`);
-        });
+        if (require.main === module) {
+          app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+          });
+        }
       })
       .catch((error) => {
         console.error('Error synchronizing models:', error);
@@ -47,3 +49,5 @@ db.sequelize.authenticate()
   .catch((error) => {
     console.error('Unable to connect to the database:', error);
   });
+
+module.exports = app;
