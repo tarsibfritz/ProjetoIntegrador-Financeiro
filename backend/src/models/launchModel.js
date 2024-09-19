@@ -36,7 +36,6 @@ module.exports = (sequelize) => {
         'Lazer',
         'Moradia',
         'Imprevisto',
-        'Cuidados Pessoais',
         'Salário',
         'Freelance',
         'Investimentos',
